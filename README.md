@@ -2,7 +2,7 @@
 Apollo, the Cryptocurrency trading bot.
 Cryptocurrency trading bot that will buy and trade on exchanges, and make its decisions based on data analysis from social media, graphs, and historyical data.
 
-### To Do
+## To Do
 
 ### Admin
 * Github
@@ -17,6 +17,6 @@ Cryptocurrency trading bot that will buy and trade on exchanges, and make its de
 * 4chan
 * Reddit
 
-## Numerical Data
+### Numerical Data
 * Graph Analysis
 * Simulated History
