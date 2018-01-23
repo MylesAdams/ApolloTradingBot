@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.class
 
 # Precompiled Headers
 *.gch
@@ -30,3 +31,10 @@
 *.exe
 *.out
 *.app
+
+#Compiled Python files
+*.pyc
+*.pyd
+*.pyo
+*.pyw
+*.pyx
