@@ -1,6 +1,4 @@
-#include <iostream>
+//
+// Created by Myles Adams on 1/23/18.
+//
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}
