@@ -1,4 +1,8 @@
-//
-// Created by Myles Adams on 1/23/18.
-//
+// Copyright (c) 2018 The Apollo Trading Bot core developers
 
+#include <iostream>
+
+int main() {
+    std::cout << "Apollo Trading Bot!" << std::endl;
+    return 0;
+}

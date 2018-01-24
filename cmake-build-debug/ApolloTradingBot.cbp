@@ -85,6 +85,9 @@
 		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/README.md">
 			<Option target="ApolloTradingBot"/>
 		</Unit>
+		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/src/main.cpp">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
 		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

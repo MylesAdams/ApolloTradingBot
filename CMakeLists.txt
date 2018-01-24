@@ -4,4 +4,4 @@ project(ApolloTradingBot)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(ApolloTradingBot
-        README.md)
+        README.md src/main.cpp)
