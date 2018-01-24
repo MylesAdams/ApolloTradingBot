@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.class
 
 # Precompiled Headers
 *.gch
@@ -33,3 +34,10 @@
 
 # IDE files
 *.idea
+
+# Compiled Python files
+*.pyc
+*.pyd
+*.pyo
+*.pyw
+*.pyx
