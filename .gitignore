@@ -41,3 +41,8 @@
 *.pyo
 *.pyw
 *.pyx
+
+# Visual Studio Project Files
+*.sln
+*.vcxproj
+*.filters
