@@ -18,5 +18,35 @@ with open(join(dirname(__file__),
                '../resources/text.json')) as tone_json:
     tone = tone_analyzer.tone(json.load(tone_json)['text'], "text/plain")
 
-file = open('../resources/tone_data.txt', 'w')
+file = open('../resources/tone_data.json', 'w')
 file.write(json.dumps(tone, indent=2))
+file.close()
+
+with open('../resources/tone_data.json', 'r') as f:
+    f_json = json.load(f)
+
+
+doc_tones = f_json['document_tone']
+print('Document tones')
+for tone in doc_tones['tones']:
+    print(tone['tone_name'] + ': ' + str(tone['score']))
+
+print()
+
+sentence_tones = {}
+
+sen_tones = f_json['sentences_tone']
+print('Sentence tones')
+for sentence in sen_tones:
+    if sentence['tones'] != []:
+        for tone in sentence['tones']:
+            print(tone['tone_name'] + ': ' + str(tone['score']))
+            if tone['tone_name'] not in sentence_tones:
+                sentence_tones[tone['tone_name']] = 1
+            else:
+                sentence_tones[tone['tone_name']] += 1
+
+print()
+print('Sentence tone frequencies')
+for k, v in sentence_tones.items():
+    print(k + ': ' + str(v))
