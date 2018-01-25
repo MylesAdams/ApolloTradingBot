@@ -1,0 +1,136 @@
+{
+  "document_tone": {
+    "tones": [
+      {
+        "score": 0.647418,
+        "tone_id": "joy",
+        "tone_name": "Joy"
+      }
+    ]
+  },
+  "sentences_tone": [
+    {
+      "sentence_id": 0,
+      "text": "VeChain will be bigger than NEO within 3-9months.",
+      "tones": []
+    },
+    {
+      "sentence_id": 1,
+      "text": "'I am proud to announce that as of today, Breyer Capital has agreed to support VeChain through an official advisory role,' - Jim Breyer, founder of Breyer Capital.",
+      "tones": [
+        {
+          "score": 0.731554,
+          "tone_id": "joy",
+          "tone_name": "Joy"
+        }
+      ]
+    },
+    {
+      "sentence_id": 2,
+      "text": "Let's give a round of applause \ud83d\udc4f for the people dumping $VEN...",
+      "tones": [
+        {
+          "score": 0.640617,
+          "tone_id": "joy",
+          "tone_name": "Joy"
+        }
+      ]
+    },
+    {
+      "sentence_id": 3,
+      "text": "I cannot wait to buy up all your bags.",
+      "tones": [
+        {
+          "score": 0.874372,
+          "tone_id": "confident",
+          "tone_name": "Confident"
+        }
+      ]
+    },
+    {
+      "sentence_id": 4,
+      "text": "VeChain releases a partnership every week.",
+      "tones": [
+        {
+          "score": 0.942582,
+          "tone_id": "confident",
+          "tone_name": "Confident"
+        }
+      ]
+    },
+    {
+      "sentence_id": 5,
+      "text": "The coin of the week is Vechain (VEN).",
+      "tones": []
+    },
+    {
+      "sentence_id": 6,
+      "text": "Unlike NEO, Vechain is officially working with the Chinese government.",
+      "tones": []
+    },
+    {
+      "sentence_id": 7,
+      "text": "HUGE GAINS!!!!! What I just heard was abundantly impressive!",
+      "tones": [
+        {
+          "score": 0.647546,
+          "tone_id": "joy",
+          "tone_name": "Joy"
+        },
+        {
+          "score": 0.856622,
+          "tone_id": "tentative",
+          "tone_name": "Tentative"
+        }
+      ]
+    },
+    {
+      "sentence_id": 8,
+      "text": "I look at the partnerships and the extreme possibilities.",
+      "tones": [
+        {
+          "score": 0.88939,
+          "tone_id": "tentative",
+          "tone_name": "Tentative"
+        },
+        {
+          "score": 0.965509,
+          "tone_id": "analytical",
+          "tone_name": "Analytical"
+        }
+      ]
+    },
+    {
+      "sentence_id": 9,
+      "text": "Vechain is a monster that has been injected with an intergalactic steroid!",
+      "tones": []
+    },
+    {
+      "sentence_id": 10,
+      "text": "Key words, signals, GLOBAL!!!",
+      "tones": [
+        {
+          "score": 0.665027,
+          "tone_id": "joy",
+          "tone_name": "Joy"
+        }
+      ]
+    },
+    {
+      "sentence_id": 11,
+      "text": "This is just the beginning!!! Q2 June Blessed to own Vechain!!!",
+      "tones": [
+        {
+          "score": 0.93585,
+          "tone_id": "joy",
+          "tone_name": "Joy"
+        },
+        {
+          "score": 0.786991,
+          "tone_id": "tentative",
+          "tone_name": "Tentative"
+        }
+      ]
+    }
+  ]
+}

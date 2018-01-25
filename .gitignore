@@ -41,3 +41,6 @@
 *.pyo
 *.pyw
 *.pyx
+
+# Python Files
+*.DS_Store
