@@ -11,28 +11,12 @@ class ExchangeAccnt {
 public:
 	std::string url;
 	std::string id;
-	LogIn log;
+	LogIn credentials;
 public:
-	bool isActive() { return this->log.isComplete(); }
-	virtual void connect();
-};
-
-//Derived class: KucoinAccnt
-class KucoinAccnt : public ExchangeAccnt {
-public:
-	void connect() override;
-};
-
-//Derived class: GdaxAccnt
-class GdaxAccnt : public ExchangeAccnt {
-public:
-	void connect() override;
-};
-
-//Derived class: BinanceAccnt
-class BinanceAccnt : public ExchangeAccnt {
-public:
-	void connect() override;
+	ExchangeAccnt() :id(""), url(""), credentials() {}
+	ExchangeAccnt(std::string id, std::string url) :id(id), url(url) {}
+	bool isActive() { return this->credentials.isComplete(); }
+	virtual void connect() {}
 };
 
 #endif // !exchange_accnt.h

@@ -1,5 +1,5 @@
 //file: log_in.h
-//written by ANDREW LAUX
+//written by ANDREW LAUX.
 
 #ifndef log_in_h
 #define log_in_h
