@@ -1,3 +1,4 @@
 add_subdirectory(curlpp)
 
-target_link_libraries(curlpp_static)
+include_directories(./curlpp/include)
+link_directories(./curlpp/src/curlpp)

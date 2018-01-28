@@ -32,8 +32,9 @@
 *.out
 *.app
 
-# IDE files
+# IDE and OS files
 *.idea
+.DS_Store
 
 # Compiled Python files
 *.pyc
@@ -41,3 +42,6 @@
 *.pyo
 *.pyw
 *.pyx
+
+# Folders
+Build/
