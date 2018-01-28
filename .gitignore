@@ -45,3 +45,10 @@
 
 # Folders
 Build/
+CMakeFiles/
+CMakeCache.txt
+MakeFile
+
+# CMake
+*.cmake
+/lib/curlpp/extras/*
