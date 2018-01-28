@@ -1,7 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ApolloTradingBot.dir/src/main.cpp.o"
+  "CMakeFiles/ApolloTradingBot.dir/src/main.cpp.obj"
   "ApolloTradingBot.pdb"
-  "ApolloTradingBot"
+  "ApolloTradingBot.exe"
+  "ApolloTradingBot.exe.manifest"
+  "libApolloTradingBot.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

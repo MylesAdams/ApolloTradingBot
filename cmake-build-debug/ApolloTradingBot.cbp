@@ -8,87 +8,87 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="rebuild_cache">
-				<Option working_dir="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="ApolloTradingBot">
-				<Option output="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
+				<Option output="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/ApolloTradingBot.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
-					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
-					<Add directory="/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="ApolloTradingBot/fast">
-				<Option output="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
+				<Option output="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/ApolloTradingBot.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
-					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
-					<Add directory="/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/../../../../mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/Myles/Documents/Workspace/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/README.md">
+		<Unit filename="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/README.md">
 			<Option target="ApolloTradingBot"/>
 		</Unit>
-		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/src/main.cpp">
+		<Unit filename="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/src/main.cpp">
 			<Option target="ApolloTradingBot"/>
 		</Unit>
-		<Unit filename="/Users/mylesadams/Documents/Workspace/ApolloTradingBot/CMakeLists.txt">
+		<Unit filename="C:/Users/Myles/Documents/Workspace/ApolloTradingBot/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
