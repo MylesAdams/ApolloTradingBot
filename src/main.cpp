@@ -4,5 +4,6 @@
 
 int main() {
     std::cout << "Apollo Trading Bot!" << std::endl;
+    std::cout << "Test" << std::endl;
     return 0;
 }

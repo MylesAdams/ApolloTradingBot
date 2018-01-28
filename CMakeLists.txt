@@ -3,5 +3,6 @@ project(ApolloTradingBot)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_subdirectory(src)
 add_subdirectory(lib)
+
+add_executable(ApolloTradingBot src/main.cpp)

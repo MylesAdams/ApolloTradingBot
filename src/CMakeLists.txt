@@ -1,1 +1,0 @@
-add_executable(ApolloTradingBot main.cpp)
