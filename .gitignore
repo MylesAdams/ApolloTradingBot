@@ -44,7 +44,7 @@
 *.pyx
 
 # Folders
-Build/
+Build/*
 CMakeFiles/
 CMakeCache.txt
 MakeFile
