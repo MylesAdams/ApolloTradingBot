@@ -3,7 +3,7 @@
 
 #ifndef exchange_accnt_h
 #define exchange_accnt_h
-#include"log_in.h"
+#include"api_key.h"
 #include<string>
 
 //Base class: ExchangeAccnt (virtual)
@@ -11,11 +11,11 @@ class ExchangeAccnt {
 public:
 	std::string url;
 	std::string id;
-	LogIn credentials;
+	ApiKey key;
 public:
-	ExchangeAccnt() :id(""), url(""), credentials() {}
+	ExchangeAccnt() :id(""), url(""), key() {}
 	ExchangeAccnt(std::string id, std::string url) :id(id), url(url) {}
-	bool isActive() { return this->credentials.isComplete(); }
+	bool isActive() { return this->key.isComplete(); }
 	virtual void connect() {}
 };
 
