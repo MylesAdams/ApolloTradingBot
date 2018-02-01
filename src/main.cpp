@@ -20,7 +20,7 @@ namespace
 /**
  * This example is made to show you how you can use the Options.
  */
-int main(int, char **)
+int main()
 {
     try
     {
