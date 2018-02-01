@@ -7,6 +7,7 @@
 #include"kucoin_accnt.h"
 #include"gdax_accnt.h"
 #include"binance_accnt.h"
+#include"NotFoundException.h"
 #include"vector"
 
 //Manager Class: ExchangeManager
@@ -16,8 +17,9 @@ public:
 	GdaxAccnt gdax;
 	BinanceAccnt binance;
 public:
-	std::vector<ExchangeAccnt*> getInactive();
-	std::vector<ExchangeAccnt*> getActive();
+	std::vector<std::string> getInactive();
+	std::vector<std::string> getActive();
+	ExchangeAccnt* getById(std::string id);
 };
 
 #endif // !exchange_manager.h
