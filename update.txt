@@ -1,3 +1,0 @@
-This is where I will keep updates to the project that are not code based:
-
-Currently figuring out the reddit api for accessing json files and then parsing them for data. Using RapidJSON and Curlpp to do the dirty work. Installed both and working on it. The reddit information is readily available. Just need to adjust to the new libraries.
