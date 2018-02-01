@@ -14,7 +14,7 @@
         * sudo apt install curl
     * Windows
         * sudo apt install curl
-3. Run commands below with in ApolloTradingBot directory
+3. Run commands below within ApolloTradingBot directory
     * cd Build
     * cmake ../
     * make
