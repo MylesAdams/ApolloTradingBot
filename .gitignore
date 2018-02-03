@@ -32,8 +32,9 @@
 *.out
 *.app
 
-# IDE files
+# IDE and OS files
 *.idea
+.DS_Store
 
 # Compiled Python files
 *.pyc
@@ -42,5 +43,12 @@
 *.pyw
 *.pyx
 
-# Python Files
-*.DS_Store
+# Folders
+Build/*
+CMakeFiles/
+CMakeCache.txt
+MakeFile
+
+# CMake
+*.cmake
+/lib/curlpp/extras/*
