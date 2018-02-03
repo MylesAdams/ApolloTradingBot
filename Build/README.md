@@ -11,9 +11,9 @@
     * Ubuntu
         * sudo apt install curl
 3. Run commands below with in ApolloTradingBot directory
-    * cd Build
-    * cmake ../
-    * make
+    * `cd Build`
+    * `cmake ../`
+    * `make`
     
 # Windows special instructions:
 
@@ -39,9 +39,9 @@
       13. Congrats you just installed curl! It really was *that hard* on windows. Luckily you have this little guide! Maybe use a UNIX system next time lol.
 
 3. Run commands in ApolloTradingBot directory:
-   * cd Build
-   * cmake -G
-   * cmake ../ -G "name of the generator you want to use"
+   * `cd Build`
+   * `cmake -G`
+   * `cmake ../ -G "name of the generator you want to use"`
 
 4. Open the generated solution in whatever IDE you chose to generate for and build.
    * For visual studio after opening the ApolloTradingBot.sln you will see on the right a listing of projects. You must right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
