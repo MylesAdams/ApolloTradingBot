@@ -13,7 +13,7 @@
     * Ubuntu
         * sudo apt install curl
     * Windows
-        * sudo apt install curl
+        * [Link to curl](https://curl.haxx.se/download.html)
 3. Run commands below with in ApolloTradingBot directory
     * cd Build
     * cmake ../
