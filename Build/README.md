@@ -30,7 +30,7 @@
          * set `CURL` equal to the path of your curl directory
       6. Under System variables find the `PATH` variable and click EDIT...
       7. pre-pend `%CURL%;` to the value of the PATH variable. (the semi-colon is absolutely essential)
-      8.. Add `%CURL%\lib\;` to the `PATH` variable as well.
+      8. Add `%CURL%\lib\;` to the `PATH` variable as well.
       9. Go to your curl directory and read the installation instructions which are found in /winbuild/BUILD.WINDOWS.TXT
          * tl;dr of how to build is to just go to search -> "dev" -> click on "Developer Command Prompt for VS20xx" -> cd into /curl/winbuild and run `nmake /F mode=dll`
       10. Go to the newly created /curl/builds/ directory and open the `libcurl-vc-x86-release-dll-ipv6-sspi-winssl` directory.
