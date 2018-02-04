@@ -52,3 +52,4 @@ MakeFile
 # CMake
 *.cmake
 /lib/curlpp/extras/*
+cmake-build-debug
