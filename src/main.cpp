@@ -36,6 +36,7 @@
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 
+#include "Bot.h"
 
 namespace
 {
