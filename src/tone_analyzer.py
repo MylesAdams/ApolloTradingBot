@@ -1,52 +1,52 @@
 import json
 from os.path import join, dirname
 from watson_developer_cloud import ToneAnalyzerV3
-
-tone_analyzer = ToneAnalyzerV3(
-    username='c032fda0-5c02-490d-8e00-ab00de2e5f40',
-    password='AfgP2LQIDCgB',
-    version='2017-09-26')
-
-print("\ntone_chat() example 1:\n")
-utterances = [{'text': 'Today, I didn\'t get to do anything that I wanted to. W'},
-              {'text': 'It is a good day.'},
-              {'text': 'The world is a very weird place. So many interesting and different people.'}]
-print(json.dumps(tone_analyzer.tone_chat(utterances), indent=2))
-
-print("\ntone() example 2:\n")
-with open(join(dirname(__file__),
-               '../resources/text.json')) as tone_json:
-    tone = tone_analyzer.tone(json.load(tone_json)['text'], "text/plain")
-
-file = open('../resources/tone_data.json', 'w')
-file.write(json.dumps(tone, indent=2))
-file.close()
-
-with open('../resources/tone_data.json', 'r') as f:
-    f_json = json.load(f)
+import os
 
 
-doc_tones = f_json['document_tone']
-print('Document tones')
-for tone in doc_tones['tones']:
-    print(tone['tone_name'] + ': ' + str(tone['score']))
+# Include .json in the filename
+def analyzeText(input_filename, output_filename):
+    tone_analyzer = ToneAnalyzerV3(
+        version='2017-09-26',
+        username='c032fda0-5c02-490d-8e00-ab00de2e5f40',
+        password='AfgP2LQIDCgB'
+    )
 
-print()
+    with open(join(dirname(__file__), '../resources/' + input_filename)) as file_json:
+        file_tone = tone_analyzer.tone(json.load(file_json)['text'], "text/plain")
 
-sentence_tones = {}
+    json_dump = open('../resources/json_dump.json', 'w')
+    json_dump.write(json.dumps(file_tone, indent=2))
+    json_dump.close()
 
-sen_tones = f_json['sentences_tone']
-print('Sentence tones')
-for sentence in sen_tones:
-    if sentence['tones'] != []:
+    file_out = open('../resources/' + output_filename, 'w')
+    with open('../resources/json_dump.json', 'r') as f:
+        json_data = json.load(f)
+
+    doc_tones = json_data['document_tone']
+    file_out.write('[Document tones]\n')
+    for tone in doc_tones['tones']:
+        file_out.write(tone['tone_name'] + ':' + str(tone['score']) + '\n')
+
+    sentence_tones = {}
+
+    sen_tones = json_data['sentences_tone']
+    for sentence in sen_tones:
         for tone in sentence['tones']:
-            print(tone['tone_name'] + ': ' + str(tone['score']))
             if tone['tone_name'] not in sentence_tones:
                 sentence_tones[tone['tone_name']] = 1
             else:
                 sentence_tones[tone['tone_name']] += 1
 
-print()
-print('Sentence tone frequencies')
-for k, v in sentence_tones.items():
-    print(k + ': ' + str(v))
+    file_out.write('[Sentence tone frequencies]\n')
+    for tone, freq in sentence_tones.items():
+        file_out.write(tone + ':' + str(freq) + '\n')
+
+    os.remove('../resources/json_dump.json')
+    file_out.close()
+    f.close()
+    file_json.close()
+
+
+# Uncomment line below to test
+# analyzeText('text.json', 'tone_data.txt')
