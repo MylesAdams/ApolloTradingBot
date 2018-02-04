@@ -5,10 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(lib)
 
-file(GLOB rapidjson_lib "lib/rapidjson/*.h" "lib/rapidjson/error/*.h" "lib/rapidjson/internal/*.h" "lib/rapidjson/msinttypes/*.h")
-
 include_directories(src)
-include_directories(lib/rapidjson)
+include_directories(lib/rapidjson/include)
 include_directories(lib/curlpp/include)
 include_directories(lib/curl/include)
 
