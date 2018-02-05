@@ -3,27 +3,33 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
+#include <curlpp/Multi.hpp>
 #include <curlpp/Options.hpp>
+#include <curlpp/Exception.hpp>
 
-class Bot
-{
-private:
-protected:
-    //fields
-    const std::string TARGET_URL_;
-    curlpp::Easy easy_handle_;
 
-    //methods
-    virtual std::string cleanInput(std::stringstream &response) = 0;    //must be overridden in derived class
-public:
-    //ctors
-    Bot();
-    Bot(std::string target_url);
+namespace Bot {
+    class Bot
+    {
+    private:
+    protected:
+        //fields
+        //TODO: declare a curlpp version of a libcurl multi-handle here
+        std::vector<std::string> url_targets_;
+        std::vector<curlpp::Easy> easy_handles_;
 
-    //methods
+        //methods
+        virtual std::string cleanData(std::stringstream &response) = 0;    //must be overridden in derived class
+    public:
+        //ctors
+        
+        //methods
 
-};
+    };
+}
 
 #endif
