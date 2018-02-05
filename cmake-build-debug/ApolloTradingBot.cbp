@@ -8,54 +8,54 @@
 		<Option virtualFolders="CMake Files\;CMake Files\lib\;CMake Files\lib\curlpp\;CMake Files\lib\curlpp\extras\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/local">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/strip">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="ApolloTradingBot">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/rapidjson"/>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/rapidjson"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -65,21 +65,21 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="ApolloTradingBot/fast">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/ApolloTradingBot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/rapidjson"/>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/rapidjson"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -89,50 +89,50 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot/fast"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 ApolloTradingBot/fast"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="list_install_components">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="curlpp_static">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.a" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
 				<Option object_output="./"/>
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -142,20 +142,20 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp_static"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp_static"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="curlpp_static/fast">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.a" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
 				<Option object_output="./"/>
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -165,20 +165,20 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp_static/fast"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp_static/fast"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="curlpp">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.dylib" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
 				<Option object_output="./"/>
 				<Option type="3"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -188,20 +188,20 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="curlpp/fast">
-				<Option output="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.dylib" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
+				<Option output="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/libcurlpp.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp"/>
 				<Option object_output="./"/>
 				<Option type="3"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include"/>
+					<Add directory="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
@@ -211,228 +211,228 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp/fast"/>
-					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/CLionProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 curlpp/fast"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/cmake-build-debug/lib/curlpp/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Easy.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Easy.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Easy.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Easy.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Exception.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Exception.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Form.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Form.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Info.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Info.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Info.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Info.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Infos.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Infos.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Multi.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Multi.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Option.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Option.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Option.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Option.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/OptionBase.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/OptionBase.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Options.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Options.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Types.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/Types.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/cURLpp.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/cURLpp.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/CurlHandle.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/CurlHandle.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/CurlHandle.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/CurlHandle.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainer.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainer.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainer.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainer.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainerType.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionContainerType.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionList.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionList.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionSetter.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionSetter.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionSetter.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/OptionSetter.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/SList.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/curlpp/internal/SList.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/EmptyType.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/EmptyType.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/NonCopyable.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/NonCopyable.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/NullType.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/NullType.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/SmartPtr.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/SmartPtr.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingFactoryMutex.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingFactoryMutex.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingFactoryMutex.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingFactoryMutex.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingSingle.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingSingle.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingSingle.inl">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/ThreadingSingle.inl">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/TypeList.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/TypeList.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/TypeTrait.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/TypeTrait.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/include/utilspp/clone_ptr.hpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/include/utilspp/clone_ptr.hpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Easy.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Easy.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Exception.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Exception.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Form.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Form.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Info.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Info.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Multi.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Multi.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/OptionBase.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/OptionBase.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Options.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/Options.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/cURLpp.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/cURLpp.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/CurlHandle.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/CurlHandle.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/OptionList.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/OptionList.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/OptionSetter.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/OptionSetter.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/SList.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/src/curlpp/internal/SList.cpp">
 			<Option target="curlpp_static"/>
 			<Option target="curlpp"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/src/main.cpp">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/main.cpp">
 			<Option target="ApolloTradingBot"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\lib\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\lib\curlpp\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\lib\curlpp\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/curlpp-config.in">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/curlpp-config.in">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/curlpp.pc.in">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/curlpp.pc.in">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/CMakeLists.txt">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/curlpp-config.in">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/curlpp-config.in">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
-		<Unit filename="/Users/Rod/CLionProjects/ApolloTradingBot/lib/curlpp/extras/curlpp.pc.in">
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/lib/curlpp/extras/curlpp.pc.in">
 			<Option virtualFolder="CMake Files\lib\curlpp\extras\"/>
 		</Unit>
 	</Project>
