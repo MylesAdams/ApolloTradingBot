@@ -1,27 +1,54 @@
-// rapidjson/example/simpledom/simpledom.cpp`
+
+#include <string>
+#include <sstream>
+#include <iostream>
+
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Easy.hpp>
+#include <curlpp/Options.hpp>
+
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
-#include <iostream>
 
-using namespace rapidjson;
 
-int main() {
-    // 1. Parse a JSON string into DOM.
-    const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
-    Document d;
-    d.Parse(json);
+int main()
+{
+    std::string redditURL = "https://www.reddit.com/r/vechain/";
+    try
+    {
+        curlpp::Cleanup myCleanup;
 
-    // 2. Modify it by DOM.
-    Value& s = d["stars"];
-    s.SetInt(s.GetInt() + 1);
+        curlpp::options::Url myUrl(redditURL + "about.json");
+        curlpp::Easy myRequest;
+        myRequest.setOpt(myUrl);
 
-    // 3. Stringify the DOM
-    StringBuffer buffer;
-    Writer<StringBuffer> writer(buffer);
-    d.Accept(writer);
 
-    // Output {"project":"rapidjson","stars":11}
-    std::cout << buffer.GetString() << std::endl;
+        myRequest.perform();
+
+
+        std::stringstream jsonOutput;
+        curlpp::options::WriteStream ws(&jsonOutput);
+        rapidjson::Document doc;
+
+        myRequest.setOpt(ws);
+        myRequest.perform();
+
+        doc.Parse(jsonOutput.str().c_str());
+
+        jsonOutput << doc["subscribers"].GetInt();
+
+        }
+
+    catch(curlpp::RuntimeError &re)
+    {
+        std::cout << re.what() << std::endl;
+    }
+
+    catch(curlpp::LogicError &le)
+    {
+        std::cout << le.what() << std::endl;
+    }
+
     return 0;
 }
