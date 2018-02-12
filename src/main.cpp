@@ -22,6 +22,6 @@ int main()
     complete_urls.push_back("https://a.4cdn.org/biz/catalog.json");
     incomplete_urls.push_back("https://a.4cdn.org/biz");    //may or may not be necessary depending on the targeted website. This is needed in FourChan's case.
     Apollo::Bot::FourChan fc(complete_urls, incomplete_urls);
-    auto data = fc.getData();
+    auto& data = fc.getData();
     return 0;
 }

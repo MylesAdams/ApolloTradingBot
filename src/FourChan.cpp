@@ -11,10 +11,11 @@ void Apollo::Bot::FourChan::saveSettings()
     }
 }
 
-Apollo::Bot::FourChan::FourChan()
+void Apollo::Bot::FourChan::initFourChan()
 {
     this->highest_post_seen_ = 0;
-    std::ifstream res("../resources/fourchan.txt");
+    std::ifstream res;
+    res.open(this->resource_file);
     if (res.is_open())
     {
         std::stringstream ss;
@@ -69,12 +70,13 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
 Apollo::Bot::FourChan::FourChan(const std::vector<std::string>& complete_urls)
     : Bot(complete_urls)
 {
+    this->initFourChan();
 }
 
 Apollo::Bot::FourChan::FourChan(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls)
     : Bot(complete_urls, incomplete_urls)
 {
-
+    this->initFourChan();
 }
 
 Apollo::Bot::FourChan::~FourChan()

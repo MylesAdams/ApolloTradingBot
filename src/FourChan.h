@@ -15,8 +15,8 @@ namespace Apollo
             const std::string resource_file = "../resources/fourchan.txt";
             void saveSettings();
         protected:
-            //init ctor
-            FourChan();
+            //init
+            void initFourChan();
 
             //fields
             unsigned long long int highest_post_seen_;
