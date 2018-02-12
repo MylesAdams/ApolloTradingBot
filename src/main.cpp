@@ -13,19 +13,19 @@
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
 
 int main()
 {
-    const std::string BASE_URL_ = "https://a.4cdn.org/biz/";
-    curlpp::Cleanup cleaner;
+    const std::string BASE_URL_ = "http://twitter.com/taradublinrocks";
+    curlpp::Cleanup cleaner2;
     curlpp::Easy my_request;
     std::stringstream json_response;
 
-    my_request.setOpt(curlpp::Options::Url(BASE_URL_ + "catalog.json"));
+    // my_request.setOpt(curlpp::Options::Url(BASE_URL_ + "catalog.json"));
+    my_request.setOpt(curlpp::Options::Url(BASE_URL_));
     my_request.setOpt(curlpp::options::WriteStream(&json_response));
     my_request.perform();
-    
+
     // 1. Parse a JSON string into DOM.
     rapidjson::Document doc;
     doc.Parse(json_response.str().c_str());
@@ -47,7 +47,7 @@ int main()
 
                 rapidjson::Document thread;
                 thread.Parse(thread_response.str().c_str());
-                
+
                 rapidjson::Value &posts = thread["posts"];
                 for (int com_idx = 0; com_idx < posts.Size(); ++com_idx)
                 {

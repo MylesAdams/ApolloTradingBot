@@ -21,6 +21,7 @@ set(SOURCES
 set(HEADERS
   ${HEADERS}
   src/Bot.h
+  src/Comment.h
   )
 
 set(LIBRARIES 
