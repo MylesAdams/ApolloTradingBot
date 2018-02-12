@@ -15,12 +15,15 @@ set(SOURCES
   ${SOURCES}
   src/main.cpp
   src/Bot.cpp
+  src/FourChan.cpp
   )
 
 # Put any header files you create here:
 set(HEADERS
   ${HEADERS}
   src/Bot.h
+  src/Comment.h
+  src/FourChan.h
   )
 
 set(LIBRARIES 

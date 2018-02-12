@@ -4,32 +4,41 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
+
+#include "Comment.h"
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
-#include <curlpp/Multi.hpp>
 #include <curlpp/Options.hpp>
-#include <curlpp/Exception.hpp>
 
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
-namespace Bot {
-    class Bot
-    {
-    private:
-    protected:
-        //fields
-        //TODO: declare a curlpp version of a libcurl multi-handle here
-        std::vector<std::string> url_targets_;
-        std::vector<curlpp::Easy> easy_handles_;
-
-        //methods
-        virtual std::string cleanData(std::stringstream &response) = 0;    //must be overridden in derived class
-    public:
-        //ctors
-        
-        //methods
-
-    };
-}
-
+namespace Apollo {
+    namespace Bot { // Put all classes that extend Bot in the Bot namespace
+        class Bot
+        {
+        private:
+        protected:
+            //fields
+            std::vector<std::string> COMPLETE_URLS_;
+            const std::vector<std::string> INCOMPLETE_URLS_;
+            //methods
+            virtual std::stringstream requestResponse(const std::string& target_url);
+            virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
+            virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments);
+        public:
+            //ctors
+            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
+            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
+            Bot(const std::vector<std::string>& complete_urls);
+            Bot(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls);
+            
+            //methods
+            virtual std::vector<Comment> getData();
+        }; //end of Bot abstract class
+    }//end of Bot namespace
+}//end of Apollo namespace
 #endif
