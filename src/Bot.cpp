@@ -1,5 +1,9 @@
 #include "Bot.h"
 
+Apollo::Bot::Bot::Bot()
+{
+}
+
 std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
 {
     std::stringstream response;
@@ -25,6 +29,10 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::cleanComments(std::vector<Comment
     }
 
     return comments;
+}
+
+Apollo::Bot::Bot::~Bot()
+{
 }
 
 Apollo::Bot::Bot::Bot(const std::vector<std::string>& complete_urls)
