@@ -27,17 +27,22 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::cleanComments(std::vector<Comment
     return comments;
 }
 
-Apollo::Bot::Bot::Bot(std::vector<std::string> target_urls)
-    : target_urls_(target_urls)
+Apollo::Bot::Bot::Bot(const std::vector<std::string>& complete_urls)
+    : COMPLETE_URLS_(complete_urls)
+{}
+
+Apollo::Bot::Bot::Bot(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls)
+    :   COMPLETE_URLS_(complete_urls),
+        INCOMPLETE_URLS_(incomplete_urls)
 {}
 
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    for (auto& target_url : this->target_urls_)
+    for (auto& complete_url : this->COMPLETE_URLS_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(target_url);
+        std::stringstream target_response = requestResponse(complete_url);
 
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;

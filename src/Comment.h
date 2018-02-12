@@ -8,6 +8,16 @@ namespace Apollo {
     {
         std::string content;
         std::string ID;
+
+        Comment()
+            :   content(""),
+                ID("")
+        {}
+
+        Comment(const std::string& content, const std::string& ID)
+            :   content(content),
+                ID(ID)
+        {}
     };
 }
 #endif
