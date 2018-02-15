@@ -4,9 +4,9 @@
 
 #include "FourChan.h"
 
-
 #include <iostream>
 #include <sstream>
+#include <cctype>
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
@@ -19,10 +19,15 @@ using Apollo::Comment;
 
 int main()
 {
+    std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
     std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
     Apollo::Bot::FourChan fc;
     auto& data = fc.getData();
+
+    std::ofstream out("fourchanbot_test.txt");
     for (auto& comment : data)
-        std::cout << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==================================\n" << std::endl;
+        if (std::regex_search(comment.content, rgx))
+            out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
+    out.close();
     return 0;
 }

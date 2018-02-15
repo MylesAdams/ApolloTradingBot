@@ -69,6 +69,7 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Co
         comment.content = std::regex_replace(comment.content, rgx_misc, "");
         comment.content = std::regex_replace(comment.content, rgx_quotelink, "");
         comment.content = this->trim(comment.content);
+        std::transform(comment.content.begin(), comment.content.end(), comment.content.begin(), ::tolower);
     }
     return comments;
 }
