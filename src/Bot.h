@@ -26,8 +26,11 @@ namespace Apollo {
             Bot();
 
             //fields
-            const std::vector<std::string> COMPLETE_URLS_;
-            const std::vector<std::string> INCOMPLETE_URLS_;
+
+            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
+            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
+            std::vector<std::string> COMPLETE_URLS_;
+            std::vector<std::string> INCOMPLETE_URLS_;
             //methods
             virtual std::stringstream requestResponse(const std::string& target_url);
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
@@ -37,10 +40,6 @@ namespace Apollo {
             std::string trim(const std::string& str);
         public:
             virtual ~Bot();
-            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
-            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
-            Bot(const std::vector<std::string>& complete_urls);
-            Bot(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls);
             
             //methods
             virtual std::vector<Comment> getData();

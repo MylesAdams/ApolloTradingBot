@@ -13,26 +13,6 @@ void Apollo::Bot::FourChan::saveSettings()
     }
 }
 
-void Apollo::Bot::FourChan::initFourChan()
-{
-    this->highest_post_seen_ = 0;
-    this->highest_timestamp_seen_ = 0;
-    std::ifstream res;
-    res.open(this->resource_file);
-    if (res.is_open())
-    {
-        std::stringstream ss;
-        ss << res.rdbuf();
-        unsigned long long num;
-        if (ss >> num)
-            if (num > highest_post_seen_)
-                highest_post_seen_ = num;
-        if (ss >> num)
-            if (num > highest_timestamp_seen_)
-                highest_timestamp_seen_ = num;
-    }
-}
-
 std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::Document & document)
 {
     unsigned long long temp_highest_post_seen = this->highest_post_seen_;
@@ -93,16 +73,26 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Co
     return comments;
 }
 
-Apollo::Bot::FourChan::FourChan(const std::vector<std::string>& complete_urls)
-    : Bot(complete_urls)
+Apollo::Bot::FourChan::FourChan()
 {
-    this->initFourChan();
-}
-
-Apollo::Bot::FourChan::FourChan(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls)
-    : Bot(complete_urls, incomplete_urls)
-{
-    this->initFourChan();
+    this->COMPLETE_URLS_.push_back("https://a.4cdn.org/biz/threads.json");
+    this->INCOMPLETE_URLS_.push_back("https://a.4cdn.org/biz");
+    this->highest_post_seen_ = 0;
+    this->highest_timestamp_seen_ = 0;
+    std::ifstream res;
+    res.open(this->resource_file);
+    if (res.is_open())
+    {
+        std::stringstream ss;
+        ss << res.rdbuf();
+        unsigned long long num;
+        if (ss >> num)
+            if (num > highest_post_seen_)
+                highest_post_seen_ = num;
+        if (ss >> num)
+            if (num > highest_timestamp_seen_)
+                highest_timestamp_seen_ = num;
+    }
 }
 
 Apollo::Bot::FourChan::~FourChan()

@@ -29,15 +29,6 @@ Apollo::Bot::Bot::~Bot()
 {
 }
 
-Apollo::Bot::Bot::Bot(const std::vector<std::string>& complete_urls)
-    : COMPLETE_URLS_(complete_urls)
-{}
-
-Apollo::Bot::Bot::Bot(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls)
-    :   COMPLETE_URLS_(complete_urls),
-        INCOMPLETE_URLS_(incomplete_urls)
-{}
-
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;

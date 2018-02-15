@@ -20,11 +20,7 @@ using Apollo::Comment;
 int main()
 {
     std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
-    std::vector<std::string> complete_urls;
-    std::vector<std::string> incomplete_urls;
-    complete_urls.push_back("https://a.4cdn.org/biz/threads.json");
-    incomplete_urls.push_back("https://a.4cdn.org/biz");    //may or may not be necessary depending on the targeted website. This is needed in FourChan's case.
-    Apollo::Bot::FourChan fc(complete_urls, incomplete_urls);
+    Apollo::Bot::FourChan fc;
     auto& data = fc.getData();
     for (auto& comment : data)
         std::cout << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==================================\n" << std::endl;
