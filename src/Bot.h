@@ -5,10 +5,6 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <algorithm>
-#include <cctype>
-#include <iterator>
-#include <numeric>
 
 #include "Comment.h"
 
