@@ -2,6 +2,7 @@
 #define FOURCHAN_H
 
 #include <fstream>
+#include <regex>
 
 #include "Bot.h"
 
@@ -23,6 +24,7 @@ namespace Apollo
 
             //methods
             std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) override;
+            std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments) override;
         public:
             FourChan(const std::vector<std::string>& complete_urls);
             FourChan(const std::vector<std::string>& complete_urls, const std::vector<std::string>& incomplete_urls);

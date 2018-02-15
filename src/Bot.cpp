@@ -16,19 +16,13 @@ std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_u
     return response;
 }
 
-std::vector<Apollo::Comment> Apollo::Bot::Bot::cleanComments(std::vector<Comment>& comments)
+std::string Apollo::Bot::Bot::trim(const std::string & str)
 {
-    //regex to strip all unnecessary content (e.g. html tags)
-    for (auto& comment : comments)
-    {
-        //strip HTML
-        //PLACEHOLDER
-
-        //remove stopwords
-        //PLACEHOLDER
-    }
-
-    return comments;
+    size_t first = str.find_first_not_of(' ');
+    if (std::string::npos == first)
+        return "";
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
 }
 
 Apollo::Bot::Bot::~Bot()

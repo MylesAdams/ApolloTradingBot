@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+#include <cctype>
+#include <iterator>
+#include <numeric>
 
 #include "Comment.h"
 
@@ -26,12 +30,15 @@ namespace Apollo {
             Bot();
 
             //fields
-            std::vector<std::string> COMPLETE_URLS_;
+            const std::vector<std::string> COMPLETE_URLS_;
             const std::vector<std::string> INCOMPLETE_URLS_;
             //methods
             virtual std::stringstream requestResponse(const std::string& target_url);
-            virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
-            virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments);
+            virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
+            virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
+
+            //helpers
+            std::string trim(const std::string& str);
         public:
             virtual ~Bot();
             //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.

@@ -15,6 +15,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 
+using Apollo::Comment;
+
 int main()
 {
     std::vector<std::string> complete_urls;

@@ -64,6 +64,22 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
         }
     }
     this->highest_post_seen_ = temp_highest_post_seen;
+    return this->cleanComments(comments);
+}
+
+std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Comment>& comments)
+{
+    //regex for removing post# quotes in 4chan replies
+    std::regex rgx_linebreak("(<br>)+");
+    std::regex rgx_misc("(&gt;)+|(<span class=\"quote\">)+|(</span>)+|(&quot;)+|(&#[0-9]+;)+|(/biz/thread/[0-9]+)+|(<wbr>)+|(https?://)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
+    std::regex rgx_quotelink("(<a href=\".*\" class=\"quotelink\">[0-9]+</a>)");
+    for (auto& comment : comments)
+    {
+        comment.content = std::regex_replace(comment.content, rgx_linebreak, " ");
+        comment.content = std::regex_replace(comment.content, rgx_misc, "");
+        comment.content = std::regex_replace(comment.content, rgx_quotelink, "");
+        comment.content = this->trim(comment.content);
+    }
     return comments;
 }
 
