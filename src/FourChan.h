@@ -21,6 +21,7 @@ namespace Apollo
 
             //fields
             unsigned long long int highest_post_seen_;
+            unsigned long long int highest_timestamp_seen_;
 
             //methods
             std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) override;

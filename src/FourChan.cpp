@@ -7,6 +7,8 @@ void Apollo::Bot::FourChan::saveSettings()
     {
         std::stringstream ss;
         ss << this->highest_post_seen_;
+        ss << " ";
+        ss << this->highest_timestamp_seen_;
         out << ss.rdbuf();
     }
 }
@@ -14,6 +16,7 @@ void Apollo::Bot::FourChan::saveSettings()
 void Apollo::Bot::FourChan::initFourChan()
 {
     this->highest_post_seen_ = 0;
+    this->highest_timestamp_seen_ = 0;
     std::ifstream res;
     res.open(this->resource_file);
     if (res.is_open())
@@ -24,24 +27,30 @@ void Apollo::Bot::FourChan::initFourChan()
         if (ss >> num)
             if (num > highest_post_seen_)
                 highest_post_seen_ = num;
+        if (ss >> num)
+            if (num > highest_timestamp_seen_)
+                highest_timestamp_seen_ = num;
     }
 }
 
 std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::Document & document)
 {
     unsigned long long temp_highest_post_seen = this->highest_post_seen_;
+    unsigned long long temp_highest_timestamp_seen = this->highest_timestamp_seen_;
     std::vector<Apollo::Comment> comments;
     for (int page_idx = 0; page_idx < document.Size(); ++page_idx)
     {
         const rapidjson::Value& threads = document[page_idx]["threads"];
         for (int thread_idx = 0; thread_idx < threads.Size(); ++thread_idx)
         {
-            int thread_no = threads[thread_idx]["no"].GetInt();
-            int replies = threads[thread_idx]["replies"].GetInt();
-            if (replies > 0)
+            unsigned long long int thread_no = threads[thread_idx]["no"].GetInt();
+            unsigned long long int last_modified = threads[thread_idx]["last_modified"].GetInt();
+            if (last_modified > this->highest_timestamp_seen_)
             {
-                std::stringstream thread_response = requestResponse(this->INCOMPLETE_URLS_[0] + "/thread/" + std::to_string(thread_no) + ".json");
+                if (last_modified > temp_highest_timestamp_seen)
+                    temp_highest_timestamp_seen = last_modified;
 
+                std::stringstream thread_response = requestResponse(this->INCOMPLETE_URLS_[0] + "/thread/" + std::to_string(thread_no) + ".json");
                 rapidjson::Document thread;
                 thread.Parse(thread_response.str().c_str());
 
@@ -64,6 +73,7 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
         }
     }
     this->highest_post_seen_ = temp_highest_post_seen;
+    this->highest_timestamp_seen_ = temp_highest_timestamp_seen;
     return this->cleanComments(comments);
 }
 
