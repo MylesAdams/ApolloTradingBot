@@ -1,132 +1,33 @@
+/*
+4chan example of using curlpp and rapidjson
+*/
 
+#include "FourChan.h"
 
-#include "document.h"
-#include "writer.h"
-#include "stringbuffer.h"
-#include "twitcurl.h"
-#include "oauthlib.h"
-#include "prettywriter.h" // for stringify JSON
-
-#include <cstdio>
 #include <iostream>
-#include <string>
 #include <sstream>
-#include <algorithm>
-#include <fstream>
+#include <cctype>
 
-using namespace std;
-using namespace rapidjson;
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Easy.hpp>
+#include <curlpp/Options.hpp>
 
-FILE _iob[] = { *stdin, *stdout, *stderr };
-extern "C" FILE * __cdecl __iob_func(void) { return _iob; }
-extern "C" void __imp__set_output_format(void) {};
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
 
+using Apollo::Comment;
 
+int main()
+{
+    std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
+    std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
+    Apollo::Bot::FourChan fc;
+    const auto& data = fc.getData();
 
-int main() {
-	//const char json[] = "[{ \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] }]";
-	//string b(json);
-	//cout << json <<  endl;
-	//cout << b << endl;
-	//b.erase(0, 1);
-	//cout << b << endl;
-	//b.erase(b.length() - 1, 1);
-	//cout << b << endl;
-	//const char *json_array = b.c_str();
-	//cout << json_array << endl;
-	//system("pause");
-	////printf("Original JSON:\n %s\n", json);
-	//Document document;
-	//document.Parse(json_array);
-	//document.GetType();
-	//
-	//document.IsArray();
-	//system("pause");
-	//printf("hello = %s\n", document["hello"].GetString());
-	//
-	//system("pause");
-
-	ofstream myfile;
-	string tmpStr;
-	string replyMsg;
-	char tmpBuf[1024];
-	twitCurl twitterObj;
-
-	string consumerKey = "28JDbKeafaAMvHACv6Z9Y1Wlq";
-	string consumerKeySecret = "y2EISPTqHxSOqj7Lz7Rffg0QprOpzbqjS6e3udOL7rQMt0Izv5";
-	string myOAuthAccessTokenKey = "955967890301190144-MJuVJqzRCg4Jgr4wxFb0ZzWwAfQU20Y";
-	string myOAuthAccessTokenSecret = "7XB8lfEtdN7z1faK45nFvDItHMUWoyk4weVoNtoDD9GVz";
-
-	// Seting keys
-	twitterObj.getOAuth().setConsumerKey(consumerKey);
-	twitterObj.getOAuth().setConsumerSecret(consumerKeySecret);
-	twitterObj.getOAuth().setOAuthTokenKey(myOAuthAccessTokenKey);
-	twitterObj.getOAuth().setOAuthTokenSecret(myOAuthAccessTokenSecret);
-
-
-
-
-
-	myfile.open("example.json");
-	rapidjson::Document d;
-
-
-	/* Get user timeline */
-	replyMsg = "";
-	printf("\nGetting user timeline\n");
-	if (twitterObj.timelineUserGet(false, false, 50, "vechainofficial", false))
-	{
-		twitterObj.getLastWebResponse(replyMsg);
-		//printf("\ntwitterClient:: twitCurl::timelineUserGet web response:\n%s\n", replyMsg.c_str());
-		myfile << replyMsg.c_str();
-		//string b(replyMsg.c_str());
-		//b.erase(0, 1);
-		//b.erase(b.length() - 1, 1);
-		//const char *json_array = b.c_str();
-		//d.Parse(json_array);
-		d.Parse(replyMsg.c_str());
-	}
-	else
-	{
-		twitterObj.getLastCurlError(replyMsg);
-		printf("\ntwitterClient:: twitCurl::timelineUserGet error:\n%s\n", replyMsg.c_str());
-	}
-	myfile.close();
-
-	//________________________________________________________________
-	//system("pause");
-	for (int i = 0; i < d.Size(); ++i)
-		cout << d[i]["text"].GetString() << endl << endl;
-
-	//printf("text = %s\n", d["text"].GetString());
-	//string comment = d["text"].GetString();
-
-	//cout << comment << endl;
-
-	//system("pause");
-
-
-
-
-	//// Post a new status message 
-	//tmpStr = "Testing Twitter API 2.0";
-	//if (twitterObj.statusUpdate(tmpStr))
-	//{
-	//	twitterObj.getLastWebResponse(replyMsg);
-	//	printf("\ntwitterClient:: twitCurl::statusUpdate web response:\n%s\n", replyMsg.c_str());
-	//}
-	//else
-	//{
-	//	twitterObj.getLastCurlError(replyMsg);
-	//	printf("\ntwitterClient:: twitCurl::statusUpdate error:\n%s\n", replyMsg.c_str());
-	//}
-
-
-
-
-
-	cout << "hi" << endl;
-	system("pause");
-	return 0;
+    std::ofstream out("fourchanbot_test.txt");
+    for (auto& comment : data)
+        if (std::regex_search(comment.content, rgx))
+            out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
+    out.close();
+    return 0;
 }
-
