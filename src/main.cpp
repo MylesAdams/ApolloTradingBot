@@ -24,6 +24,28 @@ extern "C" void __imp__set_output_format(void) {};
 
 
 int main() {
+	//const char json[] = "[{ \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] }]";
+	//string b(json);
+	//cout << json <<  endl;
+	//cout << b << endl;
+	//b.erase(0, 1);
+	//cout << b << endl;
+	//b.erase(b.length() - 1, 1);
+	//cout << b << endl;
+	//const char *json_array = b.c_str();
+	//cout << json_array << endl;
+	//system("pause");
+	////printf("Original JSON:\n %s\n", json);
+	//Document document;
+	//document.Parse(json_array);
+	//document.GetType();
+	//
+	//document.IsArray();
+	//system("pause");
+	//printf("hello = %s\n", document["hello"].GetString());
+	//
+	//system("pause");
+
 	ofstream myfile;
 	string tmpStr;
 	string replyMsg;
@@ -46,17 +68,22 @@ int main() {
 
 
 	myfile.open("example.json");
-	Document d;
+	rapidjson::Document d;
 
 
 	/* Get user timeline */
 	replyMsg = "";
 	printf("\nGetting user timeline\n");
-	if (twitterObj.timelineUserGet(true, false, 1, "vechainofficial", false))
+	if (twitterObj.timelineUserGet(false, false, 50, "vechainofficial", false))
 	{
 		twitterObj.getLastWebResponse(replyMsg);
 		//printf("\ntwitterClient:: twitCurl::timelineUserGet web response:\n%s\n", replyMsg.c_str());
 		myfile << replyMsg.c_str();
+		//string b(replyMsg.c_str());
+		//b.erase(0, 1);
+		//b.erase(b.length() - 1, 1);
+		//const char *json_array = b.c_str();
+		//d.Parse(json_array);
 		d.Parse(replyMsg.c_str());
 	}
 	else
@@ -65,12 +92,18 @@ int main() {
 		printf("\ntwitterClient:: twitCurl::timelineUserGet error:\n%s\n", replyMsg.c_str());
 	}
 	myfile.close();
+
+	//________________________________________________________________
+	//system("pause");
+	for (int i = 0; i < d.Size(); ++i)
+		cout << d[i]["text"].GetString() << endl << endl;
+
 	//printf("text = %s\n", d["text"].GetString());
 	//string comment = d["text"].GetString();
 
 	//cout << comment << endl;
 
-	system("pause");
+	//system("pause");
 
 
 
