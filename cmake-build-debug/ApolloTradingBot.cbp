@@ -410,6 +410,21 @@
 		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/Bot.h">
 			<Option target="ApolloTradingBot"/>
 		</Unit>
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/Comment.h">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/FourChan.cpp">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/FourChan.h">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/Reddit.cpp">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
+		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/Reddit.h">
+			<Option target="ApolloTradingBot"/>
+		</Unit>
 		<Unit filename="/Users/Rod/Desktop/PersonalProjects/ApolloTradingBot/src/main.cpp">
 			<Option target="ApolloTradingBot"/>
 		</Unit>

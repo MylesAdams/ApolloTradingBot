@@ -15,7 +15,7 @@ set(SOURCES
   src/main.cpp
   src/Bot.cpp
   src/FourChan.cpp
-  )
+        src/Reddit.cpp)
 
 # Put any header files you create here:
 set(HEADERS
@@ -23,7 +23,7 @@ set(HEADERS
   src/Bot.h
   src/Comment.h
   src/FourChan.h
-  )
+        src/Reddit.h)
 
 set(LIBRARIES 
   ${LIBRARIES}
