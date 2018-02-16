@@ -29,4 +29,4 @@ namespace Apollo
         };
     }// end of Bot namespace
 }// end of Apollo namespace
-#endif FOURCHAN_H
+#endif
