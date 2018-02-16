@@ -22,7 +22,7 @@ int main()
     std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
     std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
     Apollo::Bot::FourChan fc;
-    auto& data = fc.getData();
+    const auto& data = fc.getData();
 
     std::ofstream out("fourchanbot_test.txt");
     for (auto& comment : data)
