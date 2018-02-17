@@ -3,12 +3,17 @@ project(ApolloTradingBot C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(PythonLibs ${PY_VERSION} REQUIRED)
+find_package(Boost 1.64.0 REQUIRED COMPONENTS system python)
+
 add_subdirectory(lib)
 
 include_directories(src)
 include_directories(lib/rapidjson/include)
 include_directories(lib/curlpp/include)
 include_directories(lib/curl/include)
+include_directories(${PYTHON_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
 
 # If you make a new *.cpp file, place it here:
 set(SOURCES
@@ -26,7 +31,7 @@ set(HEADERS
   src/FourChan.h
   )
 
-set(LIBRARIES 
+set(LIBRARIES
   ${LIBRARIES}
   curlpp
   )
@@ -38,7 +43,9 @@ source_group("Header files" FILES ${HEADERS})
 # files to the IDE project so they appear while working in an IDE.
 add_executable(ApolloTradingBot ${SOURCES} ${HEADERS})
 
-target_link_libraries(ApolloTradingBot ${LIBRARIES})
+target_link_libraries(ApolloTradingBot ${LIBRARIES} ${Boost_LIBRARIES})
+#TARGET_LINK_LIBRARIES( ApolloTradingBot LINK_PUBLIC  )
+
 
 
 # On windows systems, this copies the newly created curlpp.dll into the same output folder as the executable

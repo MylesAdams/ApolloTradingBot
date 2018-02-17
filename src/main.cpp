@@ -2,6 +2,8 @@
 4chan example of using curlpp and rapidjson
 */
 
+#include <boost/python.hpp>
+
 #include "FourChan.h"
 
 #include <iostream>
