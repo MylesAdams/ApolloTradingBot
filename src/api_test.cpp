@@ -47,16 +47,14 @@ int main(int argc, char* argv[]) {
 
 	// Dump prehash into an arry of bytes.
 	unsigned char* ary_prehash = new unsigned char[prehash.size()];
-	for (int i = 0; i < prehash.size(); i++) {
-		ary_prehash[i] = prehash[i];
+	for (size_t i = 0; i < prehash.size(); i++) {
+		ary_prehash[i] = static_cast<unsigned char>(prehash[i]);
 	}
-
-
 
 	// Dump decoded vector into an array of bytes.
 	unsigned char* ary_key = new unsigned char[decoded_vec.size()];
-	for (int i = 0; i < decoded_vec.size(); i++) {
-		ary_key[i] = decoded_vec[i];
+	for (size_t i = 0; i < decoded_vec.size(); i++) {
+		ary_key[i] = static_cast<unsigned char>(decoded_vec[i]);
 	}
 
 	// Generate signature using sha256 encryption on prehash with key ary_key.
@@ -66,7 +64,7 @@ int main(int argc, char* argv[]) {
 
 	// Add ecypred bytes to a vector so that it can be encoded.
 	std::vector<unsigned char> signature;
-	for (int i = 0; i < encrypted_length; i++) {
+	for (size_t i = 0; i < encrypted_length; i++) {
 		signature.push_back(encrypted[i]);
 	}
 
