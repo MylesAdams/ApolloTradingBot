@@ -9,6 +9,8 @@ include_directories(src)
 include_directories(lib/rapidjson/include)
 include_directories(lib/curlpp/include)
 include_directories(lib/curl/include)
+include_directories(lib/twitterClient/include)
+
 
 # If you make a new *.cpp file, place it here:
 set(SOURCES
@@ -16,6 +18,7 @@ set(SOURCES
   src/main.cpp
   src/Bot.cpp
   src/FourChan.cpp
+  src/Twitter.cpp
   )
 
 # Put any header files you create here:
@@ -24,11 +27,13 @@ set(HEADERS
   src/Bot.h
   src/Comment.h
   src/FourChan.h
+  src/Twitter.h
   )
 
 set(LIBRARIES 
   ${LIBRARIES}
   curlpp
+  twitcurl
   )
 
 source_group("Source files" FILES ${SOURCES})
@@ -47,5 +52,12 @@ if(WIN32)
   add_custom_command(TARGET ApolloTradingBot POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${PROJECT_SOURCE_DIR}/Build/lib/curlpp/$<CONFIGURATION>"
+        $<TARGET_FILE_DIR:ApolloTradingBot>)
+endif()
+
+if(WIN32)
+  add_custom_command(TARGET ApolloTradingBot POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${PROJECT_SOURCE_DIR}/Build/lib/twitterClient/$<CONFIGURATION>"
         $<TARGET_FILE_DIR:ApolloTradingBot>)
 endif()

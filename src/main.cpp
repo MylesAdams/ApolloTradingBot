@@ -3,6 +3,7 @@
 */
 
 #include "FourChan.h"
+#include "Twitter.h"
 
 #include <iostream>
 #include <sstream>
@@ -15,19 +16,30 @@
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 
+
 using Apollo::Comment;
+
 
 int main()
 {
-    std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
-    std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
-    Apollo::Bot::FourChan fc;
-    const auto& data = fc.getData();
+	Apollo::Bot::Twitter tw;
+	const auto& data = tw.getData();
+	std::ofstream out("twitterbot_test.txt");
+	for (auto& comment : data)
+			out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
+	out.close();
 
-    std::ofstream out("fourchanbot_test.txt");
-    for (auto& comment : data)
-        if (std::regex_search(comment.content, rgx))
-            out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
-    out.close();
-    return 0;
+	return 0;
+
+	//std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
+	//std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
+ //   Apollo::Bot::FourChan fc;
+ //   const auto& data = fc.getData();
+
+ //   std::ofstream out("fourchanbot_test.txt");
+ //   for (auto& comment : data)
+ //       if (std::regex_search(comment.content, rgx))
+ //           out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
+ //   out.close();
+ //   return 0;
 }
