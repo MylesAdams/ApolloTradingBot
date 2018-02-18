@@ -1,3 +1,0 @@
-/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/mylesadams/Documents/Workspace/ApolloTradingBot/cmake-build-debug/CMakeFiles/ApolloTradingBot.dir
