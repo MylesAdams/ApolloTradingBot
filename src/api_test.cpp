@@ -39,11 +39,15 @@ int main(int argc, char* argv[]) {
 	
 
 	// Decode base64 encoded key, secret.
-	string_t secret = U("lYslfEnPL8fODyE1fpqYCD4ojTwgMMRb/C7nfhIkWj8F3jixocVH8MmhV2jE9RHHMYt3t53U59Jsqe6mNhzAWA==");
+	string_t secret = U("+RDw7Q8V9EbHZusYzX3vfub0I80tytDs8RQPd3la8/wpKLShyf+B6113C3xxqiRy0r5c8UWiUmy+xSaATemWIg==");
 	std::vector<unsigned char> decoded_vec = utility::conversions::from_base64(secret);
 	std::cout << "Decoded secret has " << decoded_vec.size() << " bytes." << std::endl << std::endl;
-
 	std::cout << "Prehash size is " << prehash.size() << std::endl;
+	std::cout << "Decoded secret is: ";
+	for (auto i : decoded_vec) {
+		std::cout << i;
+	}
+	std::cout << std::endl;
 
 	// Dump prehash into an arry of bytes.
 	unsigned char* ary_prehash = new unsigned char[prehash.size()];
@@ -67,6 +71,10 @@ int main(int argc, char* argv[]) {
 	for (size_t i = 0; i < encrypted_length; i++) {
 		signature.push_back(encrypted[i]);
 	}
+	for (auto i : signature) {
+		std::cout << i;
+	}
+	std::cout << std::endl;
 
 	// Encode signature in base64.
 	string_t sign = conversions::to_base64(signature);
@@ -79,10 +87,10 @@ int main(int argc, char* argv[]) {
 	// Add headers to http request.
 	req.headers().set_content_type(U("application/json"));								// Sets content type to application/json.
 	req.set_request_uri(U("GET/accounts"));
-	req.headers().add(U("CB-ACCESS-KEY"), U("8da062e957587b4cbb021e92d69ea459"));		// Key header.
+	req.headers().add(U("CB-ACCESS-KEY"), U("c0d41169560a191c7817c11b6ba4908b"));		// Key header.
 	req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
-	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("myc2rfd2f9"));						// Passphrase header.
+	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
 
 	//generate request task and response continuation.
 	my_client.request(req).then([](http_response response) {
