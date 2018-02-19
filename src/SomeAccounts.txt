@@ -1,0 +1,32 @@
+Gmail
+-----
+user:LamboLand48@gmail.com
+pass:1234shill
+
+Gdax Sandbox
+------------
+url:https://api-public.sandbox.gdax.com
+user:LamboLand48@gmail.com
+pass:1234shill!
+passphrase:mfsacc5sm7
+api-key:c0d41169560a191c7817c11b6ba4908b
+secret:+RDw7Q8V9EbHZusYzX3vfub0I80tytDs8RQPd3la8/wpKLShyf+B6113C3xxqiRy0r5c8UWiUmy+xSaATemWIg==
+
+Binance
+-------
+user:LamboLand48@gmail.com
+pass:1234SHILL
+
+Poloniex 
+--------
+user:LamboLand48@gmail.com
+pass:1234shill
+
+KuCoin
+------
+user:LamboLand48@gmail.com
+pass:1234Shill
+
+Bittrex
+-------
+currently not accepting new users...
