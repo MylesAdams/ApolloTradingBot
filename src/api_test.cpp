@@ -73,7 +73,10 @@ int main(int argc, char* argv[]) {
 
 	// Add headers to http request.
 	req.headers().set_content_type(U("application/json"));								// Sets content type to application/json.
-	req.set_request_uri(U("/accounts"));
+<<<<<<< HEAD
+=======
+	req.set_request_uri(request_path);
+>>>>>>> 22332d459f1717b4270b014e754e49b8094e3bbe
 	req.headers().add(U("CB-ACCESS-KEY"), U("c0d41169560a191c7817c11b6ba4908b"));		// Key header.
 	req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
