@@ -16,6 +16,7 @@ set(SOURCES
   src/main.cpp
   src/Bot.cpp
   src/FourChan.cpp
+  src/Twitter.cpp
   )
 
 # Put any header files you create here:
@@ -24,6 +25,7 @@ set(HEADERS
   src/Bot.h
   src/Comment.h
   src/FourChan.h
+  src/Twitter.h
   )
 
 set(LIBRARIES 
