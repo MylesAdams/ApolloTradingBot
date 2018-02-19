@@ -35,8 +35,6 @@ int main(int argc, char* argv[]) {
 	string_t request_path = U("/accounts");						// The request path is "/accounts".
 	string_t prehash = time_stamp + method + request_path;		// Concatenate fields into string to be hashed.
 	
-
-
 	// Decode base64 encoded key, secret.
 	string_t secret = U("+RDw7Q8V9EbHZusYzX3vfub0I80tytDs8RQPd3la8/wpKLShyf+B6113C3xxqiRy0r5c8UWiUmy+xSaATemWIg==");
 	std::vector<unsigned char> decoded_vec = utility::conversions::from_base64(secret);
@@ -73,10 +71,7 @@ int main(int argc, char* argv[]) {
 
 	// Add headers to http request.
 	req.headers().set_content_type(U("application/json"));								// Sets content type to application/json.
-<<<<<<< HEAD
-=======
-	req.set_request_uri(request_path);
->>>>>>> 22332d459f1717b4270b014e754e49b8094e3bbe
+	req.set_request_uri(request_path);													// Request path.
 	req.headers().add(U("CB-ACCESS-KEY"), U("c0d41169560a191c7817c11b6ba4908b"));		// Key header.
 	req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
@@ -100,7 +95,6 @@ int main(int argc, char* argv[]) {
 
 			// Else extract json object.
 			return response.extract_json();
-
 		})
 
 		// Continuation on extracted json.
@@ -109,8 +103,7 @@ int main(int argc, char* argv[]) {
 			// Process json object.
 			json::value json_obj = json_task.get();
 
-		}).wait(); // Wait for task group to complete.
-		
+		}).wait(); // Wait for task group to complete.	
 	}
 
 	// catch block.
