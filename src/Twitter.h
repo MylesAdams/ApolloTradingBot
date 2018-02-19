@@ -18,7 +18,7 @@ namespace Apollo
             std::string consumer_secret_;
             std::string oauth_access_token_key_;
             std::string oauth_access_token_secret_;
-            const std::string resource_file_ = "../res/twitter.json";
+            const std::string resource_file_ = "../resources/twitter.json";
             unsigned long long highest_timestamp_seen_;
             std::vector<std::string> request_paths_;
 
