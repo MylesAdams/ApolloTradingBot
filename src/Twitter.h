@@ -25,8 +25,8 @@ namespace Apollo
         protected:
             virtual void saveSettings() override;
             virtual std::stringstream requestResponse(const std::string& target_url) override;
-            virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;
-            virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
+            virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document);
+            virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments);
         public:
             Twitter();
             virtual ~Twitter();
