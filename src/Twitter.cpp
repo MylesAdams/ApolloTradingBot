@@ -27,7 +27,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const std::string & targ
     using namespace web::http::client;          // HTTP client features.
     using namespace concurrency::streams;		// Asynchronous streams.
     std::stringstream response;
-
+    
     // Create client.
     http_client my_client(U("https://api-public.sandbox.gdax.com"));
 
@@ -35,11 +35,9 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const std::string & targ
     http_request req(methods::GET);
 
     // Create datetime object for timestamp.
-    datetime date;
-    uint64_t utc = date.utc_timestamp();
+    uint64_t utc = datetime::utc_timestamp();
 
-
-    // Generate prehash string.								
+    // Generate prehash string.		
     string_t time_stamp = utility::conversions::to_string_t(std::to_string(utc));
     string_t method = U("GET");									// String of http method, "GET" in this case.
     string_t request_path = U("/accounts");						// The request path is "/accounts".
@@ -74,7 +72,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const std::string & targ
     unsigned int encrypted_length;
     HMAC(EVP_sha256(), ary_key, decoded_vec.size(), ary_prehash, prehash.size(), encrypted, &encrypted_length);
 
-    // Add ecypred bytes to a vector so that it can be encoded.
+    // Add ecrypteded bytes to a vector so that it can be encoded.
     std::vector<unsigned char> signature;
     for (size_t i = 0; i < encrypted_length; i++) {
         signature.push_back(encrypted[i]);
@@ -87,7 +85,6 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const std::string & targ
     // Encode signature in base64.
     string_t sign = conversions::to_base64(signature);
 
-
     // Delete allocated memory.
     delete[]ary_key;
     delete[]ary_prehash;
@@ -95,12 +92,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const std::string & targ
     // Add headers to http request.
     req.headers().set_content_type(U("application/json"));								// Sets content type to application/json.
     req.set_request_uri(request_path);
-    req.headers().add(U("CB-ACCESS-KEY"), U("c0d41169560a191c7817c11b6ba4908b"));		// Key header.
-    req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
-    req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
-    req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
 
-                                                                                        //generate request task and response continuation.
     my_client.request(req).then([&response](http_response res) {
         printf("received response status code:%u\n", res.status_code());
         pplx::task<std::vector<unsigned char>> task = res.extract_vector();
@@ -140,7 +132,6 @@ Apollo::Bot::Twitter::Twitter()
         this->oauth_access_token_key_ = doc["oauth_access_token_key"].GetString();
         this->oauth_access_token_secret_ = doc["oauth_access_token_secret"].GetString();
         this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetUint64();
-        this->complete_urls_.push_back("test");
     }
     else //create the JSON config file
     {
