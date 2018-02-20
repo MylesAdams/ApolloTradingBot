@@ -3,6 +3,10 @@ project(ApolloTradingBot C CXX)
 
 if (APPLE)
   set(OPENSSL_ROOT_DIR /usr/local/opt/openssl/)
+  set(OPT_CPPFLAGS "-stdlib=libc++ -I/usr/local/opt/openssl/include")
+  set(OPT_LDFLAGS "-L/usr/local/opt/openssl/lib -lcpprest -lssl -lcrypto -lboost_system -lboost_thread-mt -lboost_chrono-mt")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_CPPFLAGS} -v -g -O3 -std=c++11 -fno-rtti")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OPT_LDFLAGS}")
 endif()
 
 include(CheckCXXCompilerFlag)
@@ -16,16 +20,8 @@ else()
   message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
 endif()
 
-
-
-#set(Boost_ROOT_DIR /usr/local/Cellar/boost/1.66.0/)
 FIND_PACKAGE( Boost 1.66 COMPONENTS program_options REQUIRED )
 FIND_PACKAGE(OpenSSL REQUIRED)
-
-set(OPT_CPPFLAGS "-stdlib=libc++ -I/usr/local/opt/openssl/include")
-set(OPT_LDFLAGS "-L/usr/local/opt/openssl/lib -lcpprest -lssl -lcrypto -lboost_system -lboost_thread-mt -lboost_chrono-mt")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_CPPFLAGS} -v -g -O3 -std=c++11 -fno-rtti")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OPT_LDFLAGS}")
 
 include_directories(src)
 include_directories(lib/rapidjson/include)
