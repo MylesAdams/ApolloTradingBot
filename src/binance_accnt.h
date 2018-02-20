@@ -9,7 +9,7 @@
 class BinanceAccnt : public ExchangeAccnt {
 public:
 	BinanceAccnt() :ExchangeAccnt("Binance", "https://api.gdax.com") {}
-	void connect() override;
+	void connect();
 };
 
 #endif // !gdax_accnt_h
