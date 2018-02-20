@@ -3,6 +3,7 @@
 */
 
 #include "FourChan.h"
+#include "Twitter.h"
 
 #include <iostream>
 #include <sstream>
@@ -19,15 +20,17 @@ using Apollo::Comment;
 
 int main()
 {
-    std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
-    std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
-    Apollo::Bot::FourChan fc;
-    auto& data = fc.getData();
-
-    std::ofstream out("fourchanbot_test.txt");
-    for (auto& comment : data)
-        if (std::regex_search(comment.content, rgx))
-            out << "ID: " << comment.ID << "\nContent:\n" << comment.content << "\n==========================\n" << std::endl;
-    out.close();
+    auto utc = utility::datetime::utc_timestamp();
+    utility::string_t oauth_nonce;
+    std::vector<unsigned char> seed;
+    for (int i = 0; i < 32; ++i)
+        seed.push_back(utc % (31 * (i % 7 + 1)));   //generates 32 bytes of pseudo random data
+    oauth_nonce = utility::conversions::to_base64(seed);
+    wchar_t t = 0xF8;      //example character in hex
+    wchar_t e = t % 0x10;  //extract least significant digit
+    t /= 0x10;  //shift right
+    wchar_t f = t % 0x10;  //extract least significant digit
+    f += 0x37;  // for hex letters, add 0x37 to get the utf8 capital-cased letter
+    e += 0x30;  // for hex numbers, add 0x30 to get the utf8 number
     return 0;
 }

@@ -2,7 +2,7 @@
 
 void Apollo::Bot::FourChan::saveSettings()
 {
-    std::ofstream out(this->resource_file);
+    std::ofstream out(this->resource_file_);
     if (out.is_open())
     {
         std::stringstream ss;
@@ -30,7 +30,7 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
                 if (last_modified > temp_highest_timestamp_seen)
                     temp_highest_timestamp_seen = last_modified;
 
-                std::stringstream thread_response = requestResponse(this->INCOMPLETE_URLS_[0] + "/thread/" + std::to_string(thread_no) + ".json");
+                std::stringstream thread_response = requestResponse(this->incomplete_urls_[0] + "/thread/" + std::to_string(thread_no) + ".json");
                 rapidjson::Document thread;
                 thread.Parse(thread_response.str().c_str());
 
@@ -76,12 +76,12 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Co
 
 Apollo::Bot::FourChan::FourChan()
 {
-    this->COMPLETE_URLS_.push_back("https://a.4cdn.org/biz/threads.json");
-    this->INCOMPLETE_URLS_.push_back("https://a.4cdn.org/biz");
+    this->complete_urls_.push_back("https://a.4cdn.org/biz/threads.json");
+    this->incomplete_urls_.push_back("https://a.4cdn.org/biz");
     this->highest_post_seen_ = 0;
     this->highest_timestamp_seen_ = 0;
     std::ifstream res;
-    res.open(this->resource_file);
+    res.open(this->resource_file_);
     if (res.is_open())
     {
         std::stringstream ss;

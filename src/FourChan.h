@@ -1,9 +1,6 @@
 #ifndef FOURCHAN_H
 #define FOURCHAN_H
 
-#include <fstream>
-#include <regex>
-
 #include "Bot.h"
 
 namespace Apollo
@@ -13,8 +10,8 @@ namespace Apollo
         class FourChan : public Bot
         {
         private:
-            const std::string resource_file = "../resources/fourchan.txt";
-            void saveSettings();
+            const std::string resource_file_ = "../resources/fourchan.txt";
+            virtual void saveSettings() override;
         protected:
             //fields
             unsigned long long int highest_post_seen_;
@@ -29,4 +26,4 @@ namespace Apollo
         };
     }// end of Bot namespace
 }// end of Apollo namespace
-#endif FOURCHAN_H
+#endif

@@ -1,9 +1,5 @@
 #include "Bot.h"
 
-Apollo::Bot::Bot::Bot()
-{
-}
-
 std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
 {
     std::stringstream response;
@@ -32,7 +28,7 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    for (auto& complete_url : this->COMPLETE_URLS_)
+    for (auto& complete_url : this->complete_urls_)
     {
         //send a request and receive a response
         std::stringstream target_response = requestResponse(complete_url);

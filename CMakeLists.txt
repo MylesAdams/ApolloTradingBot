@@ -29,6 +29,7 @@ set(SOURCES
   src/Bot.cpp
   src/FourChan.cpp
   src/api_test.cpp
+  src/Twitter.cpp
   )
 
 # Put any header files you create here:
@@ -37,6 +38,7 @@ set(HEADERS
   src/Bot.h
   src/Comment.h
   src/FourChan.h
+  src/Twitter.h
   )
 
 find_library(CPPRESTSDK_LIBRARIES "cpprest_2_10.lib")
