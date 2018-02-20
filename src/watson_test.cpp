@@ -14,16 +14,32 @@ using namespace concurrency::streams;       // Asynchronous streams
 // Test driver.
 int main() {
 
+
 	// Sentiment to analyze.
-	string_t comment = U("We don't serve droids here.");
+	string_t comment = U("We don't serve droids here.\nI love you.\n This is gonna be good!");
+
+	// Credentials.
+	credentials cred(U("c032fda0-5c02-490d-8e00-ab00de2e5f40"), U("AfgP2LQIDCgB"));
+
+	// Create client config. 
+	http_client_config config;
+	config.set_credentials(cred);
 
 	// Create client.
-	http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/v3/"));
+	http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), config);
+
+	// Build uri.
+	uri_builder builder(U("/v3/tone"));
+	builder.append_query(U("version"), U("2017-09-21"));
+	builder.append_query(U("sentences"), U("false"));
 
 	// Create request.
 	http_request req(methods::POST);
-	req.headers().set_content_type(U("text/plain"));
+	req.set_request_uri(builder.to_string());
 	req.set_body(comment);
+
+	//String to hold serialized json.
+	string_t json_body;
 
 	// Attempt request.
 	pplx::task<http_response> watson_call = watson_client.request(req);
@@ -36,20 +52,15 @@ int main() {
 		std::cout << response.status_code() << std::endl;
 
 		// Extract body into vector.
-		return response.extract_vector();
+		return response.extract_string();
 
 	})
 	
 	// Hookup continuation to process body.
-	.then([](pplx::task<std::vector<unsigned char>> extracted_vec) {
+	.then([&json_body](pplx::task<string_t> string_task) {
 
-		// Get the vector.
-		std::vector<unsigned char> body = extracted_vec.get();
-
-		//Print vector by range based for loop.
-		for (auto i : body) {
-			std::cout << i;
-		}
+		//Process extracted json.
+		json_body = string_task.get();
 
 	}).wait(); // Collect outstanding tasks.
 
