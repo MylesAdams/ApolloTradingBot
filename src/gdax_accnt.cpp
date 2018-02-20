@@ -3,7 +3,10 @@
 
 #include"gdax_accnt.h"
 
-//Function: connect
-void GdaxAccnt::connect() {
-	//Needs code to connect to API.
+
+// Fucntion: isActive
+bool GdaxAccnt::isActive() {
+
+	// Exchange is considered access if credentials are not empty.
+	return (!key.empty() && !passphrase.empty() && !secret.empty());
 }

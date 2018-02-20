@@ -3,12 +3,15 @@
 
 #ifndef coin_h
 #define coin_h
-#include<string>
+#include <cpprest\http_client.h>
+
+// Define namespace.
+using namespace utility;
 
 //Class: Coin
 class coin {
 public:
-	std::string coin_id;
+	string_t coin_id;
 	double amount;
 };
 

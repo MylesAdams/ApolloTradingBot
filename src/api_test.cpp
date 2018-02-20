@@ -3,7 +3,6 @@
 
 // Preprocessor commands.
 #include <cpprest\http_client.h>
-#include <cpprest\filestream.h>
 #include <cpprest\json.h>  
 #include <openssl\hmac.h>
 #include <vector>
@@ -77,6 +76,7 @@ int main(int argc, char* argv[]) {
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
 	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
 
+	std::wstring your_string;
 
 	// wait for all the outstanding i/o to complete and handle any exceptions.
 	try {
@@ -94,16 +94,16 @@ int main(int argc, char* argv[]) {
 			}
 
 			// Else extract json object.
-			return response.extract_json();
+			return response.extract_string();
 		})
 
 		// Continuation on extracted json.
-		.then([](pplx::task<json::value> json_task) {
+		.then([&your_string](pplx::task<std::wstring> json_string) {
 
 			// Process json object.
-			json::value json_obj = json_task.get();
+			your_string = json_string.get();
 
-		}).wait(); // Wait for task group to complete.	
+		}).wait();
 	}
 
 	// catch block.
