@@ -2,10 +2,10 @@
 // Written by ANDREW LAUX
 
 // Preprocessor commands.
-#include <cpprest\http_client.h>
-#include <cpprest\filestream.h>
-#include <cpprest\json.h>  
-#include <openssl\hmac.h>
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>
+#include <openssl/hmac.h>
 #include <vector>
 #include <iostream>
 
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
 			
 			// Throw on bad server response.
 			if (response.status_code() != status_codes::OK) {
-				throw std::exception("Received status code: " + response.status_code());
+//				throw std::exception("Received status code: " + response.status_code());
 			}
 
 			// Else extract json object.
