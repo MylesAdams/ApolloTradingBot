@@ -2,48 +2,23 @@ project(ApolloTradingBot C CXX)
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_CXX_STANDARD 11)
 
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_DEBUG_RUNTIME OFF)
-set(Boost_USE_DEBUG_PYTHON OFF)
-set(Boost_USE_STLPORT OFF)
-find_package(Boost REQUIRED COMPONENTS
-    atomic
-    chrono
-    date_time
-    exception
-    filesystem
-    program_options
-    random
-    regex
-    system
-    serialization
-    thread
-    )
-
-IF (!Boost_FOUND)
-    MESSAGE("*** ERROR *** Boost package not found")
-    RETURN()
-ENDIF ()   
-
-include_directories(${Boost_INCLUDE_DIRS})
-MESSAGE("Boost_INCLUDE_DIRS:\t" ${Boost_INCLUDE_DIRS})
+set(OPENSSL_ROOT_DIR "C:/vcpkg/packages/openssl_x86-windows")
 
 
-find_package(cpprestsdk REQUIRED)
+FIND_PACKAGE(Boost REQUIRED )
 find_package(OpenSSL REQUIRED)
+find_package(cpprestsdk REQUIRED)
 
+find_path(CPPRESTSDK_INCLUDE_DIRS "cpprest/http_client.h")
+message("cpprest include:\t" ${CPPRESTSDK_INCLUDE_DIRS})
 set(MY_INCLUDE_DIRS
 ${MY_INCLUDE_DIRS}
-${OPENSLL_INCLUDE_DIRS}
-${Boost_INCLUDE_DIRS}
 ${CPPRESTSDK_INCLUDE_DIRS}
 src/
 lib/rapidjson/include
 lib/curlpp/include  
 lib/curl/include
 )
-
 
 add_subdirectory(lib)
 
@@ -64,11 +39,14 @@ set(HEADERS
   src/FourChan.h
   )
 
+find_library(CPPRESTSDK_LIBRARIES "cpprest_2_10.lib")
+message("cpprestsdk_libraries:\t" ${CPPRESTSDK_LIBRARIES})
 set(LIBRARIES 
   ${LIBRARIES}
   curlpp
-  ${Boost_LIBRARIES}
+  ${CPPRESTSDK_LIBRARIES}
   ${OPENSSL_LIBRARIES}
+  ${Boost_LIBRARIES}
   )
 
 include_directories(${MY_INCLUDE_DIRS})

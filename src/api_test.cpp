@@ -2,10 +2,10 @@
 // Written by ANDREW LAUX
 
 // Preprocessor commands.
-#include <cpprest\http_client.h>
-#include <cpprest\filestream.h>
-#include <cpprest\json.h>  
-#include <openssl\hmac.h>
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>  
+#include <openssl/hmac.h>
 #include <vector>
 #include <iostream>
 
