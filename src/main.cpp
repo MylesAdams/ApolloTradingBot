@@ -23,8 +23,8 @@ using Apollo::Comment;
 int main()
 {
     //std::regex rgx("(\\bven\\b)|(\\bvechain\\b)");
-    std::cout << "This is an example of using the FourChan bot.\n" << std::endl;
-    Apollo::Bot::Reddit rBot;
+    std::cout << "This is an example of using the Reddit bot.\n" << std::endl;
+    Apollo::Bot::Reddit rBot("vechain");
     const auto& data = rBot.getData();
 
     //std::ofstream out("fourchanbot_test.txt");

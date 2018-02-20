@@ -9,7 +9,7 @@ Apollo::Bot::Reddit::Reddit()
 Apollo::Bot::Reddit::Reddit(std::string subreddit)
 {
     Reddit();
-    this->COMPLETE_URLS_.push_back("https://reddit.com/r/" + subreddit + "new.json");
+    this->COMPLETE_URLS_.push_back("http://reddit.com/r/" + subreddit + "/comments.json");
     this->COMPLETE_URLS_REDDIT_COUNT.push_back("https://reddit.com/r/" + subreddit + "about.json");
 }
 
@@ -21,20 +21,23 @@ std::vector<Apollo::Comment> Apollo::Bot::Reddit::parseJSON(const rapidjson::Doc
     //replacing the num with the newest one
     //so that I don't read one's that have already been read
     std::vector<Apollo::Comment> comments;
-    const rapidjson::Value &children = document["children"];
+    //const rapidjson::Value &children = document["children"];
 
-    unsigned long int temp_last_comment_read = children[0]["created"].GetUint();
+    //unsigned long int temp_last_comment_read = children[0]["created"].GetUint();
 
-    for (int index = 0; index < 10; index++) {
+    for (int index = 0; index < 2; index++) {
+        Comment redditComment;
+        redditComment.content;
+        const rapidjson::Value &one = document["data"];
+        //auto one = document["data"];
+        //auto two = one["children"][index]["data"]["body"].GetString();
+        comments.push_back(redditComment);
+    }
+   /* for (int index = 0; index < 10; index++) {
         Comment redditComment;
         redditComment.content = document["data"]["children"][index]["data"]["body"].GetString();
         comments.push_back(redditComment);
-    }
-    for (int index = 0; index < 10; index++) {
-        Comment redditComment;
-        redditComment.content = document["data"]["children"][index]["data"]["body"].GetString();
-        comments.push_back(redditComment);
-    }
+    }*/
 
     /*for (auto& comment : children.GetArray())
     {
@@ -49,7 +52,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Reddit::parseJSON(const rapidjson::Doc
 
     }*/
 
-    return std::vector<Apollo::Comment>();
+    return comments;
 }
 
 std::vector<Apollo::Comment> Apollo::Bot::Reddit::cleanComments(std::vector<Apollo::Comment> &comments)
