@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
 	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
 
-
+    std::wstring test;
 	// wait for all the outstanding i/o to complete and handle any exceptions.
 	try {
 
@@ -94,16 +94,15 @@ int main(int argc, char* argv[]) {
 			}
 
 			// Else extract json object.
-			return response.extract_json();
+			return response.extract_string();
 		})
 
 		// Continuation on extracted json.
-		.then([](pplx::task<json::value> json_task) {
+		.then([&test](pplx::task<std::wstring> s) {
 
 			// Process json object.
-			json::value json_obj = json_task.get();
-
-		}).wait(); // Wait for task group to complete.	
+            test = s.get();
+        }).wait(); // Wait for task group to complete.	
 	}
 
 	// catch block.

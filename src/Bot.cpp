@@ -4,14 +4,41 @@ Apollo::Bot::Bot::Bot()
 {
 }
 
-std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
+std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & resource_url, const std::string & request_path)
 {
     std::stringstream response;
-    curlpp::Cleanup cleaner; // curlpp's RAII -- not really sure if this is deprecated but all examples still use it
-    curlpp::Easy easy_request;
-    easy_request.setOpt(curlpp::Options::Url(target_url));
-    easy_request.setOpt(curlpp::options::WriteStream(&response));
-    easy_request.perform(); // TODO add exception handling -- this can throw
+    http_client client(utility::conversions::to_string_t(resource_url));
+    http_request req(methods::GET);
+    const std::string method = "GET";
+
+    req.headers() = this->getHeaders();
+
+    // wait for all the outstanding i/o to complete and handle any exceptions.
+    try {
+
+        // Send https request.
+        pplx::task<http_response> accounts_request = my_client.request(req);
+        accounts_request
+
+            // Hook up coninuation on response.
+            .then([](http_response response) {
+
+            // Throw on bad server response.
+            if (response.status_code() != status_codes::OK) {
+                throw std::exception("Received status code: " + response.status_code());
+            }
+
+            // Else extract json object.
+            return response.extract_string();
+        })
+
+            // Continuation on extracted json.
+            .then([&response](pplx::task<std::wstring> s) {
+
+            // Process json object.
+            std::string test = utility::conversions::s.get();
+        }).wait(); // Wait for task group to complete.	
+    }
 
     return response;
 }
@@ -35,7 +62,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     for (auto& complete_url : this->COMPLETE_URLS_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(complete_url);
+        std::stringstream target_response = requestResponse(complete_url, "asdf");
 
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;

@@ -8,9 +8,10 @@
 
 #include "Comment.h"
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>  
+#include <openssl/hmac.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -18,6 +19,11 @@
 
 namespace Apollo {
     namespace Bot { // Put all classes that extend Bot in the Bot namespace
+        using namespace utility;                    // Common utilities like string conversions.
+        using namespace web;                        // Common features like URIs.
+        using namespace web::http;                  // Common HTTP functionality.
+        using namespace web::http::client;          // HTTP client features.
+        using namespace concurrency::streams;		// Asynchronous streams.
         class Bot
         {
         private:
@@ -32,10 +38,10 @@ namespace Apollo {
             std::vector<std::string> COMPLETE_URLS_;
             std::vector<std::string> INCOMPLETE_URLS_;
             //methods
-            virtual std::stringstream requestResponse(const std::string& target_url);
+            virtual std::stringstream requestResponse(const std::string& resource_url, const std::string& request_path);
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
-            virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
-
+            virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;  //might be unncessary since watson removes html automatically
+            virtual web::http::http_headers getHeaders() = 0;
             //helpers
             std::string trim(const std::string& str);
         public:
