@@ -10,10 +10,6 @@
 
 #include "Comment.h"
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -33,7 +29,7 @@ namespace Apollo {
             std::vector<std::string> incomplete_urls_;
             //methods
             virtual void saveSettings() = 0;
-            virtual std::stringstream requestResponse(const std::string& target_url);
+            virtual std::stringstream requestResponse(const std::string& resource_url, const std::string& request_path);
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
             virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
 

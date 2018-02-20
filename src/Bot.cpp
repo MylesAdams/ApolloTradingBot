@@ -1,13 +1,9 @@
 #include "Bot.h"
 
-std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
+std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & resource_url, const std::string& request_path)
 {
     std::stringstream response;
-    curlpp::Cleanup cleaner; // curlpp's RAII -- not really sure if this is deprecated but all examples still use it
-    curlpp::Easy easy_request;
-    easy_request.setOpt(curlpp::Options::Url(target_url));
-    easy_request.setOpt(curlpp::options::WriteStream(&response));
-    easy_request.perform(); // TODO add exception handling -- this can throw
+
 
     return response;
 }
@@ -31,7 +27,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     for (auto& complete_url : this->complete_urls_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(complete_url);
+        std::stringstream target_response = requestResponse(complete_url, "placeholder");
 
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;

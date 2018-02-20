@@ -30,7 +30,7 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
                 if (last_modified > temp_highest_timestamp_seen)
                     temp_highest_timestamp_seen = last_modified;
 
-                std::stringstream thread_response = requestResponse(this->incomplete_urls_[0] + "/thread/" + std::to_string(thread_no) + ".json");
+                std::stringstream thread_response = requestResponse(this->incomplete_urls_[0] + "/thread/" + std::to_string(thread_no) + ".json", "placeholder");
                 rapidjson::Document thread;
                 thread.Parse(thread_response.str().c_str());
 
