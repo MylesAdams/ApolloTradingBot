@@ -2,9 +2,10 @@
 // Written by ANDREW LAUX
 
 // Preprocessor commands.
-#include <cpprest\http_client.h>
-#include <cpprest\json.h>  
-#include <openssl\hmac.h>
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>
+#include <openssl/hmac.h>
 #include <vector>
 #include <iostream>
 
@@ -76,7 +77,6 @@ int main(int argc, char* argv[]) {
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
 	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
 
-	std::wstring your_string;
 
 	// wait for all the outstanding i/o to complete and handle any exceptions.
 	try {
@@ -90,20 +90,20 @@ int main(int argc, char* argv[]) {
 			
 			// Throw on bad server response.
 			if (response.status_code() != status_codes::OK) {
-				throw std::exception("Received status code: " + response.status_code());
+//				throw std::exception("Received status code: " + response.status_code());
 			}
 
 			// Else extract json object.
-			return response.extract_string();
+			return response.extract_json();
 		})
 
 		// Continuation on extracted json.
-		.then([&your_string](pplx::task<std::wstring> json_string) {
+		.then([](pplx::task<json::value> json_task) {
 
 			// Process json object.
-			your_string = json_string.get();
+			json::value json_obj = json_task.get();
 
-		}).wait();
+		}).wait(); // Wait for task group to complete.	
 	}
 
 	// catch block.
