@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 //{
 //    Apollo::Bot::Twitter t;
 //    auto comments = t.getData();
-//
+
 //    std::ofstream out("../resources/twitter_comments.json");
 //    using rapidjson::Value;
 //    rapidjson::Document doc;
