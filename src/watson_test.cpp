@@ -4,6 +4,10 @@
 #include <iostream>
 #include <cpprest\http_client.h>
 #include <cpprest\json.h>
+<<<<<<< HEAD
+=======
+#include "watson.h"
+>>>>>>> ab1873f4b00103c5fb1d0d06d2bd5357424dc288
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
@@ -14,9 +18,20 @@ using namespace concurrency::streams;       // Asynchronous streams
 // Test driver.
 int main() {
 
+<<<<<<< HEAD
 
 	// Sentiment to analyze.
 	string_t comment = U("We don't serve droids here.\nI love you.\n This is gonna be good!");
+=======
+	//Watson obj.
+	Watson watson_bot(U("c032fda0-5c02-490d-8e00-ab00de2e5f40"), U("AfgP2LQIDCgB"));
+
+	// Sentiment to analyze.
+	string_t comment = U("I hate mondays.\n Ice cream hurts my teeth.\n Sushi is for dumb girls. \n");
+
+	string_t sentiment = watson_bot.analyzeToString(comment);
+	watson_bot.analyzeToFile(comment, U("."));
+>>>>>>> ab1873f4b00103c5fb1d0d06d2bd5357424dc288
 
 	// Credentials.
 	credentials cred(U("c032fda0-5c02-490d-8e00-ab00de2e5f40"), U("AfgP2LQIDCgB"));
