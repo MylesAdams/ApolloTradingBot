@@ -1,31 +1,33 @@
 # INSTRUCTIONS TO BUILD PROJECT
 
-1. Install CMake
+# UNIX Systems
+
+1. Install [CMake](https://cmake.org/download/)
     * macOS
-        * brew install cmake
+        * `brew install cmake`
     * Ubuntu
-        * sudo apt install cmake
+        * `sudo apt install cmake`
 2. Install curl
     * macOS
-        * brew install curl
+        * `brew install curl`
     * Ubuntu
-        * sudo apt install curl
+        * `sudo apt install curl`
         
 3. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
    * `brew install cpprestsdk` on mac
    * `sudo apt-get install libcpprest-dev` on ubuntu/debian
    
-Run commands below within ApolloTradingBot directory
+4. Run commands below within ApolloTradingBot directory
     * `cd Build`
     * `cmake ../`
     * `make`
     
 # Windows special instructions:
+**This guide can only guarantee that these instructions work for Visual Studio 2017 Community Edition.**
 
-1. Install CMake
-   * [Link to CMake](https://cmake.org/download/)
+1. Install [CMake](https://cmake.org/download/)
    
-2. Install libcurl:
+2. Install libcurl
       1. [Download the curl source zip](https://curl.haxx.se/download.html)
       2. Extract curl to any folder you want
       3. Go to start -> search -> "system environment variables"
@@ -43,10 +45,16 @@ Run commands below within ApolloTradingBot directory
       12. Copy both **libcurl.dll** and **libcurl.lib** into /curl/lib/
       13. Congrats you just installed curl! It really was *that hard* on windows. Luckily you have this little guide! Maybe use a UNIX system next time lol.
 
-3. Run commands in ApolloTradingBot directory:
-   * `cd Build`
-   * `cmake -G`
-   * `cmake ../ -G "name of the generator you want to use"`
+3. Install [vcpkg](https://github.com/Microsoft/vcpkg)
 
-4. Open the generated solution in whatever IDE you chose to generate for and build.
-   * For visual studio after opening the ApolloTradingBot.sln you will see on the right a listing of projects. You must right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
+4. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
+   * Use vcpkg to do this. Getting the dependencies for cpprestsdk manually is not a good idea.
+   * `vcpkg install cpprestsdk cpprestsdk:x64-windows`
+   
+5. Run commands in ApolloTradingBot directory:
+   * `cd Build`
+   * `cmake ../ -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake` (**Note**: If you did not install vckpkg to C:\\ then specify your system's path to vcpkg's root directory.)
+
+6. Open `ApolloTradingBot.sln` inside the build folder. After opening the ApolloTradingBot.sln, open or locate the solution explorer window. Right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
+
+7. `ctrl-shift-b` to build.
