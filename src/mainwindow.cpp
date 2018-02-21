@@ -17,18 +17,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     ui->plot->addGraph();
     ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
     ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
     ui->plot->yAxis->setRange(-1,1);
+
     ui->plot->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
     dateTicker->setDateTimeFormat("d MMM\nyyyy");
+    dateTicker->setTickCount(7);
+
     ui->plot->xAxis->setTicker(dateTicker);
     ui->plot->xAxis->setLabel("Date");
     ui->plot->yAxis->setLabel("Sentiment Index");
-//    dateTicker->setTickStepStrategy(QCPAxisTickerFixed::ssNone);
-    dateTicker->setTickCount(8);
 
     ui->GDAX->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->Binance->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -37,9 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
 
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updatePlot()));
-    timer->start(1000);
+    timerStarted = false;
 }
 
 MainWindow::~MainWindow()
@@ -82,6 +82,15 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
     }
     json_file.close();
+
+    if (!timerStarted)
+    {
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(updatePlot()));
+        timer->start(1000);
+        timerStarted = true;
+    }
+
     currentItem = item;
 }
 

@@ -32,6 +32,8 @@ private:
 
     QListWidgetItem* currentItem;
 
+    bool timerStarted;
+
 };
 
 #endif // MAINWINDOW_H

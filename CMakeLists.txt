@@ -47,23 +47,30 @@ set(SOURCES
   src/qcustomplot.cpp
   src/main.cpp
   src/mainwindow.cpp
+  src/Bot.cpp
+  src/FourChan.cpp
+  src/Twitter.cpp
   )
 
 # Put any header files you create here:
 set(HEADERS
   ${HEADERS}
-#  src/Comment.h
-#  src/kucoin_accnt.h
-#  src/NotFoundException.h
-#  src/gdax_accnt.h
-#  src/exchange_manager.h
-#  src/exchange_accnt.h
-#  src/coin.h
-#  src/binance_accnt.h
-#  src/api_key.h
-  src/qcustomplot.h
-  src/mainwindow.h
-  src/mainwindow.ui
+  #  src/Comment.h
+  #  src/kucoin_accnt.h
+  #  src/NotFoundException.h
+  #  src/gdax_accnt.h
+  #  src/exchange_manager.h
+  #  src/exchange_accnt.h
+  #  src/coin.h
+  #  src/binance_accnt.h
+  #  src/api_key.h
+    src/qcustomplot.h
+    src/mainwindow.h
+    src/mainwindow.ui
+    src/Bot.h
+    src/Comment.h
+    src/FourChan.h
+    src/Twitter.h
   )
 
 set(LIBRARIES

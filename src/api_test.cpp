@@ -76,7 +76,19 @@ int main(int argc, char* argv[]) {
 	req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
 	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
+    
+	//generate request task and response continuation.
+	my_client.request(req).then([](http_response response) {
+		printf("received response status code:%u\n", response.status_code());
+		pplx::task<std::vector<unsigned char>> task = response.extract_vector();
+		std::vector<unsigned char> body_vec = task.get();
 
+		for (auto& i : body_vec) {
+			std::cout << i;
+		}
+	
+
+	});
 
 	// wait for all the outstanding i/o to complete and handle any exceptions.
 	try {
@@ -103,7 +115,7 @@ int main(int argc, char* argv[]) {
 			// Process json object.
 			json::value json_obj = json_task.get();
 
-		}).wait(); // Wait for task group to complete.	
+		}).wait(); // Wait for task group to complete.
 	}
 
 	// catch block.

@@ -53,4 +53,10 @@ MakeFile
 *.cmake
 /lib/curlpp/extras/*
 cmake-build-debug
+<<<<<<< HEAD
 CMakeLists.txt.user
+=======
+
+# vscode files
+.vscode*
+>>>>>>> rest_bot_baseclass
