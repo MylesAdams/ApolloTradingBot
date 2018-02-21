@@ -29,6 +29,8 @@ FIND_PACKAGE(OpenSSL REQUIRED)
 FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5PrintSupport REQUIRED)
 
+find_package(cpprestsdk REQUIRED)
+
 include_directories(src)
 include_directories(lib/rapidjson/include)
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
@@ -75,6 +77,11 @@ set(HEADERS
 
 set(LIBRARIES
   ${LIBRARIES}
+  # curlpp
+  cpprestsdk::cpprest
+  cpprestsdk::cpprestsdk_boost_internal
+  cpprestsdk::cpprestsdk_zlib_internal
+  cpprestsdk::cpprestsdk_openssl_internal
   )
 
 source_group("Source files" FILES ${SOURCES})
