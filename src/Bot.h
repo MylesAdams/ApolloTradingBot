@@ -16,8 +16,34 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/ostreamwrapper.h"
 
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>  
+#include <openssl/hmac.h>
+
 namespace Apollo {
     namespace Bot { // Put all classes that extend Bot in the Bot namespace
+
+        struct RequestParameter //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
+        {
+            const utility::string_t key;
+            const utility::string_t value;
+            RequestParameter(const utility::string_t& key, const utility::string_t& value)
+                : key(key), value(value)
+            {
+            }
+        };
+
+        struct ScraperTarget //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
+        {
+            const utility::string_t resource_url;
+            const utility::string_t request_path;
+            std::vector<RequestParameter> request_parameters;
+            ScraperTarget(const utility::string_t& resource_url, const utility::string_t& request_path)
+                : resource_url(resource_url),
+                request_path(request_path) {}
+        };
+
         class Bot
         {
         private:
@@ -25,14 +51,13 @@ namespace Apollo {
             //fields
             //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
             //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
-            std::vector<std::string> complete_urls_;
-            std::vector<std::string> incomplete_urls_;
+            std::vector<ScraperTarget> targets_;
             //methods
             virtual void saveSettings() = 0;
-            virtual std::stringstream requestResponse(const std::string& resource_url, const std::string& request_path);
+            virtual std::stringstream requestResponse(const ScraperTarget& target) = 0;
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
             virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
-
+            utility::string_t stripBase64(const utility::string_t& s);
             //helpers
             std::string trim(const std::string& str);
         public:

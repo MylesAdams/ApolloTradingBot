@@ -2,10 +2,6 @@
 #define TWITTER_H
 
 #include "Bot.h"
-#include <cpprest\http_client.h>
-#include <cpprest\filestream.h>
-#include <cpprest\json.h>  
-#include <openssl\hmac.h>
 
 namespace Apollo
 {
@@ -21,11 +17,11 @@ namespace Apollo
             const std::string resource_file_ = "../resources/twitter.json";
             unsigned long long highest_timestamp_seen_;
             std::vector<std::string> request_paths_;
-            utility::string_t percentEncode(const utility::string_t& s);
+            std::string percentEncode(const utility::string_t& s);
 
         protected:
             virtual void saveSettings() override;
-            virtual std::stringstream requestResponse(const std::string& resource_url, const std::string& request_path) override;
+            virtual std::stringstream requestResponse(const ScraperTarget& target) override;
             virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) override;
             virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments) override;
             
