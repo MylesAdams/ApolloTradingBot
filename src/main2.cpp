@@ -29,8 +29,11 @@ Set following entry in the hosts file:
 
 #include "cpprest/http_listener.h"
 #include "cpprest/http_client.h"
+#include "RedditOauth.h"
 #include "OauthListener.h"
 #include "OauthSession.h"
+#include <iostream>
+#include <string>
 
 using namespace utility;
 using namespace web;
@@ -42,42 +45,40 @@ using namespace web::http::experimental::listener;
 //
 // Set key & secret pair to enable session for that service.
 //
-static const utility::string_t s_reddit_key(U("UH7RWCuYA_qBIA"));
 static const utility::string_t s_reddit_secret(U("nH8HZW7W8X-meUt15cZA2kFfVD8"));
 
-static const utility::string_t s_linkedin_key(U(""));
-static const utility::string_t s_linkedin_secret(U(""));
-
-static const utility::string_t s_live_key(U(""));
-static const utility::string_t s_live_secret(U(""));
+static const utility::string_t s_reddit_client(U("UH7RWCuYA_qBIA"));
+static const utility::string_t s_reddit_response_type(U("code"));
+static const utility::string_t s_reddit_state(U("alkgmaldkgm"));
+static const utility::string_t s_reddit_redirect_uri(U("https://mylesadams.github.io/ApolloTradingBot/"));
+static const utility::string_t s_reddit_duration(U("temporary"));
+static const utility::string_t s_reddit_scope(U("read"));
 
 //
 // Specialized class for Dropbox OAuth 2.0 session.
 //
-class reddit_session_sample : public OauthSession
-{
-public:
-    reddit_session_sample() :
-        OauthSession(U("Reddit"),
-            s_reddit_key,
-            s_reddit_secret,
-            U("https://www.reddit.com/api/v1/authorize?"),
-            U("https://www.reddit.com/api/v1/access_token"),
-            U("https://mylesadams.github.io/ApolloTradingBot/"))
-//            U("read"),
-//            U("Apollo_Scaper"))
-    {
-        // Dropbox uses "default" OAuth 2.0 settings.
-    }
-//https://reddit.com/api/v1/authorize?client_id=UH7RWCuYA_qBIA&response_type=code&state=Stdlkmsg&redirect_uri=https://mylesadams.github.io/ApolloTradingBot/&duration=temporary&scope=read,mysubreddits
-protected:
-    void run_internal() override
-    {
-        http_client api(U("https://reddit.com/api/v1/authorize?"), m_http_config);
-        ucout << "Requesting account information:" << std::endl;
-        ucout << "Information: " << api.request(methods::GET, U("account/info")).get().extract_json().get() << std::endl;
-    }
-};
+//class reddit_session_sample : public OauthSession
+//{
+//public:
+//    reddit_session_sample() :
+//        OauthSession(U("Reddit"),
+//            s_reddit_key,
+//            s_reddit_secret,
+//            U("https://www.reddit.com/api/v1/authorize?"),
+//            U("https://www.reddit.com/api/v1/access_token"),
+//            U("https://mylesadams.github.io/ApolloTradingBot/"))
+////            U("read"),
+////            U("Apollo_Scaper"))
+//    {
+//        // Dropbox uses "default" OAuth 2.0 settings.
+//    }
+//    void run_internal() override
+//    {
+//        http_client api(U("https://reddit.com/api/v1/authorize?"), m_http_config);
+//        ucout << "Requesting account information:" << std::endl;
+//        ucout << "Information: " << api.request(methods::GET, U("account/info")).get().extract_json().get() << std::endl;
+//    }
+//};
 
 
 #ifdef _WIN32
@@ -89,11 +90,11 @@ int main(int argc, char *argv[])
     ucout << "Running OAuth 2.0 client sample..." << std::endl;
 
 
-    reddit_session_sample  reddit;
+    RedditOauth reddit(s_reddit_client,s_reddit_response_type,s_reddit_state,s_reddit_redirect_uri,s_reddit_duration,s_reddit_scope);
+    ucout << reddit.buildRedditOauthURL();
 
-    reddit.run();
 
 
-    ucout << "Done." << std::endl;
+   // ucout << "Done." << std::endl;
     return 0;
 }
