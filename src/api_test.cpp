@@ -76,33 +76,23 @@ int main(int argc, char* argv[]) {
 	req.headers().add(U("CB-ACCESS-SIGN"), sign);										// Sign header.
 	req.headers().add(U("CB-ACCESS-TIMESTAMP"), time_stamp);							// Timestamp header.
 	req.headers().add(U("CB-ACCESS-PASSPHRASE"), U("mfsacc5sm7"));						// Passphrase header.
+    
+	//generate request task and response continuation.
+	my_client.request(req).then([](http_response response) {
+		printf("received response status code:%u\n", response.status_code());
+		pplx::task<std::vector<unsigned char>> task = response.extract_vector();
+		std::vector<unsigned char> body_vec = task.get();
 
-    std::wstring test;
+		for (auto& i : body_vec) {
+			std::cout << i;
+		}
+	
+
+	});
+
 	// wait for all the outstanding i/o to complete and handle any exceptions.
 	try {
-
-		// Send https request.
-		pplx::task<http_response> accounts_request = my_client.request(req);
-		accounts_request
-
-		// Hook up coninuation on response.
-		.then([](http_response response) {
-			
-			// Throw on bad server response.
-			if (response.status_code() != status_codes::OK) {
-				throw std::exception("Received status code: " + response.status_code());
-			}
-
-			// Else extract json object.
-			return response.extract_string();
-		})
-
-		// Continuation on extracted json.
-		.then([&test](pplx::task<std::wstring> s) {
-
-			// Process json object.
-            test = s.get();
-        }).wait(); // Wait for task group to complete.	
+		
 	}
 
 	// catch block.

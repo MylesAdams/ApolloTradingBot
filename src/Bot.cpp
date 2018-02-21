@@ -1,46 +1,15 @@
 #include "Bot.h"
 
-Apollo::Bot::Bot::Bot()
+utility::string_t Apollo::Bot::Bot::stripBase64(const utility::string_t & s)
 {
-}
+    std::vector<unsigned char> buffer;
+    buffer.reserve(s.size());
+    for (unsigned int i = 0; i < s.size(); ++i)
+        if (isalnum(s[i]))
+            buffer.push_back(s[i]);
 
-std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & resource_url, const std::string & request_path)
-{
-    std::stringstream response;
-    http_client client(utility::conversions::to_string_t(resource_url));
-    http_request req(methods::GET);
-    const std::string method = "GET";
-
-    req.headers() = this->getHeaders();
-
-    // wait for all the outstanding i/o to complete and handle any exceptions.
-    try {
-
-        // Send https request.
-        pplx::task<http_response> accounts_request = my_client.request(req);
-        accounts_request
-
-            // Hook up coninuation on response.
-            .then([](http_response response) {
-
-            // Throw on bad server response.
-            if (response.status_code() != status_codes::OK) {
-                throw std::exception("Received status code: " + response.status_code());
-            }
-
-            // Else extract json object.
-            return response.extract_string();
-        })
-
-            // Continuation on extracted json.
-            .then([&response](pplx::task<std::wstring> s) {
-
-            // Process json object.
-            std::string test = utility::conversions::s.get();
-        }).wait(); // Wait for task group to complete.	
-    }
-
-    return response;
+    utility::string_t stripped_string(buffer.begin(), buffer.end());
+    return stripped_string;
 }
 
 std::string Apollo::Bot::Bot::trim(const std::string & str)
@@ -59,11 +28,12 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    for (auto& complete_url : this->COMPLETE_URLS_)
+    if (targets_.size() == 0)
+        std::cout << "Apollo::Bot has no targets!" << std::endl;
+    for (auto& target : this->targets_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(complete_url, "asdf");
-
+        std::stringstream target_response = requestResponse(target);
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;
         target_document.Parse(target_response.str().c_str());
@@ -75,6 +45,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
         comments.insert(comments.end(), target_comments.begin(), target_comments.end());
     }
 
-    //regex the comments to get all valid words (and ignore stopwords)
+    ////regex the comments to get all valid words (and ignore stopwords)
+
     return cleanComments(comments);
 }
