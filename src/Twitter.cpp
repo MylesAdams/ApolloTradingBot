@@ -63,9 +63,10 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     using namespace web::http::client;          // HTTP client features.
     using namespace concurrency::streams;		// Asynchronous streams.
     
+    //get target info
     const auto resource_url = target.resource_url;
     const auto request_path = target.request_path;
-    const auto request_parameters = target.request_parameters;
+    std::vector<RequestParameter> request_parameters = target.request_parameters;
 
     // Get time since UNIX epoch
     uint64_t utc = datetime::utc_timestamp();
@@ -83,14 +84,19 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     const string_t oauth_version = U("1.0");
     //=============this
 
-    //temporarily hardcode this stuff. NOTE if you change this, the key/value pairs MUST be sorted lexicographically by key.
-    //create parameter string
-    std::string parameter_string = percentEncode(U("oauth_consumer_key")) + '=' + percentEncode(oauth_consumer_key)
-        + '&' + percentEncode(U("oauth_nonce")) + '=' + percentEncode(oauth_nonce)
-        + '&' + percentEncode(U("oauth_signature_method")) + '=' + percentEncode(oauth_signature_method)
-        + '&' + percentEncode(U("oauth_timestamp")) + '=' + percentEncode(oauth_timestamp)
-        + '&' + percentEncode(U("oauth_token")) + '=' + percentEncode(oauth_token)
-        + '&' + percentEncode(U("oauth_version")) + '=' + percentEncode(oauth_version);
+    request_parameters.push_back(RequestParameter(U("oauth_consumer_key"), oauth_consumer_key));
+    request_parameters.push_back(RequestParameter(U("oauth_nonce"), oauth_nonce));
+    request_parameters.push_back(RequestParameter(U("oauth_signature_method"), oauth_signature_method));
+    request_parameters.push_back(RequestParameter(U("oauth_timestamp"), oauth_timestamp));
+    request_parameters.push_back(RequestParameter(U("oauth_token"), oauth_token));
+    request_parameters.push_back(RequestParameter(U("oauth_version"), oauth_version));
+
+    std::sort(request_parameters.begin(), request_parameters.end());
+
+    std::string parameter_string;
+    for (const auto& param : request_parameters)
+        parameter_string.append(percentEncode(param.key) + '=' + percentEncode(param.value) + '&');
+    parameter_string.pop_back(); // removes the last '&'
 
     //create output string
     const std::string method = "GET";

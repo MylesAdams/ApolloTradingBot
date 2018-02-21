@@ -2,6 +2,7 @@
 #define TWITTER_H
 
 #include "Bot.h"
+#include <algorithm>
 
 namespace Apollo
 {

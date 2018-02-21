@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <regex>
+#include <algorithm>
 
 #include "Comment.h"
 
@@ -26,11 +27,15 @@ namespace Apollo {
 
         struct RequestParameter //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
         {
-            const utility::string_t key;
-            const utility::string_t value;
+            utility::string_t key;
+            utility::string_t value;
             RequestParameter(const utility::string_t& key, const utility::string_t& value)
                 : key(key), value(value)
             {
+            }
+            bool operator < (const RequestParameter& str) const
+            {
+                return (key < str.key);
             }
         };
 
@@ -49,9 +54,8 @@ namespace Apollo {
         private:
         protected:
             //fields
-            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
-            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
             std::vector<ScraperTarget> targets_;
+
             //methods
             virtual void saveSettings() = 0;
             virtual std::stringstream requestResponse(const ScraperTarget& target) = 0;
