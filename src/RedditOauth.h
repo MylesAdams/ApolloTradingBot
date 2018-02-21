@@ -1,0 +1,8 @@
+//
+// Created by Roderic Deichler on 2/20/18.
+//
+
+#ifndef APOLLOTRADINGBOT_REDDITOAUTH_H
+#define APOLLOTRADINGBOT_REDDITOAUTH_H
+
+#endif //APOLLOTRADINGBOT_REDDITOAUTH_H

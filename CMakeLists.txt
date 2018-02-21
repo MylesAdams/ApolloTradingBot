@@ -39,9 +39,10 @@ set(SOURCES
   src/exchange_manager.cpp
   src/binance_accnt.cpp
   src/api_key.cpp
-  src/api_test.cpp
+#  src/api_test.cpp
   #src/gui_test_driver.cpp
   src/kucoin_accnt.cpp
+        src/main2.cpp
   )
 
 # Put any header files you create here:
@@ -56,7 +57,9 @@ set(HEADERS
   src/coin.h
   src/binance_accnt.h
   src/api_key.h
-  )
+        src/OauthSession.h
+        src/OauthListener.h
+        src/RedditOauth.h)
 
 set(LIBRARIES
   ${LIBRARIES}
