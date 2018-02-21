@@ -202,6 +202,7 @@ Apollo::Bot::Twitter::Twitter()
         this->oauth_access_token_key_ = doc["oauth_access_token_key"].GetString();
         this->oauth_access_token_secret_ = doc["oauth_access_token_secret"].GetString();
         this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetUint64();
+        //TODO implement a way for a user of this class to add timelines to track (screen_name), and max number of tweets to get (count).
         ScraperTarget vechain(U("https://api.twitter.com"), U("/1.1/statuses/user_timeline.json"));
         vechain.request_parameters.push_back(RequestParameter(U("count"), U("10")));
         vechain.request_parameters.push_back(RequestParameter(U("screen_name"), U("vechainofficial")));

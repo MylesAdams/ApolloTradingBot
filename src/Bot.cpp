@@ -28,11 +28,12 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
+    if (targets_.size() == 0)
+        std::cout << "Apollo::Bot has no targets!" << std::endl;
     for (auto& target : this->targets_)
     {
         //send a request and receive a response
         std::stringstream target_response = requestResponse(target);
-
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;
         target_document.Parse(target_response.str().c_str());
