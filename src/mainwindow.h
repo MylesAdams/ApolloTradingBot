@@ -20,13 +20,18 @@ public:
     void clearData();
     void plot();
 
+
 private slots:
     void on_listWidget_itemClicked(QListWidgetItem *item);
+    void updatePlot();
 
 private:
     Ui::MainWindow *ui;
 
     QVector<double> q_x, q_y;
+
+    QListWidgetItem* currentItem;
+
 };
 
 #endif // MAINWINDOW_H

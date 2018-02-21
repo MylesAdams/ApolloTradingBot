@@ -53,3 +53,4 @@ MakeFile
 *.cmake
 /lib/curlpp/extras/*
 cmake-build-debug
+CMakeLists.txt.user

@@ -6,69 +6,128 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>805</width>
-    <height>530</height>
+    <width>1000</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Apollo Training Bot</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>0</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Coins</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="listWidget">
-    <property name="geometry">
-     <rect>
-      <x>625</x>
-      <y>30</y>
-      <width>181</width>
-      <height>501</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Bitcoin</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Bitcoin Cash</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Ethereum</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Litecoin</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QCustomPlot" name="plot" native="true">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>541</width>
-      <height>471</height>
+      <x>10</x>
+      <y>10</y>
+      <width>770</width>
+      <height>580</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QTabWidget" name="Tabs">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>10</y>
+      <width>200</width>
+      <height>580</height>
+     </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="GDAX">
+     <attribute name="title">
+      <string>GDAX</string>
+     </attribute>
+     <widget class="QListWidget" name="listWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>200</width>
+        <height>555</height>
+       </rect>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Bitcoin</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Bitcoin Cash</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ethereum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Litecoin</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Binance">
+     <attribute name="title">
+      <string>Binance</string>
+     </attribute>
+     <widget class="QListWidget" name="listWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>200</width>
+        <height>555</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Kucoin">
+     <attribute name="title">
+      <string>Kucoin</string>
+     </attribute>
+     <widget class="QListWidget" name="listWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>200</width>
+        <height>555</height>
+       </rect>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>
