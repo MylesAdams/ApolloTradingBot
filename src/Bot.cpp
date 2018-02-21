@@ -45,6 +45,6 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     }
 
     ////regex the comments to get all valid words (and ignore stopwords)
-    comments = cleanComments(comments);
-    return comments;
+
+    return cleanComments(comments);
 }

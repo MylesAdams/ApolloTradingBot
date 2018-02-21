@@ -19,6 +19,23 @@ using Apollo::Comment;
 int main()
 {
     Apollo::Bot::Twitter t;
-    t.getData();
+    auto comments = t.getData();
+
+    std::ofstream out("../resources/twitter_comments.json");
+    using rapidjson::Value;
+    rapidjson::Document doc;
+    doc.SetArray();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+    for (auto com : comments)
+    {
+        rapidjson::Value v;
+        v.SetObject();
+        v.AddMember("content", Value(com.content, allocator), allocator);
+        doc.PushBack(v, allocator);
+    }
+    rapidjson::OStreamWrapper osw(out);
+    rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+    doc.Accept(writer);
+    out.close();
     return 0;
 }

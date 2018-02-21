@@ -62,7 +62,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     using namespace web::http;                  // Common HTTP functionality.
     using namespace web::http::client;          // HTTP client features.
     using namespace concurrency::streams;		// Asynchronous streams.
-    
+
     //get target info
     const auto resource_url = target.resource_url;
     const auto request_path = target.request_path;
@@ -131,7 +131,11 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     http_request req(methods::GET);
     const string_t content_type = U("application/json");
     req.headers().set_content_type(content_type);								// Sets content type to application/json.
-    req.set_request_uri(request_path);
+    uri_builder builder(request_path);
+    for (auto& param : target.request_parameters)
+        builder.append_query(param.key, param.value);
+    //req.set_request_uri(request_path + U("?count=5&screen_name=vechainofficial"));
+    req.set_request_uri(builder.to_string());
 
     //build the authorization header
     auto authorization_header = "OAuth " + percentEncode(U("oauth_consumer_key")) + "=\"" + percentEncode(oauth_consumer_key) + "\", "
@@ -149,16 +153,17 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     try {
 
         // Send https request.
-        pplx::task<http_response> accounts_request = my_client.request(req);
-        accounts_request.then([](http_response res)
+        pplx::task<http_response> my_request = my_client.request(req);
+        my_request.then([](http_response res)
         {
             auto stat = res.status_code();
             std::cout << "Status code:\t" << stat << std::endl;
-            auto t = res.extract_vector();
-            auto v = t.get();
-            for (auto c : v)
-                std::cout << c;
-
+            return res.extract_vector();
+        }).then([&response](pplx::task<std::vector<unsigned char>> vector_task)
+        {
+            auto v = vector_task.get();
+            std::string str(v.begin(), v.end());
+            response << str;
         }).wait(); // Wait for task group to complete.	
     }
     catch (...) {}
@@ -168,12 +173,18 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
 
 std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Document & document)
 {
-    return std::vector<Comment>();
+    std::vector<Comment> comments;
+
+    for (size_t i = 0; i < document.Size(); ++i)
+    {
+        comments.push_back(Comment(document[i]["text"].GetString(), "placeholder"));
+    }
+    return comments;
 }
 
 std::vector<Apollo::Comment> Apollo::Bot::Twitter::cleanComments(std::vector<Comment>& comments)
 {
-    return std::vector<Apollo::Comment>();
+    return comments;
 }
 
 Apollo::Bot::Twitter::Twitter()
@@ -192,7 +203,7 @@ Apollo::Bot::Twitter::Twitter()
         this->oauth_access_token_secret_ = doc["oauth_access_token_secret"].GetString();
         this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetUint64();
         ScraperTarget vechain(U("https://api.twitter.com"), U("/1.1/statuses/user_timeline.json"));
-        vechain.request_parameters.push_back(RequestParameter(U("count"), U("5")));
+        vechain.request_parameters.push_back(RequestParameter(U("count"), U("10")));
         vechain.request_parameters.push_back(RequestParameter(U("screen_name"), U("vechainofficial")));
         this->targets_.push_back(vechain);
     }
