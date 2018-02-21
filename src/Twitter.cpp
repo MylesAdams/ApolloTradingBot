@@ -177,7 +177,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Do
 
     for (size_t i = 0; i < document.Size(); ++i)
     {
-        comments.push_back(Comment(document[i]["text"].GetString(), "placeholder"));
+        comments.push_back(Comment(document[i]["full_text"].GetString(), "placeholder"));
     }
     return comments;
 }
@@ -206,6 +206,7 @@ Apollo::Bot::Twitter::Twitter()
         ScraperTarget vechain(U("https://api.twitter.com"), U("/1.1/statuses/user_timeline.json"));
         vechain.request_parameters.push_back(RequestParameter(U("count"), U("10")));
         vechain.request_parameters.push_back(RequestParameter(U("screen_name"), U("vechainofficial")));
+        vechain.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
         this->targets_.push_back(vechain);
     }
     else //create the JSON config file
