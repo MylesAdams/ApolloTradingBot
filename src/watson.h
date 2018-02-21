@@ -8,28 +8,23 @@
 #include <iostream>
 #include <fstream>
 
-using namespace utility;                    // Common utilities like string conversions
-using namespace web;                        // Common features like URIs.
-using namespace web::http;                  // Common HTTP functionality
-using namespace web::http::client;          // HTTP client features
-
 // Class: Watson
 class Watson {
 private:
-	http_client_config config;		// Passed to client constructor. Holds username and pass.
-	credentials creds;				// Holds username and pass. Passed to config.
-	http_request req;				// Http request object. Has method and uri.
-	uri_builder builder;			// URI object.
-	datetime date;					// Use date to get UTC timestamp.
+	web::http::client::http_client_config config;		// Passed to client constructor. Holds username and pass.
+	web::credentials creds;				// Holds username and pass. Passed to config.
+	web::http::http_request req;				// Http request object. Has method and uri.
+	web::uri_builder builder;			// URI object.
+	utility::datetime date;					// Use date to get UTC timestamp.
 public:
-	Watson(string_t user, string_t pass);
-	string_t toneToString(const string_t &tone_input);								// Throws exception.
-	void toneRatingToFile(const string_t &tone_input, const string_t &filename);	// Throws exception.
+	Watson(utility::string_t user, utility::string_t pass);
+	utility::string_t toneToString(const utility::string_t &tone_input);								// Throws exception.
+	void toneRatingToFile(const utility::string_t &tone_input, const utility::string_t &filename);	// Throws exception.
 private:
 	Watson();
 	Watson(Watson &copy) = delete;								// Forbid copy constructor.
 	Watson& operator=(Watson &copy) = delete;					// Forbid assignment.
-	int rateTone(const string_t &tone);							// Helper. Rates tones. -1, 0, or 1,	
+	int rateTone(const utility::string_t &tone);							// Helper. Rates tones. -1, 0, or 1,	
 };
 
 
