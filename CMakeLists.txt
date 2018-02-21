@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(lib)
 
+find_package(cpprestsdk REQUIRED)
+
 include_directories(src)
 include_directories(lib/rapidjson/include)
 include_directories(lib/curlpp/include)
@@ -31,6 +33,10 @@ set(HEADERS
 set(LIBRARIES 
   ${LIBRARIES}
   curlpp
+  cpprestsdk::cpprest
+  cpprestsdk::cpprestsdk_boost_internal
+  cpprestsdk::cpprestsdk_zlib_internal
+  cpprestsdk::cpprestsdk_openssl_internal
   )
 
 source_group("Source files" FILES ${SOURCES})
