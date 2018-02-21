@@ -116,8 +116,9 @@ void Watson::toneRatingToFile(const string_t & tone_input, const string_t & file
 	outfile.open(filename);
 
 	// Check that stream is open
-	if(!outfile.is_open())
-
+	if (outfile.fail()) {
+		//TODO: throw exception
+	}
 	
 }
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.
