@@ -10,7 +10,12 @@
         * brew install curl
     * Ubuntu
         * sudo apt install curl
-3. Run commands below with in ApolloTradingBot directory
+        
+3. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
+   * `brew install cpprestsdk` on mac
+   * `sudo apt-get install libcpprest-dev` on ubuntu/debian
+   
+Run commands below within ApolloTradingBot directory
     * `cd Build`
     * `cmake ../`
     * `make`
