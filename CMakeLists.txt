@@ -59,7 +59,7 @@ set(HEADERS
   src/api_key.h
         src/OauthSession.h
         src/OauthListener.h
-        src/RedditOauth.h)
+        src/RedditOauth.h src/RedditOauth.cpp)
 
 set(LIBRARIES
   ${LIBRARIES}
