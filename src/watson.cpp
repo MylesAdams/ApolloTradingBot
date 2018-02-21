@@ -4,11 +4,11 @@
 #include "watson.h"
 
 // Constructor for watson object.
-Watson::Watson(string_t user, string_t pass) :
+Watson::Watson(utility::string_t user, utility::string_t pass) :
 	creds(user, pass),
 	config(),
 	builder(U("/v3/tone")),
-	req(methods::POST) {
+	req(web::http::methods::POST) {
 
 	// Set config.
 	config.set_credentials(creds);
@@ -20,28 +20,28 @@ Watson::Watson(string_t user, string_t pass) :
 }
 
 // Function: Returns sentiment as stringified JSON.
-string_t Watson::toneToString(const string_t & tone_input) {
+utility::string_t Watson::toneToString(const utility::string_t & tone_input) {
 
 	// String to hold sentiment.
-	string_t sentiment_str;
+	utility::string_t sentiment_str;
 
-	json::value json_obj;
+	web::json::value json_obj;
 
 	// Create watson_client.
-	http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), this->config);
+	web::http::client::http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), this->config);
 
 	// Set request body to tone_input.
 	this->req.set_body(tone_input);
 
 	// Attempt request.
-	pplx::task<http_response> watson_call = watson_client.request(req);
+	pplx::task<web::http::http_response> watson_call = watson_client.request(req);
 	watson_call
 
 		// Hookup response continuation
-		.then([](http_response response) {
+		.then([](web::http::http_response response) {
 
 		// Report error.
-		if (response.status_code() != status_codes::OK) {
+		if (response.status_code() != web::http::status_codes::OK) {
 			// TODO: throw exception
 		}
 
@@ -50,7 +50,7 @@ string_t Watson::toneToString(const string_t & tone_input) {
 	    })
 
 		// Hookup continuation to process body.
-		.then([&sentiment_str](pplx::task<string_t> string_task) {
+		.then([&sentiment_str](pplx::task<utility::string_t> string_task) {
 		
 		//Process extracted json.
 		sentiment_str = string_task.get();
@@ -63,26 +63,26 @@ string_t Watson::toneToString(const string_t & tone_input) {
 }
 
 // Function: Outputs sentiment to <coinID>.josn.
-void Watson::toneRatingToFile(const string_t & tone_input, const string_t & filename) {
+void Watson::toneRatingToFile(const utility::string_t & tone_input, const utility::string_t & filename) {
 
 	// Response json.
-	json::value json_obj;
+	web::json::value json_obj;
 
 	// Create watson_client.
-	http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), this->config);
+	web::http::client::http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), this->config);
 
 	// Set request body to tone_input.
 	this->req.set_body(tone_input);
 
 	// Attempt request.
-	pplx::task<http_response> watson_call = watson_client.request(req);
+	pplx::task<web::http::http_response> watson_call = watson_client.request(req);
 	watson_call
 
 	// Hookup response continuation
-	.then([](http_response response) {
+	.then([](web::http::http_response response) {
 
 		// Report error.
-		if (response.status_code() != status_codes::OK) {
+		if (response.status_code() != web::http::status_codes::OK) {
 			// TODO: throw exception
 		}
 
@@ -91,7 +91,7 @@ void Watson::toneRatingToFile(const string_t & tone_input, const string_t & file
 	})
 
 	// Hookup continuation to process body.
-	.then([&json_obj](pplx::task<json::value> json_task) {
+	.then([&json_obj](pplx::task<web::json::value> json_task) {
 
 		//Process extracted json.
 		json_obj = json_task.get();
@@ -103,7 +103,7 @@ void Watson::toneRatingToFile(const string_t & tone_input, const string_t & file
 	auto value_tone = json_obj[U("document_tone")][U("tones")][0][U("tone_name")];
 	auto value_score = json_obj[U("document_tone")][U("tones")][0][U("score")];
 	double score = value_score.as_double();
-	string_t tone = value_tone.as_string();
+	utility::string_t tone = value_tone.as_string();
 
 	// Get timestamp.
 	int utc = static_cast<int>(this->date.utc_timestamp());
@@ -112,7 +112,7 @@ void Watson::toneRatingToFile(const string_t & tone_input, const string_t & file
 	double rating = score * rateTone(tone);
 
 	// Open outgoing file stream.
-	ofstream_t outfile;
+	utility::ofstream_t outfile;
 	outfile.open(filename);
 
 	// Check that stream is open
@@ -122,7 +122,7 @@ void Watson::toneRatingToFile(const string_t & tone_input, const string_t & file
 	
 }
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.
-int Watson::rateTone(const string_t & tone) {
+int Watson::rateTone(const utility::string_t & tone) {
 
 	//Rating
 	int rating = 0;

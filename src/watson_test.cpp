@@ -6,7 +6,6 @@
 #include <cpprest\json.h>
 #include "watson.h"
 
-
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
 using namespace web::http;                  // Common HTTP functionality
