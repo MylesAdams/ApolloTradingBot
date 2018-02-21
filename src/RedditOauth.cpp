@@ -4,6 +4,7 @@
 #include "RedditOauth.h"
 #include "cpprest/http_listener.h"
 #include "cpprest/http_client.h"
+#include <fstream>
 
 using namespace web;
 using namespace web::http;
@@ -84,13 +85,93 @@ void RedditOauth::setTokens(utility::string_t client, utility::string_t secret, 
             })
             .wait();
 
-    if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
-    {
+   // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
+   // {
         current_token = response_body["access_token"].as_string();
         refresh_token = response_body["refresh_token"].as_string();
-    }
+
+        std::ofstream tokenFile;
+        tokenFile.open("../resources/reddit_token_data.txt");
+        tokenFile << current_token << "\n" << refresh_token;
+        tokenFile.close();
+   // }
 
     ucout << response_body.serialize() << std::endl;
-    ucout << current_token << std::endl;
-    ucout << refresh_token << std::endl;
+    //ucout << current_token << std::endl;
+   // ucout << refresh_token << std::endl;
 }
+
+void RedditOauth::getTokens()
+{
+    utility::string_t line;
+    std::ifstream tokenFile("../resources/reddit_token_data.txt");
+    if (tokenFile.is_open())
+    {
+        int count = 0;
+        while (getline(tokenFile,line))
+        {
+            if (count == 0)
+                current_token = line;
+            else
+                refresh_token = line;
+            count++;
+        }
+        tokenFile.close();
+    }
+
+    else
+        std::cout << "Unable to open file";
+}
+
+void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secret, utility::string_t refresh_token) {
+
+    credentials cred(client, secret);
+    http_client_config config;
+
+    config.set_credentials(cred);
+
+    http_client redditClient(U("https://www.reddit.com/api/"), config);
+
+    http_request reqRed(methods::POST);
+    uri_builder builder("v1/access_token");
+    builder.append_query(U("grant_type"), U("refresh_token"));
+    builder.append_query(U("refresh_token"), refresh_token);
+
+    reqRed.set_request_uri(builder.to_string());
+
+    reqRed.headers().add(U("user"), client);
+    reqRed.headers().add(U("password"), secret);
+
+    json::value response_body;
+
+    pplx::task<http_response> reddit_call = redditClient.request(reqRed);
+    reddit_call
+
+            .then([](http_response response) {
+                std::cout << response.status_code() << std::endl;
+
+                return response.extract_json();
+
+            })
+            .then([&response_body](pplx::task<json::value > json_task){
+
+                response_body = json_task.get();
+
+            })
+            .wait();
+
+    // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
+    // {
+    current_token = response_body["access_token"].as_string();
+    refresh_token = response_body["refresh_token"].as_string();
+
+    std::ofstream tokenFile;
+    tokenFile.open("../resources/reddit_token_data.txt");
+    tokenFile << current_token << "\n" << refresh_token;
+    tokenFile.close();
+    // }
+
+    ucout << response_body.serialize() << std::endl;
+
+}
+

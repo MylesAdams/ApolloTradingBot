@@ -35,7 +35,10 @@ public:
                 utility::string_t secret);
 
     utility::string_t buildRedditOauthURL();
+    utility::string_t getRefreshToken() {return refresh_token;};
     void setTokens(utility::string_t client,utility::string_t secret,utility::string_t code,utility::string_t redirect_uri);
+    void getTokens();
+    void refreshTokens(utility::string_t client, utility::string_t secret, utility::string_t refresh_token);
 };
 
 

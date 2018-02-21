@@ -1,25 +1,6 @@
-/*
-* Copyright (C) Microsoft. All rights reserved.
-* Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
-*
-* =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-*
-* Oauth2Client.cpp : Defines the entry point for the console application
-*
-* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-****/
-/*
-INSTRUCTIONS
-This sample performs authorization code grant flow on various OAuth 2.0
-services and then requests basic user information.
-This sample is for Windows Desktop, OS X and Linux.
-Execute with administrator privileges.
-Set the app key & secret strings below (i.e. s_reddit_key, s_reddit_secret, etc.)
-To get key & secret, register an app in the corresponding service.
-Set following entry in the hosts file:
-127.0.0.1    testhost.local
-*/
-//#include "stdafx.h"
+//
+// Created by Roderic Deichler on 2/20/18.
+//
 
 #if defined(_WIN32) && !defined(__cplusplus_winrt)
 // Extra includes for Windows desktop.
@@ -31,7 +12,8 @@ Set following entry in the hosts file:
 #include "cpprest/http_client.h"
 #include "RedditOauth.h"
 #include <iostream>
-
+#include <sys/stat.h>
+#include <string>
 
 using namespace utility;
 using namespace web;
@@ -48,7 +30,11 @@ std::string setRandString()
     return randString;
 }
 
-
+inline bool exist(const std::string& name)
+{
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
 //
 // Set key & secret pair to enable session for that service.
 //
@@ -60,7 +46,7 @@ static const utility::string_t s_reddit_state(U(setRandString()));
 static const utility::string_t s_reddit_redirect_uri(U("https://mylesadams.github.io/ApolloTradingBot/"));
 static const utility::string_t s_reddit_duration(U("permanent"));
 static const utility::string_t s_reddit_scope(U("read"));
-static const utility::string_t s_reddit_code(U("ugWP443x3sci9NzJKZ-3o9q1NGo"));
+static const utility::string_t s_reddit_code(U("ISzg8ZBF65HspmXnoIfrTMhZPg8"));
 
 //
 // Specialized class for Dropbox OAuth 2.0 session.
@@ -137,8 +123,18 @@ int main(int argc, char *argv[])
     RedditOauth reddit(s_reddit_client,s_reddit_response_type,s_reddit_state,s_reddit_redirect_uri,
                        s_reddit_duration,s_reddit_scope, s_reddit_secret);
 
-    reddit.setTokens(s_reddit_client, s_reddit_secret, s_reddit_code, s_reddit_redirect_uri);
     ucout << reddit.buildRedditOauthURL() << std::endl;
+
+    if (!exist("../resources/reddit_token_data.txt")) {
+        reddit.setTokens(s_reddit_client, s_reddit_secret, s_reddit_code, s_reddit_redirect_uri);
+        reddit.getTokens();
+    }
+
+    else {
+        reddit.refreshTokens(s_reddit_client, s_reddit_secret, reddit.getRefreshToken());
+    }
+
+
 
     //ucout << response_body;
 
