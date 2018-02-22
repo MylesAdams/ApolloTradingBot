@@ -25,10 +25,13 @@ utility::string_t WATSON_PASSWORD = U("AfgP2LQIDCgB");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    twitterBot(),
-    watsonAnalyzer(new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD))
+    ui(new Ui::MainWindow)
 {
+    Apollo::Bot::Twitter* testBot;
+    testBot = new Apollo::Bot::Twitter();
+
+    twitterBot = new Apollo::Bot::Twitter();
+    watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
     ui->setupUi(this);
     setupWidgets();
 

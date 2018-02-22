@@ -34,6 +34,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     {
         //send a request and receive a response
         std::string target_response = requestResponse(target);
+
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;
         target_document.Parse(target_response.c_str());
