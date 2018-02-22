@@ -4,7 +4,7 @@
 #include "watson.h"
 
 // Constructor for watson object.
-Watson::Watson(utility::string_t user, utility::string_t pass) :
+Apollo::Watson::Watson(utility::string_t user, utility::string_t pass) :
 	creds(user, pass),
 	config(),
 	builder(U("/v3/tone")),
@@ -20,7 +20,7 @@ Watson::Watson(utility::string_t user, utility::string_t pass) :
 }
 
 // Function: Returns sentiment as stringified JSON.
-utility::string_t Watson::toneToString(const utility::string_t & tone_input) {
+utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_input) {
 
 	// String to hold sentiment.
 	utility::string_t sentiment_str;
@@ -63,7 +63,7 @@ utility::string_t Watson::toneToString(const utility::string_t & tone_input) {
 }
 
 // Function: Outputs sentiment to <coinID>.josn.
-web::json::value Watson::toneToJson(const utility::string_t & tone_input) {
+web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input) {
 
 	// Response json.
 	web::json::value json_obj;
@@ -103,7 +103,7 @@ web::json::value Watson::toneToJson(const utility::string_t & tone_input) {
 }
 
 // Function writes tone sentiment to file.
-void Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name) {
+void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name) {
 
 	// Call toneToJson to get json object.
 	web::json::value json_sentiment = toneToJson(tone_input);
@@ -187,7 +187,7 @@ void Watson::toneToFile(const utility::string_t & tone_input, const utility::str
 }
 
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.
-int Watson::rateTone(const utility::string_t & tone) {
+int Apollo::Watson::rateTone(const utility::string_t & tone) {
 
 	//Rating
 	int rating = 0;

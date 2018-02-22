@@ -1,25 +1,11 @@
-
 #include "mainwindow.h"
 #include <QApplication>
-
-#include "FourChan.h"
-#include "Twitter.h"
-
-#include <iostream>
-#include <sstream>
-#include <cctype>
-
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-
-using Apollo::Comment;
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-
 
     return a.exec();
 }

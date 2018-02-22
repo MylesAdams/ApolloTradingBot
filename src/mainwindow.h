@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include "Twitter.h"
+#include "watson.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,7 +30,17 @@ private:
     QVector<double> qy_pos, qy_neg, qx;
     QListWidgetItem* currentItem;
     bool timerStarted;
-    Apollo::Bot::Twitter twitterBot;
+
+    Apollo::Bot::Twitter* twitterBot;
+    Apollo::Watson* watsonAnalyzer;
+
+    void setupWidgets();
+    void runBots();
+    void normalizeGraphs();
+    void normalizeData(QVector<double>& vec);
+
+    // Move to other file later
+    utility::string_t commentsToString(std::vector<Apollo::Comment> comments);
 
 };
 
