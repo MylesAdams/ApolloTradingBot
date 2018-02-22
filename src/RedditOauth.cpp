@@ -12,20 +12,19 @@ using namespace web::http::client;
 using namespace web::http::oauth2::experimental;
 using namespace web::http::experimental::listener;
 
-RedditOauth::RedditOauth(utility::string_t client, utility::string_t response_type, utility::string_t state,
-                         utility::string_t redirect_uri, utility::string_t duration, utility::string_t scope,
-                         utility::string_t secret, utility::string_t subreddit)
+RedditOauth::RedditOauth(utility::string_t subreddit)
 {
-    s_reddit_client = client;
-    s_reddit_response_type = response_type;
-    s_reddit_state = state;
-    s_reddit_redirect_uri = redirect_uri;
-    s_reddit_duration = duration;
-    s_reddit_scope = scope;
-    s_reddit_auth_endpoint = U("https://www.reddit.com/api/v1/authorize?");
-    s_reddit_token_endpoint = U("https://www.reddit.com/api/v1/access_token");
-    s_reddit_secret = secret;
-    s_subreddit = subreddit;
+    s_reddit_subreddit = subreddit;
+
+    utility::string_t line;
+    std::ifstream tokenFile("../resources/reddit_token_data.txt");
+    if (tokenFile.is_open())
+    {
+        getline(tokenFile, line);
+        UTC_time = stoi(line);
+        tokenFile.close();
+    }
+    else UTC_time = 0;
 }
 
 utility::string_t RedditOauth::buildRedditOauthURL()
@@ -47,10 +46,9 @@ utility::string_t RedditOauth::buildRedditOauthURL()
     return oauth_url;
 }
 
-void RedditOauth::setTokens(utility::string_t client, utility::string_t secret, utility::string_t code,
-                           utility::string_t redirect_uri)
+void RedditOauth::setTokens()
 {
-    credentials cred(client, secret);
+    credentials cred(s_reddit_client, s_reddit_secret);
     http_client_config config;
 
     config.set_credentials(cred);
@@ -60,13 +58,13 @@ void RedditOauth::setTokens(utility::string_t client, utility::string_t secret, 
     http_request reqRed(methods::POST);
     uri_builder builder("v1/access_token");
     builder.append_query(U("grant_type"), U("authorization_code"));
-    builder.append_query(U("code"), code);
-    builder.append_query(U("redirect_uri"), redirect_uri);
+    builder.append_query(U("code"), s_reddit_current_token);
+    builder.append_query(U("redirect_uri"), s_reddit_redirect_uri);
 
     reqRed.set_request_uri(builder.to_string());
 
-    reqRed.headers().add(U("user"), client);
-    reqRed.headers().add(U("password"), secret);
+    reqRed.headers().add(U("user"), s_reddit_client);
+    reqRed.headers().add(U("password"), s_reddit_secret);
 
     json::value response_body;
 
@@ -88,12 +86,12 @@ void RedditOauth::setTokens(utility::string_t client, utility::string_t secret, 
 
    // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
    // {
-        current_token = response_body["access_token"].as_string();
-        refresh_token = response_body["refresh_token"].as_string();
+        s_reddit_current_token = response_body["access_token"].as_string();
+        //s_reddit_refresh_token = response_body["refresh_token"].as_string();
 
         std::ofstream tokenFile;
         tokenFile.open("../resources/reddit_token_data.txt");
-        tokenFile << current_token << "\n" << refresh_token;
+        tokenFile << s_reddit_current_token << "\n" << s_reddit_refresh_token;
         tokenFile.close();
    // }
 
@@ -112,9 +110,9 @@ void RedditOauth::getTokens()
         while (getline(tokenFile,line))
         {
             if (count == 0)
-                current_token = line;
+                s_reddit_current_token = line;
             else
-                refresh_token = line;
+                //s_reddit_refresh_token = line;
             count++;
         }
         tokenFile.close();
@@ -124,9 +122,17 @@ void RedditOauth::getTokens()
         std::cout << "Unable to open file";
 }
 
-void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secret, utility::string_t refresh_token) {
+void RedditOauth::refreshTokens()
+{
+    int_fast64_t UTC_temp = utility::datetime::utc_timestamp();
+    if (UTC_temp - 3590 < UTC_time)
+    {
+        ucout << "no need to refresh token yet" << std::endl;
+        return;
+    }
 
-    credentials cred(client, secret);
+
+    credentials cred(s_reddit_client, s_reddit_secret);
     http_client_config config;
 
     config.set_credentials(cred);
@@ -136,12 +142,12 @@ void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secr
     http_request reqRed(methods::POST);
     uri_builder builder("v1/access_token");
     builder.append_query(U("grant_type"), U("refresh_token"));
-    builder.append_query(U("refresh_token"), refresh_token);
+    builder.append_query(U("refresh_token"), s_reddit_refresh_token);
 
     reqRed.set_request_uri(builder.to_string());
 
-    reqRed.headers().add(U("user"), client);
-    reqRed.headers().add(U("password"), secret);
+    reqRed.headers().add(U("user"), s_reddit_client);
+    reqRed.headers().add(U("password"), s_reddit_secret);
 
 
     json::value response_body;
@@ -164,30 +170,31 @@ void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secr
 
     // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
     // {
-    current_token = response_body["access_token"].as_string();
-    refresh_token = response_body["refresh_token"].as_string();
-
-    /*std::ofstream tokenFile;
+    s_reddit_current_token = response_body["access_token"].as_string();
+    //s_reddit_refresh_token = response_body["refresh_token"].as_string();
+    UTC_time = UTC_temp;
+    std::ofstream tokenFile;
     tokenFile.open("../resources/reddit_token_data.txt");
-    tokenFile << current_token << "\n" << refresh_token;
+    tokenFile << UTC_time << "\n";
     tokenFile.close();
-    // }*/
+    //
+    // }
 
-    ucout << response_body.serialize() << std::endl;
+    //ucout << response_body.serialize() << std::endl;
 
 }
 
-void RedditOauth::readComments(utility::string_t client,
-                               utility::string_t secret, utility::string_t access_token)
+void RedditOauth::readComments()
 
 {
-    http_client redditClient(U("https://oauth.reddit.com/r/") + s_subreddit + U("/comments.json"));
+    refreshTokens();
+    http_client redditClient(U("https://oauth.reddit.com/r/") + s_reddit_subreddit + U("/comments.json"));
 
     http_request reqRed(methods::GET);
 
-    reqRed.headers().add(U("user"), client);
-    reqRed.headers().add(U("password"), secret);
-    reqRed.headers().add(U("Authorization"), U("bearer ") + access_token);
+    reqRed.headers().add(U("user"), s_reddit_client);
+    reqRed.headers().add(U("password"), s_reddit_secret);
+    reqRed.headers().add(U("Authorization"), U("bearer ") + s_reddit_current_token);
 
     json::value response_body;
 
@@ -225,17 +232,17 @@ void RedditOauth::readComments(utility::string_t client,
     ucout << response_body.serialize();
 }
 
-void RedditOauth::readSubscriberCount(utility::string_t client,
-                                      utility::string_t secret, utility::string_t access_token)
+void RedditOauth::readSubscriberCount()
 {
+    refreshTokens();
 
-    http_client redditClient(U("https://oauth.reddit.com/r/") + s_subreddit + U("/about.json"));
+    http_client redditClient(U("https://oauth.reddit.com/r/") + s_reddit_subreddit + U("/about.json"));
 
     http_request reqRed(methods::GET);
 
-    reqRed.headers().add(U("user"), client);
-    reqRed.headers().add(U("password"), secret);
-    reqRed.headers().add(U("Authorization"), U("bearer ") + access_token);
+    reqRed.headers().add(U("user"), s_reddit_client);
+    reqRed.headers().add(U("password"), s_reddit_secret);
+    reqRed.headers().add(U("Authorization"), U("bearer ") + s_reddit_current_token);
 
     json::value response_body;
 
