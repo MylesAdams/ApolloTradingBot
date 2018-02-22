@@ -65,8 +65,8 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     using namespace concurrency::streams;		// Asynchronous streams.
 
     //get target info
-    auto RESOURCE_URL = target.RESOURCE_URL;
-    auto request_path = target.REQUEST_PATH;
+    auto RESOURCE_URL = target.resource_url;
+    auto request_path = target.request_path;
     std::vector<RequestParameter> request_parameters = target.request_parameters;
 
     // Get time since UNIX epoch
@@ -150,7 +150,8 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     req.headers().add(U("Connection"), U("close"));
     req.headers().add(U("Authorization"), utility::conversions::to_string_t(authorization_header));
     std::string response;
-    try {
+    try
+    {
 
         // Send https request.
         pplx::task<http_response> my_request = my_client.request(req);
@@ -238,5 +239,5 @@ void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
     target.request_parameters.push_back(RequestParameter(U("q"), utility::conversions::to_string_t(query)));
     //target.request_parameters.push_back(RequestParameter(U(""), U(""))); since last utc param
-    this->targets_ = target;
+    this->target_ = target;
 }

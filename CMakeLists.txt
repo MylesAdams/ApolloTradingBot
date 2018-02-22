@@ -73,10 +73,12 @@ set(HEADERS
     src/mainwindow.h
     src/mainwindow.ui
     src/Bot.h
-    src/Comment.h
     src/FourChan.h
     src/Twitter.h
     src/watson.h
+    src/Comment.h
+    src/RequestParameter.h
+    src/ScraperTarget.h
   )
 
 set(LIBRARIES

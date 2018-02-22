@@ -28,7 +28,7 @@ std::string Apollo::Bot::FourChan::requestResponse(const ScraperTarget & target)
 
     http_request req(methods::GET);
     req.headers().set_content_type(CONTENT_TYPE);
-    uri_builder builder(target.REQUEST_PATH);
+    uri_builder builder(target.request_path);
     req.set_request_uri(builder.to_string());
 
     std::string response;
@@ -119,7 +119,7 @@ Apollo::Bot::FourChan::FourChan()
     this->highest_post_seen_ = 0;
     this->highest_timestamp_seen_ = 0;
     ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"));
-    this->targets_ = target;
+    this->target_ = target;
 
     std::ifstream res;
     res.open(this->RESOURCE_FILE_);
