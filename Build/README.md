@@ -50,11 +50,17 @@
 4. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
    * Use vcpkg to do this. Getting the dependencies for cpprestsdk manually is not a good idea.
    * `vcpkg install cpprestsdk cpprestsdk:x64-windows`
+
+5. Install Qt5-base
+   * `vcpkg install Qt5-base`
    
-5. Run commands in ApolloTradingBot directory:
+6. Install Boost-program-options
+   * `vcpkg install boost-program-options`
+   
+7. Run commands in ApolloTradingBot directory:
    * `cd Build`
    * `cmake ../ -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake` (**Note**: If you did not install vckpkg to C:\\ then specify your system's path to vcpkg's root directory.)
 
-6. Open `ApolloTradingBot.sln` inside the build folder. After opening the ApolloTradingBot.sln, open or locate the solution explorer window. Right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
+8. Open `ApolloTradingBot.sln` inside the build folder. After opening the ApolloTradingBot.sln, open or locate the solution explorer window. Right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
 
-7. `ctrl-shift-b` to build.
+9. `ctrl-shift-b` to build.
