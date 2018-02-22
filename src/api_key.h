@@ -1,21 +1,27 @@
-//FILE: api_key.h
-//Written by ANDREW LAUX
+// FILE: api_key.h
+// Written by ANDREW LAUX
 
 #ifndef api_key_h
 #define api_key_h
-#include<string>
 
-//Class: ApiKey
+// Includes.
+#include <cpprest/http_client.h>
+
+// Define namespace.
+using namespace utility;
+
+// Class: ApiKey
 class ApiKey {
 private:
-	std::string key;
+	string_t key;
+	string_t secret;
+	string_t
 public:
-	ApiKey() :key("") {}
-	void setKey(std::string key);
-	void clear() { this->key = std::string(""); }
+	ApiKey() :key(U("")) {}
+	void setKey(string_t key);
+	void clear() { this->key = string_t(U("")); }
 	bool isComplete() { return !key.empty(); }
-	std::string getKey();
-	std::string getHash();
+	string_t getKey();
 };
 
 #endif // !api_key_h

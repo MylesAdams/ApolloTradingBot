@@ -7,9 +7,17 @@
 
 //Derived class: GdaxAccnt
 class GdaxAccnt : public ExchangeAccnt {
+private:
+	string_t key;
+	string_t passphrase;
+	string_t secret;
 public:
-	GdaxAccnt() :ExchangeAccnt("Gdax", "https://api.gdax.com") {}
-	void connect() override;
+	GdaxAccnt() :
+		ExchangeAccnt(U("Gdax"), U("https://api.gdax.com")),
+		key(U("")),
+		passphrase(U("")),
+		secret(U("")){}
+	bool isActive() override;
 };
 
 #endif // !gdax_accnt_h

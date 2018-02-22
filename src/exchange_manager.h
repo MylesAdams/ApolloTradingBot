@@ -18,8 +18,9 @@ public:
 	BinanceAccnt binance;
 public:
 	std::vector<std::string> getInactive();
-	std::vector<std::string> getActive();
+    std::vector<std::string> getActive();
 	ExchangeAccnt* getById(std::string id);
+
 };
 
 #endif // !exchange_manager.h
