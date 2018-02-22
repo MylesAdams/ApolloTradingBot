@@ -52,6 +52,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
 
+    twitterBot.addSearchQuery("Vechain", 25);
+    auto comments = twitterBot.getData();
+
+    for (auto& com : comments)
+    {
+        std::cout << com.content << std::endl;
+    }
+
+
     timerStarted = false;
 }
 
