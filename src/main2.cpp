@@ -46,33 +46,8 @@ static const utility::string_t s_reddit_state(U(setRandString()));
 static const utility::string_t s_reddit_redirect_uri(U("https://mylesadams.github.io/ApolloTradingBot/"));
 static const utility::string_t s_reddit_duration(U("permanent"));
 static const utility::string_t s_reddit_scope(U("read"));
-static const utility::string_t s_reddit_code(U("ISzg8ZBF65HspmXnoIfrTMhZPg8"));
-
-//
-// Specialized class for Dropbox OAuth 2.0 session.
-//
-//class reddit_session_sample : public OauthSession
-//{
-//public:
-//    reddit_session_sample() :
-//        OauthSession(U("Reddit"),
-//            s_reddit_key,
-//            s_reddit_secret,
-//            U("https://www.reddit.com/api/v1/authorize?"),
-//            U("https://www.reddit.com/api/v1/access_token"),
-//            U("https://mylesadams.github.io/ApolloTradingBot/"))
-////            U("read"),
-////            U("Apollo_Scaper"))
-//    {
-//        // Dropbox uses "default" OAuth 2.0 settings.
-//    }
-//    void run_internal() override
-//    {
-//        http_client api(U("https://reddit.com/api/v1/authorize?"), m_http_config);
-//        ucout << "Requesting account information:" << std::endl;
-//        ucout << "Information: " << api.request(methods::GET, U("account/info")).get().extract_json().get() << std::endl;
-//    }
-//};
+static const utility::string_t s_reddit_code(U("0RduF6WUMg5N8HA_q96el1rjcGc"));
+static const utility::string_t s_reddit_refresh_token(U("73830480229-vaJRUR9ihfhJYiRVYPQ-BcYPrHg"));
 
 
 #ifdef _WIN32
@@ -81,60 +56,29 @@ int wmain(int argc, wchar_t *argv[])
 int main(int argc, char *argv[])
 #endif
 {
-    /*credentials cred(s_reddit_client, s_reddit_secret);
-    http_client_config config;
-
-    config.set_credentials(cred);
-
-    http_client redditClient(U("https://www.reddit.com/api/"), config);
-
-    http_request reqRed(methods::POST);
-    uri_builder builder("v1/access_token");
-    builder.append_query(U("grant_type"), U("authorization_code"));
-    builder.append_query(U("code"), U("4wAFGtsuR7M7H79A1FbGJxJcl08"));
-    builder.append_query(U("redirect_uri"), U("https://mylesadams.github.io/ApolloTradingBot/"));
-
-    reqRed.set_request_uri(builder.to_string());
-
-    reqRed.headers().add(U("user"), s_reddit_client);
-    reqRed.headers().add(U("password"), s_reddit_secret);
-
-    ucout << "Running OAuth 2.0 client sample..." << std::endl;
-
-    string_t response_body;
-
-    pplx::task<http_response> reddit_call = redditClient.request(reqRed);
-    reddit_call
-
-            .then([](http_response response) {
-        std::cout << response.status_code() << std::endl;
-
-                return response.extract_string();
-
-    })
-            .then([&response_body](pplx::task<string_t> string_task){
-
-                response_body = string_task.get();
-
-            })
-
-            .wait();*/
-
     RedditOauth reddit(s_reddit_client,s_reddit_response_type,s_reddit_state,s_reddit_redirect_uri,
-                       s_reddit_duration,s_reddit_scope, s_reddit_secret);
+                       s_reddit_duration,s_reddit_scope, s_reddit_secret, U("VeChain"));
 
-    ucout << reddit.buildRedditOauthURL() << std::endl;
+    //ucout << reddit.buildRedditOauthURL() << std::endl;
 
-    if (!exist("../resources/reddit_token_data.txt")) {
-        reddit.setTokens(s_reddit_client, s_reddit_secret, s_reddit_code, s_reddit_redirect_uri);
-        reddit.getTokens();
-    }
+    //if (!exist("../resources/reddit_token_data.txt")) {
+    //reddit.setTokens(s_reddit_client, s_reddit_secret, s_reddit_code, s_reddit_redirect_uri);
+    //   reddit.getTokens();
+    //}
 
-    else {
-        reddit.refreshTokens(s_reddit_client, s_reddit_secret, reddit.getRefreshToken());
-    }
+    reddit.readSubscriberCount(s_reddit_client, s_reddit_secret, s_reddit_code);
 
+    ucout << std::endl;
+    ucout << std::endl;
 
+    reddit.readComments(s_reddit_client, s_reddit_secret, s_reddit_code);
+    //else {
+    reddit.refreshTokens(s_reddit_client, s_reddit_secret, s_reddit_refresh_token);
+    //}
+
+    reddit.readSubscriberCount(s_reddit_client, s_reddit_secret, s_reddit_code);
+
+    reddit.refreshTokens(s_reddit_client, s_reddit_secret, s_reddit_refresh_token);
 
     //ucout << response_body;
 

@@ -14,7 +14,7 @@ using namespace web::http::experimental::listener;
 
 RedditOauth::RedditOauth(utility::string_t client, utility::string_t response_type, utility::string_t state,
                          utility::string_t redirect_uri, utility::string_t duration, utility::string_t scope,
-                         utility::string_t secret)
+                         utility::string_t secret, utility::string_t subreddit)
 {
     s_reddit_client = client;
     s_reddit_response_type = response_type;
@@ -25,6 +25,7 @@ RedditOauth::RedditOauth(utility::string_t client, utility::string_t response_ty
     s_reddit_auth_endpoint = U("https://www.reddit.com/api/v1/authorize?");
     s_reddit_token_endpoint = U("https://www.reddit.com/api/v1/access_token");
     s_reddit_secret = secret;
+    s_subreddit = subreddit;
 }
 
 utility::string_t RedditOauth::buildRedditOauthURL()
@@ -142,6 +143,7 @@ void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secr
     reqRed.headers().add(U("user"), client);
     reqRed.headers().add(U("password"), secret);
 
+
     json::value response_body;
 
     pplx::task<http_response> reddit_call = redditClient.request(reqRed);
@@ -165,13 +167,96 @@ void RedditOauth::refreshTokens(utility::string_t client, utility::string_t secr
     current_token = response_body["access_token"].as_string();
     refresh_token = response_body["refresh_token"].as_string();
 
-    std::ofstream tokenFile;
+    /*std::ofstream tokenFile;
     tokenFile.open("../resources/reddit_token_data.txt");
     tokenFile << current_token << "\n" << refresh_token;
     tokenFile.close();
-    // }
+    // }*/
 
     ucout << response_body.serialize() << std::endl;
 
+}
+
+void RedditOauth::readComments(utility::string_t client,
+                               utility::string_t secret, utility::string_t access_token)
+
+{
+    http_client redditClient(U("https://oauth.reddit.com/r/") + s_subreddit + U("/comments.json"));
+
+    http_request reqRed(methods::GET);
+
+    reqRed.headers().add(U("user"), client);
+    reqRed.headers().add(U("password"), secret);
+    reqRed.headers().add(U("Authorization"), U("bearer ") + access_token);
+
+    json::value response_body;
+
+    pplx::task<http_response> reddit_call = redditClient.request(reqRed);
+    reddit_call
+
+            .then([](http_response response) {
+                std::cout << response.status_code() << std::endl;
+
+                return response.extract_json();
+
+            })
+            .then([&response_body](pplx::task<json::value > json_task){
+
+                response_body = json_task.get();
+
+            })
+            .wait();
+
+    size_t tempLastRead = response_body["data"]["children"][0]["data"]["created"].as_integer();
+
+    for (int i = 0; i < response_body["data"]["children"].size(); i++)
+    {
+        //if  (response_body["data"]["children"][i]["data"]["created"].as_integer() > last_comment_read)
+        //{
+            comments.push_back(response_body["data"]["children"][i]["data"]["body"].as_string());
+        //}
+    }
+
+    last_comment_read = tempLastRead;
+
+    for (int i = 0; i < comments.size(); i++)
+        ucout << comments[i] << std::endl;
+    ucout << "last comment read id: " << last_comment_read << std::endl;
+    ucout << response_body.serialize();
+}
+
+void RedditOauth::readSubscriberCount(utility::string_t client,
+                                      utility::string_t secret, utility::string_t access_token)
+{
+
+    http_client redditClient(U("https://oauth.reddit.com/r/") + s_subreddit + U("/about.json"));
+
+    http_request reqRed(methods::GET);
+
+    reqRed.headers().add(U("user"), client);
+    reqRed.headers().add(U("password"), secret);
+    reqRed.headers().add(U("Authorization"), U("bearer ") + access_token);
+
+    json::value response_body;
+
+    pplx::task<http_response> reddit_call = redditClient.request(reqRed);
+    reddit_call
+
+            .then([](http_response response) {
+                std::cout << response.status_code() << std::endl;
+
+                return response.extract_json();
+
+            })
+            .then([&response_body](pplx::task<json::value > json_task){
+
+                response_body = json_task.get();
+
+            })
+            .wait();
+
+    subscriber_count = response_body["data"]["subscribers"].as_integer();
+    //ucout << response_body.serialize() << std::endl;
+    ucout << "subcribers: " << subscriber_count << std::endl;
 }
 
