@@ -20,6 +20,7 @@ namespace Apollo
             //fields
             unsigned long long int highest_post_seen_;
             unsigned long long int highest_timestamp_seen_;
+            std::vector<std::string> search_patterns_;
 
             //methods
             virtual std::string requestResponse(const ScraperTarget& target) override;
@@ -28,6 +29,9 @@ namespace Apollo
         public:
             FourChan();
             virtual ~FourChan();
+
+            //methods
+            virtual void addSearchQuery(const std::string& query, size_t number_of_results) override;
         };
     }// end of Bot namespace
 }// end of Apollo namespace

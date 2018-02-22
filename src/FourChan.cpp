@@ -36,8 +36,6 @@ std::string Apollo::Bot::FourChan::requestResponse(const ScraperTarget & target)
     client.request(req)
         .then([](http_response res)
         {
-            auto code = res.status_code();
-            std::cout << "Fourchan status code:\t" << code << std::endl;
             return res.extract_utf8string();
         })
         .then([&response](pplx::task<std::string> utf8str)
@@ -53,58 +51,65 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
     unsigned long long temp_highest_post_seen = this->highest_post_seen_;
     unsigned long long temp_highest_timestamp_seen = this->highest_timestamp_seen_;
     std::vector<Apollo::Comment> comments;
-    //for (int page_idx = 0; page_idx < document.Size(); ++page_idx)
-    //{
-    //    const rapidjson::Value& threads = document[page_idx]["threads"];
-    //    for (int thread_idx = 0; thread_idx < threads.Size(); ++thread_idx)
-    //    {
-    //        unsigned long long int thread_no = threads[thread_idx]["no"].GetInt();
-    //        unsigned long long int last_modified = threads[thread_idx]["last_modified"].GetInt();
-    //        if (last_modified > this->highest_timestamp_seen_)
-    //        {
-    //            if (last_modified > temp_highest_timestamp_seen)
-    //                temp_highest_timestamp_seen = last_modified;
+    for (int page_idx = 0; page_idx < document.Size(); ++page_idx)
+    {
+        const rapidjson::Value& threads = document[page_idx]["threads"];
+        for (int thread_idx = 0; thread_idx < threads.Size(); ++thread_idx)
+        {
+            unsigned long long int thread_no = threads[thread_idx]["no"].GetInt();
+            unsigned long long int last_modified = threads[thread_idx]["last_modified"].GetInt();
+            if (last_modified > this->highest_timestamp_seen_)
+            {
+                if (last_modified > temp_highest_timestamp_seen)
+                    temp_highest_timestamp_seen = last_modified;
 
-    //            std::stringstream thread_response = requestResponse(this->incomplete_urls_[0] + "/thread/" + std::to_string(thread_no) + ".json", "placeholder");
-    //            rapidjson::Document thread;
-    //            thread.Parse(thread_response.str().c_str());
+                utility::string_t thread_request_path = U("/biz/thread/") + utility::conversions::to_string_t(std::to_string(thread_no)) + U(".json");
+                std::string thread_response = requestResponse(ScraperTarget(this->BASE_URL_, thread_request_path));
+                rapidjson::Document thread;
+                thread.Parse(thread_response.c_str());
 
-    //            rapidjson::Value &posts = thread["posts"];
-    //            for (int com_idx = 0; com_idx < posts.Size(); ++com_idx)
-    //            {
-    //                rapidjson::Value &comment = posts[com_idx];
-    //                if (comment.HasMember("com"))
-    //                {
-    //                    unsigned long long post_no = comment["no"].GetInt();
-    //                    if (post_no > this->highest_post_seen_)
-    //                    {
-    //                        comments.push_back(Comment(comment["com"].GetString(), std::to_string(post_no)));
-    //                        if (post_no > temp_highest_post_seen)
-    //                            temp_highest_post_seen = post_no;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-    //this->highest_post_seen_ = temp_highest_post_seen;
-    //this->highest_timestamp_seen_ = temp_highest_timestamp_seen;
+                rapidjson::Value &posts = thread["posts"];
+                for (int com_idx = 0; com_idx < posts.Size(); ++com_idx)
+                {
+                    rapidjson::Value &comment = posts[com_idx];
+                    if (comment.HasMember("com"))
+                    {
+                        unsigned long long post_no = comment["no"].GetInt();
+                        if (post_no > this->highest_post_seen_)
+                        {
+                            std::string comment_content = comment["com"].GetString();
+                            //put to lower case
+                            std::transform(comment_content.begin(), comment_content.end(), comment_content.begin(), ::tolower);
+                            bool matched_pattern = false;
+                            for (const auto& pattern : this->search_patterns_)
+                            {
+                                if (comment_content.find(pattern) != std::string::npos)
+                                {
+                                    matched_pattern = true;
+                                    break;
+                                }
+                            }
+                            if (matched_pattern)
+                                comments.push_back(Comment(comment_content, std::to_string(post_no)));
+                            if (post_no > temp_highest_post_seen)
+                                temp_highest_post_seen = post_no;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    this->highest_post_seen_ = temp_highest_post_seen;
+    this->highest_timestamp_seen_ = temp_highest_timestamp_seen;
     return this->cleanComments(comments);
 }
 
 std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Comment>& comments)
 {
-    //regex for removing post# quotes in 4chan replies
-    std::regex rgx_linebreak("(<br>)+");
-    std::regex rgx_misc("(&gt;)+|(<span class=\"quote\">)+|(</span>)+|(&quot;)+|(&#[0-9]+;)+|(/biz/thread/[0-9]+)+|(<wbr>)+|(https?://)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
-    std::regex rgx_quotelink("(<a href=\".*\" class=\"quotelink\">[0-9]+</a>)");
+    //took out regex for now. Regex was too slow.
     for (auto& comment : comments)
     {
-        comment.content = std::regex_replace(comment.content, rgx_linebreak, " ");
-        comment.content = std::regex_replace(comment.content, rgx_misc, "");
-        comment.content = std::regex_replace(comment.content, rgx_quotelink, "");
         comment.content = this->trim(comment.content);
-        std::transform(comment.content.begin(), comment.content.end(), comment.content.begin(), ::tolower);
     }
     return comments;
 }
@@ -135,4 +140,11 @@ Apollo::Bot::FourChan::FourChan()
 Apollo::Bot::FourChan::~FourChan()
 {
     this->saveSettings();
+}
+
+void Apollo::Bot::FourChan::addSearchQuery(const std::string & query, size_t number_of_results)
+{
+    std::string q = query;
+    std::transform(q.begin(), q.end(), q.begin(), ::tolower);
+    this->search_patterns_.push_back(q);
 }

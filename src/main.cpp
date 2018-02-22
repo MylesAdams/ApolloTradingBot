@@ -20,8 +20,12 @@ int main()
 {
     Apollo::Bot::Twitter t;
     Apollo::Bot::FourChan f;
-    f.getData();
-
+    f.addSearchQuery("bitcoin", 12141241); //for now the number of results arg does nothing, lol.
+    const auto& fourchandata = f.getData();
+    for (auto& com : fourchandata)
+    {
+        std::cout << com.content << "\n\n" << std::endl;
+    }
     t.addSearchQuery("vechain", 100);
    // t.addTimeline("vechainofficial", 5);
     auto comments = t.getData();

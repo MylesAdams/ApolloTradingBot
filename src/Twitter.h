@@ -31,7 +31,7 @@ namespace Apollo
             virtual ~Twitter();
 
             //methods
-            void addSearchQuery(const std::string& query, size_t number_of_results);
+            void addSearchQuery(const std::string& query, size_t number_of_results) override;
         };
     }
 }

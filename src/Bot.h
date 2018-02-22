@@ -70,6 +70,7 @@ namespace Apollo {
             
             //methods
             virtual std::vector<Comment> getData();
+            virtual void addSearchQuery(const std::string& query, size_t number_of_results) = 0;
         }; //end of Bot abstract class
     }//end of Bot namespace
 }//end of Apollo namespace
