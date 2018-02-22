@@ -39,7 +39,7 @@ std::string Apollo::Bot::Twitter::percentEncode(const utility::string_t& s)
 void Apollo::Bot::Twitter::saveSettings()
 {
     using rapidjson::Value;
-    std::ofstream file(resource_file_);
+    std::ofstream file(RESOURCE_FILE_);
     rapidjson::Document doc;
     doc.SetObject();
 
@@ -64,8 +64,8 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     using namespace concurrency::streams;		// Asynchronous streams.
 
     //get target info
-    const auto resource_url = target.resource_url;
-    const auto request_path = target.request_path;
+    const auto RESOURCE_URL = target.RESOURCE_URL;
+    const auto request_path = target.REQUEST_PATH;
     std::vector<RequestParameter> request_parameters = target.request_parameters;
 
     // Get time since UNIX epoch
@@ -100,7 +100,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
 
     //create output string
     const std::string method = "GET";
-    const std::string signature_base_string = method + "&" + percentEncode(resource_url + request_path) + "&" + percentEncode(utility::conversions::to_string_t(parameter_string));
+    const std::string signature_base_string = method + "&" + percentEncode(RESOURCE_URL + request_path) + "&" + percentEncode(utility::conversions::to_string_t(parameter_string));
 
     //create signing key
     const std::string signing_key = percentEncode(utility::conversions::to_string_t(this->consumer_secret_)) + "&" + percentEncode(utility::conversions::to_string_t(this->oauth_access_token_secret_));
@@ -125,7 +125,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     delete[] signature_base_array;
 
     // Create client.
-    http_client my_client(resource_url);
+    http_client my_client(RESOURCE_URL);
 
     // Declare request.
     http_request req(methods::GET);
@@ -156,7 +156,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
         my_request.then([](http_response res)
         {
             auto stat = res.status_code();
-            std::cout << "Status code:\t" << stat << std::endl;
+            std::cout << "Twitter status code:\t" << stat << std::endl;
             return res.extract_vector();
         }).then([&response](pplx::task<std::vector<unsigned char>> vector_task)
         {
@@ -199,7 +199,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::cleanComments(std::vector<Com
 
 Apollo::Bot::Twitter::Twitter()
 {
-    std::ifstream file(resource_file_);
+    std::ifstream file(RESOURCE_FILE_);
 
     if (file.peek() != std::ifstream::traits_type::eof())
     {
@@ -232,7 +232,7 @@ Apollo::Bot::Twitter::~Twitter()
 
 void Apollo::Bot::Twitter::addSearchQuery(const std::string & query, size_t number_of_results)
 {
-    ScraperTarget target(base_url_, U("/1.1/search/tweets.json"));
+    ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
     std::stringstream ss;
     ss << number_of_results;
     std::string count;

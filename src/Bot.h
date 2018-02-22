@@ -41,12 +41,12 @@ namespace Apollo {
 
         struct ScraperTarget //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
         {
-            const utility::string_t resource_url;
-            const utility::string_t request_path;
+            const utility::string_t RESOURCE_URL;
+            const utility::string_t REQUEST_PATH;
             std::vector<RequestParameter> request_parameters;
             ScraperTarget(const utility::string_t& resource_url, const utility::string_t& request_path)
-                : resource_url(resource_url),
-                request_path(request_path) {}
+                : RESOURCE_URL(resource_url),
+                REQUEST_PATH(request_path) {}
         };
 
         class Bot

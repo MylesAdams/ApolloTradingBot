@@ -19,6 +19,9 @@ using Apollo::Comment;
 int main()
 {
     Apollo::Bot::Twitter t;
+    Apollo::Bot::FourChan f;
+    f.getData();
+
     t.addSearchQuery("vechain", 100);
    // t.addTimeline("vechainofficial", 5);
     auto comments = t.getData();
