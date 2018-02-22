@@ -54,7 +54,7 @@ void Apollo::Bot::Twitter::saveSettings()
     doc.Accept(writer);
 }
 
-std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
+std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
 {
     // Namespace.
     using namespace utility;                    // Common utilities like string conversions.
@@ -133,8 +133,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     req.headers().set_content_type(content_type);								// Sets content type to application/json.
     uri_builder builder(request_path);
     for (auto& param : target.request_parameters)
-        builder.append_query(param.key, param.value);
-    //req.set_request_uri(request_path + U("?count=5&screen_name=vechainofficial"));
+        builder.append_query(param.key, utility::conversions::to_string_t(percentEncode(param.value)));
     req.set_request_uri(builder.to_string());
 
     //build the authorization header
@@ -149,7 +148,7 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
     req.headers().add(U("Accept"), U("/*/"));
     req.headers().add(U("Connection"), U("close"));
     req.headers().add(U("Authorization"), utility::conversions::to_string_t(authorization_header));
-    std::stringstream response;
+    std::string response;
     try {
 
         // Send https request.
@@ -162,11 +161,10 @@ std::stringstream Apollo::Bot::Twitter::requestResponse(const ScraperTarget& tar
         }).then([&response](pplx::task<std::vector<unsigned char>> vector_task)
         {
             auto v = vector_task.get();
-            std::string str(v.begin(), v.end());
-            response << str;
+            response.assign(v.begin(), v.end());
         }).wait(); // Wait for task group to complete.	
     }
-    catch (...) {}
+    catch (...) {} //TODO -- make this actually handle the exception properly
 
     return response;
 }
@@ -175,10 +173,22 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Do
 {
     std::vector<Comment> comments;
 
-    for (size_t i = 0; i < document.Size(); ++i)
+    unsigned long long int temp_highest_seen = this->highest_timestamp_seen_;
+    for (size_t i = 0; i < document["statuses"].Size(); ++i)
     {
-        comments.push_back(Comment(document[i]["full_text"].GetString(), "placeholder"));
+        auto& tweet = document["statuses"][i];
+        std::string created_at = document["statuses"][i]["created_at"].GetString();
+        utility::datetime date;
+        date.from_string(utility::conversions::to_string_t(created_at));
+        auto utc = date.utc_timestamp();
+        if (utc > this->highest_timestamp_seen_)
+        {
+            comments.push_back(Comment(document["statuses"][i]["full_text"].GetString(), "placeholder"));
+            if (utc > temp_highest_seen)
+                temp_highest_seen = utc;
+        }
     }
+    this->highest_timestamp_seen_ = temp_highest_seen;
     return comments;
 }
 
@@ -202,12 +212,6 @@ Apollo::Bot::Twitter::Twitter()
         this->oauth_access_token_key_ = doc["oauth_access_token_key"].GetString();
         this->oauth_access_token_secret_ = doc["oauth_access_token_secret"].GetString();
         this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetUint64();
-        //TODO implement a way for a user of this class to add timelines to track (screen_name), and max number of tweets to get (count).
-        ScraperTarget vechain(U("https://api.twitter.com"), U("/1.1/statuses/user_timeline.json"));
-        vechain.request_parameters.push_back(RequestParameter(U("count"), U("10")));
-        vechain.request_parameters.push_back(RequestParameter(U("screen_name"), U("vechainofficial")));
-        vechain.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
-        this->targets_.push_back(vechain);
     }
     else //create the JSON config file
     {
@@ -224,4 +228,17 @@ Apollo::Bot::Twitter::Twitter()
 Apollo::Bot::Twitter::~Twitter()
 {
     this->saveSettings();
+}
+
+void Apollo::Bot::Twitter::addSearchQuery(const std::string & query, size_t number_of_results)
+{
+    ScraperTarget target(base_url_, U("/1.1/search/tweets.json"));
+    std::stringstream ss;
+    ss << number_of_results;
+    std::string count;
+    ss >> count;
+    target.request_parameters.push_back(RequestParameter(U("count"), utility::conversions::to_string_t(count)));
+    target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
+    target.request_parameters.push_back(RequestParameter(U("q"), utility::conversions::to_string_t(query)));
+    this->targets_.push_back(target);
 }

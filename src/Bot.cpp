@@ -33,10 +33,10 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     for (auto& target : this->targets_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(target);
+        std::string target_response = requestResponse(target);
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;
-        target_document.Parse(target_response.str().c_str());
+        target_document.Parse(target_response.c_str());
 
         //parse the JSON Document for "comments"
         std::vector<Comment> target_comments = parseJSON(target_document);

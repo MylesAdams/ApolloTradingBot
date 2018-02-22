@@ -19,6 +19,8 @@ using Apollo::Comment;
 int main()
 {
     Apollo::Bot::Twitter t;
+    t.addSearchQuery("vechain", 100);
+   // t.addTimeline("vechainofficial", 5);
     auto comments = t.getData();
 
     std::ofstream out("../resources/twitter_comments.json");

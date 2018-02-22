@@ -55,10 +55,11 @@ namespace Apollo {
         protected:
             //fields
             std::vector<ScraperTarget> targets_;
+            unsigned long long int highest_timestamp_seen_;
 
             //methods
             virtual void saveSettings() = 0;
-            virtual std::stringstream requestResponse(const ScraperTarget& target) = 0;
+            virtual std::string requestResponse(const ScraperTarget& target) = 0;
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
             virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
             utility::string_t stripBase64(const utility::string_t& s);
