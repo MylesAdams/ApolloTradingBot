@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Apollo Training Bot</string>
+   <string>Apollo Trading Bot</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QCustomPlot" name="plot" native="true">

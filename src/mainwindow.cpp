@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
 
-    twitterBot.addSearchQuery("Vechain", 25);
+    twitterBot.addSearchQuery("Vechain", 500);
     auto comments = twitterBot.getData();
 
     for (auto& com : comments)
@@ -71,36 +71,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    clearData();
-    std::string filepath = "../Resources/" + item->text().toStdString() + ".json";
-    std::ifstream json_file;
-    json_file.open(filepath);
-//    std::cout << "Test1" << std::endl;
-    if (json_file.is_open())
-    {
-        rapidjson::IStreamWrapper isw(json_file);
-//        std::cout << "Test2" << std::endl;
-        rapidjson::Document doc;
-//        std::cout << "Test3" << std::endl;
-        doc.ParseStream(isw);
-//        std::cout << "Test4" << std::endl;
-//        rapidjson::Value &data = doc;
-//        std::cout << "Test5" << std::endl;
-        int upper = doc.Size();
-//        std::cout << upper << std::endl;
-        int lower = upper - NUMBER_OF_PLOT;
-//        std::cout << lower << std::endl;
-        for (int ndx = lower; ndx < upper; ndx++)
-        {
-            qx.append(std::stoi(doc[ndx]["Time"].GetString()));
-            qy_pos.append(std::stod(doc[ndx]["PosRating"].GetString()));
-            qy_neg.append(std::stod(doc[ndx]["NegRating"].GetString()));
-        }
-        ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
-        plot();
-
-    }
-    json_file.close();
+    currentItem = item;
+    updatePlot();
 
     if (!timerStarted)
     {
@@ -109,15 +81,7 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
         timer->start(1000);
         timerStarted = true;
     }
-
-    currentItem = item;
 }
-
-//void MainWindow::addPoint(double x, double y)
-//{
-//    qx.append(x);
-//    q_y.append(y);
-//}
 
 void MainWindow::clearData()
 {
@@ -145,25 +109,18 @@ void MainWindow::updatePlot()
         rapidjson::IStreamWrapper isw(json_file);
         rapidjson::Document doc;
         doc.ParseStream(isw);
-//        rapidjson::Value &data = doc;
+
         int upper = doc.Size();
-//        std::cout << upper << std::endl;
         int lower = upper - NUMBER_OF_PLOT;
-//        std::cout << lower << std::endl;
         for (int ndx = lower; ndx < upper; ndx++)
         {
-//            std::cout << ndx << std::endl;
-//            std::cout << std::stoi(data[ndx]["time"].GetString()) << std::endl;
             qx.append(std::stoi(doc[ndx]["Time"].GetString()));
             qy_pos.append(std::stod(doc[ndx]["PosRating"].GetString()));
             qy_neg.append(std::stod(doc[ndx]["NegRating"].GetString()));
         }
-//        std::copy(q_x.begin(), q_x.end(), std::ostream_iterator<char>(std::cout, " "));
-//        int x = q_x[lower];
-//        int y = q_x[upper-1];
-//        std::cout << x << "," << y << std::endl;
+
         ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
         plot();
+        json_file.close();
     }
-    json_file.close();
 }

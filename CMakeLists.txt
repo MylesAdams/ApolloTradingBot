@@ -51,8 +51,9 @@ set(SOURCES
   src/main.cpp
   src/mainwindow.cpp
   src/Bot.cpp
-  src/FourChan.cpp
+  # src/FourChan.cpp
   src/Twitter.cpp
+  src/watson.cpp
   )
 
 # Put any header files you create here:
@@ -72,17 +73,19 @@ set(HEADERS
     src/mainwindow.ui
     src/Bot.h
     src/Comment.h
-    src/FourChan.h
+    # src/FourChan.h
     src/Twitter.h
+    src/watson.h
   )
 
 set(LIBRARIES
   ${LIBRARIES}
-  # curlpp
   cpprestsdk::cpprest
   cpprestsdk::cpprestsdk_boost_internal
   cpprestsdk::cpprestsdk_zlib_internal
   cpprestsdk::cpprestsdk_openssl_internal
+  Qt5::Widgets
+  Qt5::PrintSupport
   )
 
 source_group("Source files" FILES ${SOURCES})
@@ -92,4 +95,4 @@ source_group("Header files" FILES ${HEADERS})
 # files to the IDE project so they appear while working in an IDE.
 add_executable(ApolloTradingBot ${SOURCES} ${HEADERS})
 
-target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES} ${Boost_LIBRARIES} Qt5::Widgets Qt5::PrintSupport)
+target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES} ${Boost_LIBRARIES} )

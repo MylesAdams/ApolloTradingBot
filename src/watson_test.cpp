@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cpprest\http_client.h>
 #include <cpprest\json.h>
+#include "watson.h"
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
@@ -15,43 +16,14 @@ using namespace concurrency::streams;       // Asynchronous streams
 int main() {
 
 	// Sentiment to analyze.
-	string_t comment = U("We don't serve droids here.");
+	string_t comment = U("We don't serve droids here.\nI love you.\n This is gonna be good!\n Just the tip, baby. \n Obama is a nagger. \n You smell like eggs. \n I'm looking forward to killing myself. \n Panda express tasted really good today. \n My mother won't stop calling me. \n When I fart it smells like toothpaste. \n");
 
-	// Create client.
-	http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/v3/"));
+	// Watson obj.
+	Watson watson_bot(U("c032fda0-5c02-490d-8e00-ab00de2e5f40"), U("AfgP2LQIDCgB"));
 
-	// Create request.
-	http_request req(methods::POST);
-	req.headers().set_content_type(U("text/plain"));
-	req.set_body(comment);
-
-	// Attempt request.
-	pplx::task<http_response> watson_call = watson_client.request(req);
-	watson_call
-
-	// Hookup response continuation
-	.then([](http_response response) {
-
-		// Report error.
-		std::cout << response.status_code() << std::endl;
-
-		// Extract body into vector.
-		return response.extract_vector();
-
-	})
+	// Check.
+	watson_bot.toneToFile(comment, U("c:/users/Andrew Laux/Documents/ApolloTradingBot/resources/test.json"));
 	
-	// Hookup continuation to process body.
-	.then([](pplx::task<std::vector<unsigned char>> extracted_vec) {
-
-		// Get the vector.
-		std::vector<unsigned char> body = extracted_vec.get();
-
-		//Print vector by range based for loop.
-		for (auto i : body) {
-			std::cout << i;
-		}
-
-	}).wait(); // Collect outstanding tasks.
 
 	// Exit program.
 	std::cin.get();
