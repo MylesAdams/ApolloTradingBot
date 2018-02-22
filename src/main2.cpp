@@ -1,69 +1,52 @@
 //
-// Created by Myles Adams on 2/19/18.
+// Created by Roderic Deichler on 2/20/18.
 //
-#include <cpprest/http_client.h>
-#include <cpprest/filestream.h>
 
-using namespace utility;                    // Common utilities like string conversions
-using namespace web;                        // Common features like URIs.
-using namespace web::http;                  // Common HTTP functionality
-using namespace web::http::client;          // HTTP client features
-using namespace concurrency::streams;       // Asynchronous streams
+#if defined(_WIN32) && !defined(__cplusplus_winrt)
+// Extra includes for Windows desktop.
+#include <windows.h>
+#include <Shellapi.h>
+#endif
 
-#include <cpprest/http_client.h>
-#include <cpprest/filestream.h>
+#include "cpprest/http_listener.h"
+#include "cpprest/http_client.h"
+#include "RedditOauth.h"
+#include <iostream>
+#include <sys/stat.h>
+#include <string>
 
-using namespace utility;                    // Common utilities like string conversions
-using namespace web;                        // Common features like URIs.
-using namespace web::http;                  // Common HTTP functionality
-using namespace web::http::client;          // HTTP client features
-using namespace concurrency::streams;       // Asynchronous streams
+using namespace utility;
+using namespace web;
+using namespace web::http;
+using namespace web::http::client;
+using namespace web::http::oauth2::experimental;
+using namespace web::http::experimental::listener;
 
-int main(int argc, char *argv[])
+
+
+inline bool exist(const std::string& name)
 {
-    auto fileStream = std::make_shared<ostream>();
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
 
-    // Open stream to output file.
-    pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
-                                                                                 {
-                                                                                     *fileStream = outFile;
 
-                                                                                     // Create http_client to send the request.
-                                                                                     http_client client(
-                                                                                             U("http://www.bing.com/"));
 
-                                                                                     // Build request URI and start the request.
-                                                                                     uri_builder builder(U("/search"));
-                                                                                     builder.append_query(U("q"),
-                                                                                                          U("cpprestsdk github"));
-                                                                                     return client.request(methods::GET,
-                                                                                                           builder.to_string());
-                                                                                 })
+#ifdef _WIN32
+int wmain(int argc, wchar_t *argv[])
+#else
+int main(int argc, char *argv[])
+#endif
+{
+    RedditOauth reddit(U("VeChain"));
 
-                    // Handle response headers arriving.
-            .then([=](http_response response)
-                  {
-                      printf("Received response status code:%u\n", response.status_code());
 
-                      // Write response body into the file.
-                      return response.body().read_to_end(fileStream->streambuf());
-                  })
+    reddit.readSubscriberCount();
 
-                    // Close the file stream.
-            .then([=](size_t)
-                  {
-                      return fileStream->close();
-                  });
+    ucout << std::endl;
+    ucout << std::endl;
 
-    // Wait for all the outstanding I/O to complete and handle any exceptions
-    try
-    {
-        requestTask.wait();
-    }
-    catch (const std::exception &e)
-    {
-        printf("Error exception:%s\n", e.what());
-    }
+    reddit.readComments();
 
     return 0;
 }
