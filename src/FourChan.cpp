@@ -2,7 +2,7 @@
 
 void Apollo::Bot::FourChan::saveSettings()
 {
-    std::ofstream out(this->resource_file);
+    std::ofstream out(this->RESOURCE_FILE_);
     if (out.is_open())
     {
         std::stringstream ss;
@@ -11,6 +11,39 @@ void Apollo::Bot::FourChan::saveSettings()
         ss << this->highest_timestamp_seen_;
         out << ss.rdbuf();
     }
+}
+
+std::string Apollo::Bot::FourChan::requestResponse(const ScraperTarget & target)
+{
+    // Namespace.
+    using namespace utility;                    // Common utilities like string conversions.
+    using namespace web;                        // Common features like URIs.
+    using namespace web::http;                  // Common HTTP functionality.
+    using namespace web::http::client;          // HTTP client features.
+    using namespace concurrency::streams;		// Asynchronous streams.
+    using utility::string_t;
+
+    const string_t METHOD(U("GET"));
+    const string_t CONTENT_TYPE(U("application/json"));
+
+    http_request req(methods::GET);
+    req.headers().set_content_type(CONTENT_TYPE);
+    uri_builder builder(target.REQUEST_PATH);
+    req.set_request_uri(builder.to_string());
+
+    std::string response;
+    http_client client(this->BASE_URL_);
+    client.request(req)
+        .then([](http_response res)
+        {
+            return res.extract_utf8string();
+        })
+        .then([&response](pplx::task<std::string> utf8str)
+        {
+            response = utf8str.get();
+        }).wait();
+
+    return response;
 }
 
 std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::Document & document)
@@ -30,9 +63,10 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
                 if (last_modified > temp_highest_timestamp_seen)
                     temp_highest_timestamp_seen = last_modified;
 
-                std::stringstream thread_response = requestResponse(this->INCOMPLETE_URLS_[0] + "/thread/" + std::to_string(thread_no) + ".json");
+                utility::string_t thread_request_path = U("/biz/thread/") + utility::conversions::to_string_t(std::to_string(thread_no)) + U(".json");
+                std::string thread_response = requestResponse(ScraperTarget(this->BASE_URL_, thread_request_path));
                 rapidjson::Document thread;
-                thread.Parse(thread_response.str().c_str());
+                thread.Parse(thread_response.c_str());
 
                 rapidjson::Value &posts = thread["posts"];
                 for (int com_idx = 0; com_idx < posts.Size(); ++com_idx)
@@ -43,7 +77,20 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
                         unsigned long long post_no = comment["no"].GetInt();
                         if (post_no > this->highest_post_seen_)
                         {
-                            comments.push_back(Comment(comment["com"].GetString(), std::to_string(post_no)));
+                            std::string comment_content = comment["com"].GetString();
+                            //put to lower case
+                            std::transform(comment_content.begin(), comment_content.end(), comment_content.begin(), ::tolower);
+                            bool matched_pattern = false;
+                            for (const auto& pattern : this->search_patterns_)
+                            {
+                                if (comment_content.find(pattern) != std::string::npos)
+                                {
+                                    matched_pattern = true;
+                                    break;
+                                }
+                            }
+                            if (matched_pattern)
+                                comments.push_back(Comment(comment_content, std::to_string(post_no)));
                             if (post_no > temp_highest_post_seen)
                                 temp_highest_post_seen = post_no;
                         }
@@ -59,29 +106,23 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
 
 std::vector<Apollo::Comment> Apollo::Bot::FourChan::cleanComments(std::vector<Comment>& comments)
 {
-    //regex for removing post# quotes in 4chan replies
-    std::regex rgx_linebreak("(<br>)+");
-    std::regex rgx_misc("(&gt;)+|(<span class=\"quote\">)+|(</span>)+|(&quot;)+|(&#[0-9]+;)+|(/biz/thread/[0-9]+)+|(<wbr>)+|(https?://)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
-    std::regex rgx_quotelink("(<a href=\".*\" class=\"quotelink\">[0-9]+</a>)");
+    //took out regex for now. Regex was too slow.
     for (auto& comment : comments)
     {
-        comment.content = std::regex_replace(comment.content, rgx_linebreak, " ");
-        comment.content = std::regex_replace(comment.content, rgx_misc, "");
-        comment.content = std::regex_replace(comment.content, rgx_quotelink, "");
         comment.content = this->trim(comment.content);
-        std::transform(comment.content.begin(), comment.content.end(), comment.content.begin(), ::tolower);
     }
     return comments;
 }
 
 Apollo::Bot::FourChan::FourChan()
 {
-    this->COMPLETE_URLS_.push_back("https://a.4cdn.org/biz/threads.json");
-    this->INCOMPLETE_URLS_.push_back("https://a.4cdn.org/biz");
     this->highest_post_seen_ = 0;
     this->highest_timestamp_seen_ = 0;
+    ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"));
+    this->targets_.push_back(target);
+
     std::ifstream res;
-    res.open(this->resource_file);
+    res.open(this->RESOURCE_FILE_);
     if (res.is_open())
     {
         std::stringstream ss;
@@ -99,4 +140,11 @@ Apollo::Bot::FourChan::FourChan()
 Apollo::Bot::FourChan::~FourChan()
 {
     this->saveSettings();
+}
+
+void Apollo::Bot::FourChan::addSearchQuery(const std::string & query, size_t number_of_results)
+{
+    std::string q = query;
+    std::transform(q.begin(), q.end(), q.begin(), ::tolower);
+    this->search_patterns_.push_back(q);
 }

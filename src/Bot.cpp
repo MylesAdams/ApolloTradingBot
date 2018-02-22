@@ -1,19 +1,15 @@
 #include "Bot.h"
 
-Apollo::Bot::Bot::Bot()
+utility::string_t Apollo::Bot::Bot::stripBase64(const utility::string_t & s)
 {
-}
+    std::vector<unsigned char> buffer;
+    buffer.reserve(s.size());
+    for (unsigned int i = 0; i < s.size(); ++i)
+        if (isalnum(s[i]))
+            buffer.push_back(s[i]);
 
-std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
-{
-    std::stringstream response;
-    curlpp::Cleanup cleaner; // curlpp's RAII -- not really sure if this is deprecated but all examples still use it
-    curlpp::Easy easy_request;
-    easy_request.setOpt(curlpp::Options::Url(target_url));
-    easy_request.setOpt(curlpp::options::WriteStream(&response));
-    easy_request.perform(); // TODO add exception handling -- this can throw
-
-    return response;
+    utility::string_t stripped_string(buffer.begin(), buffer.end());
+    return stripped_string;
 }
 
 std::string Apollo::Bot::Bot::trim(const std::string & str)
@@ -32,14 +28,16 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    for (auto& complete_url : this->COMPLETE_URLS_)
+    if (targets_.size() == 0)
+        std::cout << "Apollo::Bot has no targets!" << std::endl;
+    for (auto& target : this->targets_)
     {
         //send a request and receive a response
-        std::stringstream target_response = requestResponse(complete_url);
+        std::string target_response = requestResponse(target);
 
         //parse the response into a rapidjson Document
         rapidjson::Document target_document;
-        target_document.Parse(target_response.str().c_str());
+        target_document.Parse(target_response.c_str());
 
         //parse the JSON Document for "comments"
         std::vector<Comment> target_comments = parseJSON(target_document);
@@ -48,6 +46,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
         comments.insert(comments.end(), target_comments.begin(), target_comments.end());
     }
 
-    //regex the comments to get all valid words (and ignore stopwords)
+    ////regex the comments to get all valid words (and ignore stopwords)
+
     return cleanComments(comments);
 }

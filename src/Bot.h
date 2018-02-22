@@ -5,37 +5,65 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <fstream>
+#include <regex>
+#include <algorithm>
 
 #include "Comment.h"
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-
+#define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include "rapidjson/ostreamwrapper.h"
+
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>  
+#include <openssl/hmac.h>
 
 namespace Apollo {
     namespace Bot { // Put all classes that extend Bot in the Bot namespace
+
+        struct RequestParameter //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
+        {
+            utility::string_t key;
+            utility::string_t value;
+            RequestParameter(const utility::string_t& key, const utility::string_t& value)
+                : key(key), value(value)
+            {
+            }
+            bool operator < (const RequestParameter& str) const
+            {
+                return (key < str.key);
+            }
+        };
+
+        struct ScraperTarget //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
+        {
+            const utility::string_t RESOURCE_URL;
+            const utility::string_t REQUEST_PATH;
+            std::vector<RequestParameter> request_parameters;
+            ScraperTarget(const utility::string_t& resource_url, const utility::string_t& request_path) :
+                    RESOURCE_URL(resource_url),
+                    REQUEST_PATH(request_path)
+            {}
+        };
+
         class Bot
         {
         private:
         protected:
-            //init ctor
-            Bot();
-
             //fields
+            std::vector<ScraperTarget> targets_;
+            unsigned long long int highest_timestamp_seen_;
 
-            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
-            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
-            std::vector<std::string> COMPLETE_URLS_;
-            std::vector<std::string> INCOMPLETE_URLS_;
             //methods
-            virtual std::stringstream requestResponse(const std::string& target_url);
+            virtual void saveSettings() = 0;
+            virtual std::string requestResponse(const ScraperTarget& target) = 0;
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
             virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
-
+            utility::string_t stripBase64(const utility::string_t& s);
             //helpers
             std::string trim(const std::string& str);
         public:
@@ -43,6 +71,7 @@ namespace Apollo {
             
             //methods
             virtual std::vector<Comment> getData();
+            virtual void addSearchQuery(const std::string& query, size_t number_of_results) = 0;
         }; //end of Bot abstract class
     }//end of Bot namespace
 }//end of Apollo namespace
