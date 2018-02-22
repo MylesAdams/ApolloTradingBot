@@ -13,6 +13,10 @@ const int TIME_WEEK = 604800;
 
 const int NUMBER_OF_PLOT = 15;
 
+const int POS_GRAPH = 0;
+
+const int NEG_GRAPH = 1;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,9 +24,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->plot->addGraph();
-    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
-    ui->plot->yAxis->setRange(-1,1);
+    ui->plot->addGraph();
+    ui->plot->graph(POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
+    ui->plot->graph(NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
+    ui->plot->graph(POS_GRAPH)->setName("Positive Sentiment");
+    ui->plot->graph(NEG_GRAPH)->setName("Negative Sentiment");
+    ui->plot->graph(NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::red));
+
+    ui->plot->yAxis->setRange(0,1);
+    ui->plot->legend->setVisible(true);
 
     ui->plot->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
@@ -39,8 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->Tabs->setCurrentIndex(0);
 
 //    currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
-
-
 
     timerStarted = false;
 }
@@ -65,22 +75,19 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 //        std::cout << "Test3" << std::endl;
         doc.ParseStream(isw);
 //        std::cout << "Test4" << std::endl;
-        rapidjson::Value &data = doc["entry"];
+//        rapidjson::Value &data = doc;
 //        std::cout << "Test5" << std::endl;
-        int upper = data.Size();
+        int upper = doc.Size();
 //        std::cout << upper << std::endl;
         int lower = upper - NUMBER_OF_PLOT;
 //        std::cout << lower << std::endl;
         for (int ndx = lower; ndx < upper; ndx++)
         {
-//            std::cout << std::stoi(data[ndx]["time"].GetString()) << std::endl;
-            q_x.append(std::stoi(data[ndx]["time"].GetString()));
-            q_y.append(std::stod(data[ndx]["index"].GetString()));
+            qx.append(std::stoi(doc[ndx]["Time"].GetString()));
+            qy_pos.append(std::stod(doc[ndx]["PosRating"].GetString()));
+            qy_neg.append(std::stod(doc[ndx]["NegRating"].GetString()));
         }
-//        int x = q_x[lower];
-//        int y = q_x[upper-1];
-//        std::cout << x << "," << y << std::endl;
-        ui->plot->xAxis->setRange(q_x[0], q_x[14]);
+        ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
         plot();
 
     }
@@ -97,21 +104,23 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     currentItem = item;
 }
 
-void MainWindow::addPoint(double x, double y)
-{
-    q_x.append(x);
-    q_y.append(y);
-}
+//void MainWindow::addPoint(double x, double y)
+//{
+//    qx.append(x);
+//    q_y.append(y);
+//}
 
 void MainWindow::clearData()
 {
-    q_x.clear();
-    q_y.clear();
+    qx.clear();
+    qy_pos.clear();
+    qy_neg.clear();
 }
 
 void MainWindow::plot()
 {
-    ui->plot->graph(0)->setData(q_x, q_y);
+    ui->plot->graph(POS_GRAPH)->setData(qx, qy_pos);
+    ui->plot->graph(NEG_GRAPH)->setData(qx, qy_neg);
     ui->plot->replot();
     ui->plot->update();
 }
@@ -127,8 +136,8 @@ void MainWindow::updatePlot()
         rapidjson::IStreamWrapper isw(json_file);
         rapidjson::Document doc;
         doc.ParseStream(isw);
-        rapidjson::Value &data = doc["entry"];
-        int upper = data.Size();
+//        rapidjson::Value &data = doc;
+        int upper = doc.Size();
 //        std::cout << upper << std::endl;
         int lower = upper - NUMBER_OF_PLOT;
 //        std::cout << lower << std::endl;
@@ -136,14 +145,15 @@ void MainWindow::updatePlot()
         {
 //            std::cout << ndx << std::endl;
 //            std::cout << std::stoi(data[ndx]["time"].GetString()) << std::endl;
-            q_x.append(std::stoi(data[ndx]["time"].GetString()));
-            q_y.append(std::stod(data[ndx]["index"].GetString()));
+            qx.append(std::stoi(doc[ndx]["Time"].GetString()));
+            qy_pos.append(std::stod(doc[ndx]["PosRating"].GetString()));
+            qy_neg.append(std::stod(doc[ndx]["NegRating"].GetString()));
         }
 //        std::copy(q_x.begin(), q_x.end(), std::ostream_iterator<char>(std::cout, " "));
 //        int x = q_x[lower];
 //        int y = q_x[upper-1];
 //        std::cout << x << "," << y << std::endl;
-        ui->plot->xAxis->setRange(q_x[0], q_x[NUMBER_OF_PLOT - 1]);
+        ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
         plot();
     }
     json_file.close();

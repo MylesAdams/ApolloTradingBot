@@ -17,7 +17,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void addPoint(double x, double y);
+//    void addPoint(double x, double y);
     void clearData();
     void plot();
 
@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    QVector<double> q_x, q_y;
+    QVector<double> qy_pos, qy_neg, qx;
 
     QListWidgetItem* currentItem;
 

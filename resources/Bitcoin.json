@@ -1,68 +1,82 @@
+[
     {
-  "entry": [
-    {
-      "index": ".768",
-      "time": "1518521151"
+      "PosRating": ".768",
+      "NegRating": ".514",
+      "Time": "1518521151"
     },
     {
-      "index": ".821",
-      "time": "1518564351"
+      "PosRating": ".821",
+      "NegRating": ".541",
+      "Time": "1518564351"
     },
     {
-      "index": ".723",
-      "time": "1518607551"
+      "PosRating": ".723",
+      "NegRating": ".631",
+      "Time": "1518607551"
     },
     {
-      "index": ".675",
-      "time": "1518650751"
+      "PosRating": ".675",
+      "NegRating": ".734",
+      "Time": "1518650751"
     },
     {
-      "index": ".532",
-      "time": "1518693951"
+      "PosRating": ".532",
+      "NegRating": ".745",
+      "Time": "1518693951"
     },
     {
-      "index": ".4432",
-      "time": "1518737151"
+      "PosRating": ".539",
+      "NegRating": ".712",
+      "Time": "1518737151"
     },
     {
-      "index": ".324",
-      "time": "1518780351"
+      "PosRating": ".558",
+      "NegRating": ".689",
+      "Time": "1518780351"
     },
     {
-      "index": ".355",
-      "time": "1518823551"
+      "PosRating": ".580",
+      "NegRating": ".653",
+      "Time": "1518823551"
     },
     {
-      "index": ".3992",
-      "time": "1518866751"
+      "PosRating": ".626",
+      "NegRating": ".610",
+      "Time": "1518866751"
     },
     {
-      "index": ".2134",
-      "time": "1518909951"
+      "PosRating": ".675",
+      "NegRating": ".589",
+      "Time": "1518909951"
     },
     {
-      "index": ".1544",
-      "time": "1518953151"
+      "PosRating": ".740",
+      "NegRating": ".540",
+      "Time": "1518953151"
     },
     {
-      "index": ".0943",
-      "time": "1518996351"
+      "PosRating": ".793",
+      "NegRating": ".523",
+      "Time": "1518996351"
     },
     {
-      "index": "-.1234",
-      "time": "1519039551"
+      "PosRating": ".876",
+      "NegRating": ".508",
+      "Time": "1519039551"
     },
     {
-      "index": "-.245",
-      "time": "1519082751"
+      "PosRating": ".812",
+      "NegRating": ".549",
+      "Time": "1519082751"
     },
     {
-      "index": "-.499",
-      "time": "1519125951"
+      "PosRating": ".763",
+      "NegRating": ".598",
+      "Time": "1519125951"
     },
     {
-      "index": "-.110",
-      "time": "1519169151"
+      "PosRating": ".793",
+      "NegRating": ".567",
+      "Time": "1519169151"
     }
-  ]
-}
+]
