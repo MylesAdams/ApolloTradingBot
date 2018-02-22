@@ -7,6 +7,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <QTimer>
+#include "Twitter.h"
 
 const int TIME_WEEK = 604800;
 
@@ -37,7 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->Kucoin->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->Tabs->setCurrentIndex(0);
 
-    currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
+//    currentItem = ui->listWidget->findItems("Bitcoin", Qt::MatchExactly)[0];
+
+
 
     timerStarted = false;
 }

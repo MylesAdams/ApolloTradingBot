@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include "Twitter.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +34,8 @@ private:
     QListWidgetItem* currentItem;
 
     bool timerStarted;
+
+    Apollo::Bot::Twitter twitterBot;
 
 };
 

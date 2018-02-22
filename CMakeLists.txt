@@ -26,8 +26,9 @@ endif()
 
 FIND_PACKAGE(Boost 1.66 COMPONENTS program_options REQUIRED)
 FIND_PACKAGE(OpenSSL REQUIRED)
-FIND_PACKAGE(Qt5Widgets REQUIRED)
-FIND_PACKAGE(Qt5PrintSupport REQUIRED)
+# FIND_PACKAGE(Qt5Widgets REQUIRED)
+# FIND_PACKAGE(Qt5PrintSupport REQUIRED)
+find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 
 find_package(cpprestsdk REQUIRED)
 
