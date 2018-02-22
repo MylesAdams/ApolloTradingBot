@@ -52,7 +52,7 @@ set(SOURCES
   src/main.cpp
   src/mainwindow.cpp
   src/Bot.cpp
-  # src/FourChan.cpp
+  src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
   )
@@ -74,7 +74,7 @@ set(HEADERS
     src/mainwindow.ui
     src/Bot.h
     src/Comment.h
-    # src/FourChan.h
+    src/FourChan.h
     src/Twitter.h
     src/watson.h
   )

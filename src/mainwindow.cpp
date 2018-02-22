@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <vector>
 
 const int TIME_WEEK = 604800;
 const int NUMBER_OF_PLOT = 15;
@@ -27,16 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    Apollo::Bot::Twitter* testBot;
-    testBot = new Apollo::Bot::Twitter();
-
-    twitterBot = new Apollo::Bot::Twitter();
-    watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
     ui->setupUi(this);
     setupWidgets();
 
-//    watsonAnalyzer = Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
-
+    twitterBot = new Apollo::Bot::Twitter();
+    watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
 
 
 //    for (auto& com : comments)
@@ -59,18 +55,16 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     currentItem = item;
 
-    twitterBot->addSearchQuery("Bitcoin", 128);
-    auto comments = twitterBot->getData();
-
-    watsonAnalyzer->toneToFile(commentsToString(comments), U("../Resources/" + currentItem->text().toStdString() + ".json"));
-
     updatePlot();
-
     if (!timerStarted)
     {
-        QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(updatePlot()));
-        timer->start(1000);
+//        QTimer *updatePlot = new QTimer(this);
+//        connect(updatePlot, SIGNAL(timeout()), this, SLOT(updatePlot()));
+//        updatePlot->start(1000);
+
+        QTimer *updateData = new QTimer(this);
+        connect(updateData, SIGNAL(timeout()), this, SLOT(updateData()));
+        updateData->start(12000);
         timerStarted = true;
     }
 }
@@ -93,9 +87,10 @@ void MainWindow::plot()
 void MainWindow::updatePlot()
 {
     clearData();
-    std::string filepath = "../Resources/" + currentItem->text().toStdString() + ".json";
+    std::string filepath = "../resources/" + currentItem->text().toStdString() + ".json";
     std::ifstream json_file;
     json_file.open(filepath);
+
     if (json_file.is_open())
     {
         rapidjson::IStreamWrapper isw(json_file);
@@ -104,11 +99,26 @@ void MainWindow::updatePlot()
 
         int upper = doc.Size();
         int lower = upper - NUMBER_OF_PLOT;
+
         for (int ndx = lower; ndx < upper; ndx++)
         {
-            qx.append(std::stoi(doc[ndx]["Time"].GetString()));
-            qy_pos.append(std::stod(doc[ndx]["PosRating"].GetString()));
-            qy_neg.append(std::stod(doc[ndx]["NegRating"].GetString()));
+            qx.append(doc[ndx]["Time"].GetDouble());
+
+            qy_pos.append(doc[ndx]["PosRating"].GetDouble());
+            qy_neg.append(doc[ndx]["NegRating"].GetDouble());
+
+
+//            double pos;
+//            if ((pos = doc[ndx]["PosRating"].GetDouble()) != 0.0)
+//                qy_pos.append(pos);
+//            else
+//                qy_pos.append(WATSON_LOWEST_VAL);
+
+//            double neg;
+//            if ((neg = doc[ndx]["NegRating"].GetDouble()) != 0.0)
+//                qy_neg.append(neg);
+//            else
+//                qy_neg.append(WATSON_LOWEST_VAL);
         }
 
         json_file.close();
@@ -116,6 +126,15 @@ void MainWindow::updatePlot()
         ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
         plot();
     }
+}
+
+void MainWindow::updateData()
+{
+    twitterBot->addSearchQuery("Bitcoin", 128);
+
+    watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), U("../resources/" + currentItem->text().toStdString() + ".json"));
+
+    updatePlot();
 }
 
 void MainWindow::setupWidgets()

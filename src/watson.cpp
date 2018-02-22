@@ -3,6 +3,8 @@
 
 #include "watson.h"
 
+const double WATSON_LOWEST_VAL = .5;
+
 // Constructor for watson object.
 Apollo::Watson::Watson(utility::string_t user, utility::string_t pass) :
 	creds(user, pass),
@@ -133,16 +135,18 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
 		}
 
 		// Increment negative.
-		else {
+        else if (rating < 0){
 			negative_rating += rating;
 			count_neg++;
 		}
 
 	}
 
-	// Average ratings. 
-	positive_rating = positive_rating / count_pos;
-	negative_rating = -1*(negative_rating / count_neg);
+    // Average ratings.
+    positive_rating = (count_pos > 0) ? (positive_rating / count_pos) : WATSON_LOWEST_VAL;
+    negative_rating = (count_neg > 0) ? -1*(negative_rating / count_neg) : WATSON_LOWEST_VAL;
+
+    std::cout << positive_rating << "," << negative_rating << std::endl;
 
 	// TODO: Throw logical error if ratings are < 0.5 or >1 
 
@@ -150,18 +154,19 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
 	int utc = static_cast<int>(this->date.utc_timestamp());
 
 	// Open outgoing file stream.
-	std::ifstream check_file(file_name);
+    std::ifstream check_file(file_name);
 
 	// Create json doc
-	rapidjson::Document doc;
+    rapidjson::Document doc;
 
 	// File already exists.
-	if (check_file.good()) {
+    if (check_file.good()) {
 
 		// Wrap std::ifstream object.
 		rapidjson::IStreamWrapper isw(check_file);
-		doc.ParseStream(isw);
-	}
+
+        doc.ParseStream(isw);
+    }
 
 	// File doesn't exist.
 	else doc.SetArray();
@@ -171,10 +176,12 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
 
 	// Generate entry.
 	rapidjson::Value v;
-	v.SetObject();
+
+    v.SetObject();
 	v.AddMember("PosRating", rapidjson::Value(positive_rating), allocator);
 	v.AddMember("NegRating", rapidjson::Value(negative_rating), allocator);
 	v.AddMember("Time", rapidjson::Value(utc), allocator);
+
 	doc.PushBack(v, allocator);
 
 	// Use json writer to output to file.
@@ -182,7 +189,9 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
 	rapidjson::OStreamWrapper osw(out);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
 	doc.Accept(writer);
-	out.close();
+    out.close();
+
+
 
 }
 
