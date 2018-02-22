@@ -53,7 +53,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     currentItem = item;
-
+    twitterBot->setSearchQuery(currentItem->text().toStdString());
     updatePlot();
     if (!timerStarted)
     {
@@ -97,7 +97,11 @@ void MainWindow::updatePlot()
         doc.ParseStream(isw);
 
         int upper = doc.Size();
-        int lower = upper - NUMBER_OF_PLOT;
+        int lower;
+        if (upper > 14)
+           lower = upper - NUMBER_OF_PLOT;
+        else
+            lower = 0;
 
         for (int ndx = lower; ndx < upper; ndx++)
         {
@@ -105,31 +109,20 @@ void MainWindow::updatePlot()
 
             qy_pos.append(doc[ndx]["PosRating"].GetDouble());
             qy_neg.append(doc[ndx]["NegRating"].GetDouble());
-
-
-//            double pos;
-//            if ((pos = doc[ndx]["PosRating"].GetDouble()) != 0.0)
-//                qy_pos.append(pos);
-//            else
-//                qy_pos.append(WATSON_LOWEST_VAL);
-
-//            double neg;
-//            if ((neg = doc[ndx]["NegRating"].GetDouble()) != 0.0)
-//                qy_neg.append(neg);
-//            else
-//                qy_neg.append(WATSON_LOWEST_VAL);
         }
 
         json_file.close();
         normalizeGraphs();
-        ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
+        if (upper > 15)
+            ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
+        else
+            ui->plot->xAxis->setRange(qx[0], qx[0] + 12*15);
         plot();
     }
 }
 
 void MainWindow::updateData()
 {
-    twitterBot->setSearchQuery("Bitcoin");
     std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
     watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), utility::conversions::to_string_t(filename));
 
@@ -168,7 +161,6 @@ void MainWindow::setupWidgets()
 
 void MainWindow::runBots()
 {
-    twitterBot->setSearchQuery(currentItem->text().toStdString());
     auto comments = twitterBot->getData();
 }
 
