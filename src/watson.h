@@ -19,10 +19,8 @@ namespace Apollo
     {
     private:
         web::http::client::http_client_config config;        // Passed to client constructor. Holds username and pass.
-        web::credentials creds;                                // Holds username and pass. Passed to config.
         web::http::http_request req;                        // Http request object. Has method and uri.
-        web::uri_builder builder;                            // URI object.
-        utility::datetime date;                                // Use date to get UTC timestamp.
+
     public:
         Watson(utility::string_t user, utility::string_t pass);
 
