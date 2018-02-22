@@ -131,8 +131,8 @@ void MainWindow::updatePlot()
 void MainWindow::updateData()
 {
     twitterBot->addSearchQuery("Bitcoin", 128);
-
-    watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), U("../resources/" + currentItem->text().toStdString() + ".json"));
+    std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
+    watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), utility::conversions::to_string_t(filename));
 
     updatePlot();
 }
@@ -189,10 +189,10 @@ void MainWindow::normalizeData(QVector<double>& vec)
 
 utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> comments)
 {
-    utility::string_t str = "";
+    std::string str = "";
 
     for (auto& comment : comments)
         str.append(comment.content);
 
-    return str;
+    return utility::conversions::to_string_t(str);
 }
