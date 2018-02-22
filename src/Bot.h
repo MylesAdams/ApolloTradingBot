@@ -6,7 +6,6 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <regex>
 #include <algorithm>
 
 #include "Comment.h"
@@ -41,9 +40,10 @@ namespace Apollo {
 
         struct ScraperTarget //TODO -- make this into a class with a .h and .cpp file. Literally make it exactly the same but as a class.
         {
-            const utility::string_t RESOURCE_URL;
-            const utility::string_t REQUEST_PATH;
+            utility::string_t RESOURCE_URL;
+            utility::string_t REQUEST_PATH;
             std::vector<RequestParameter> request_parameters;
+            ScraperTarget() : RESOURCE_URL(U("")), REQUEST_PATH(U("")) {}
             ScraperTarget(const utility::string_t& resource_url, const utility::string_t& request_path) :
                     RESOURCE_URL(resource_url),
                     REQUEST_PATH(request_path)
@@ -55,7 +55,7 @@ namespace Apollo {
         private:
         protected:
             //fields
-            std::vector<ScraperTarget> targets_;
+            ScraperTarget targets_;
             unsigned long long int highest_timestamp_seen_;
 
             //methods
@@ -67,11 +67,12 @@ namespace Apollo {
             //helpers
             std::string trim(const std::string& str);
         public:
+            Bot();
             virtual ~Bot();
             
             //methods
             virtual std::vector<Comment> getData();
-            virtual void addSearchQuery(const std::string& query, size_t number_of_results) = 0;
+            virtual void setSearchQuery(const std::string& query) = 0;
         }; //end of Bot abstract class
     }//end of Bot namespace
 }//end of Apollo namespace

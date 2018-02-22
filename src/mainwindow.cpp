@@ -20,7 +20,6 @@ const int POS_GRAPH = 0;
 const int NEG_GRAPH = 1;
 const double WATSON_LOWEST_VAL = .5;
 const int NORMALIZE_VAL = 2;
-const int GET_NUM_TWEETS = 64;
 utility::string_t WATSON_USERNAME = U("c032fda0-5c02-490d-8e00-ab00de2e5f40");
 utility::string_t WATSON_PASSWORD = U("AfgP2LQIDCgB");
 
@@ -130,7 +129,7 @@ void MainWindow::updatePlot()
 
 void MainWindow::updateData()
 {
-    twitterBot->addSearchQuery("Bitcoin", 128);
+    twitterBot->setSearchQuery("Bitcoin");
     std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
     watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), utility::conversions::to_string_t(filename));
 
@@ -169,7 +168,7 @@ void MainWindow::setupWidgets()
 
 void MainWindow::runBots()
 {
-    twitterBot->addSearchQuery(currentItem->text().toStdString(), GET_NUM_TWEETS);
+    twitterBot->setSearchQuery(currentItem->text().toStdString());
     auto comments = twitterBot->getData();
 }
 

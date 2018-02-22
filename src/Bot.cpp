@@ -21,6 +21,10 @@ std::string Apollo::Bot::Bot::trim(const std::string & str)
     return str.substr(first, (last - first + 1));
 }
 
+Apollo::Bot::Bot::Bot()
+{
+}
+
 Apollo::Bot::Bot::~Bot()
 {
 }
@@ -28,23 +32,21 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    if (targets_.size() == 0)
+    if (targets_.RESOURCE_URL.size() == 0)
         std::cout << "Apollo::Bot has no targets!" << std::endl;
-    for (auto& target : this->targets_)
-    {
-        //send a request and receive a response
-        std::string target_response = requestResponse(target);
 
-        //parse the response into a rapidjson Document
-        rapidjson::Document target_document;
-        target_document.Parse(target_response.c_str());
+    //send a request and receive a response
+    std::string target_response = requestResponse(targets_);
 
-        //parse the JSON Document for "comments"
-        std::vector<Comment> target_comments = parseJSON(target_document);
+    //parse the response into a rapidjson Document
+    rapidjson::Document target_document;
+    target_document.Parse(target_response.c_str());
 
-        //add target_comments to comments vector
-        comments.insert(comments.end(), target_comments.begin(), target_comments.end());
-    }
+    //parse the JSON Document for "comments"
+    std::vector<Comment> target_comments = parseJSON(target_document);
+
+    //add target_comments to comments vector
+    comments.insert(comments.end(), target_comments.begin(), target_comments.end());
 
     ////regex the comments to get all valid words (and ignore stopwords)
 

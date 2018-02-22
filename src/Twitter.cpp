@@ -198,8 +198,7 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::cleanComments(std::vector<Com
     return comments;
 }
 
-Apollo::Bot::Twitter::Twitter() :
-Bot()
+Apollo::Bot::Twitter::Twitter()
 {
     std::ifstream file(RESOURCE_FILE_);
 
@@ -232,15 +231,12 @@ Apollo::Bot::Twitter::~Twitter()
     this->saveSettings();
 }
 
-void Apollo::Bot::Twitter::addSearchQuery(const std::string & query, size_t number_of_results)
+void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
     ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
-    std::stringstream ss;
-    ss << number_of_results;
-    std::string count;
-    ss >> count;
-    target.request_parameters.push_back(RequestParameter(U("count"), utility::conversions::to_string_t(count)));
+    target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
     target.request_parameters.push_back(RequestParameter(U("q"), utility::conversions::to_string_t(query)));
-    this->targets_.push_back(target);
+    //target.request_parameters.push_back(RequestParameter(U(""), U(""))); since last utc param
+    this->targets_ = target;
 }

@@ -19,6 +19,7 @@ namespace Apollo
             std::vector<std::string> request_paths_;
             std::string percentEncode(const utility::string_t& s);
             const utility::string_t BASE_URL_ = U("https://api.twitter.com");
+            const utility::string_t MAX_SEARCH_COUNT_ = U("300");
 
         protected:
             virtual void saveSettings() override;
@@ -31,7 +32,7 @@ namespace Apollo
             virtual ~Twitter();
 
             //methods
-            void addSearchQuery(const std::string& query, size_t number_of_results) override;
+            void setSearchQuery(const std::string& query) override;
         };
     }
 }

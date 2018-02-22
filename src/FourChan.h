@@ -31,7 +31,7 @@ namespace Apollo
             virtual ~FourChan();
 
             //methods
-            virtual void addSearchQuery(const std::string& query, size_t number_of_results) override;
+            virtual void setSearchQuery(const std::string& query) override;
         };
     }// end of Bot namespace
 }// end of Apollo namespace

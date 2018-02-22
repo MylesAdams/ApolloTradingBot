@@ -119,7 +119,7 @@ Apollo::Bot::FourChan::FourChan()
     this->highest_post_seen_ = 0;
     this->highest_timestamp_seen_ = 0;
     ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"));
-    this->targets_.push_back(target);
+    this->targets_ = target;
 
     std::ifstream res;
     res.open(this->RESOURCE_FILE_);
@@ -142,7 +142,7 @@ Apollo::Bot::FourChan::~FourChan()
     this->saveSettings();
 }
 
-void Apollo::Bot::FourChan::addSearchQuery(const std::string & query, size_t number_of_results)
+void Apollo::Bot::FourChan::setSearchQuery(const std::string & query)
 {
     std::string q = query;
     std::transform(q.begin(), q.end(), q.begin(), ::tolower);
