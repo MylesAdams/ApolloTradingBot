@@ -45,6 +45,7 @@ public:
     utility::string_t getRefreshTokenFromFile();
     utility::string_t setRefreshTokenFile();
 
+    void setSubreddit(utility::string_t subreddit);
     void readComments();
     void readSubscriberCount();
 

@@ -18,7 +18,7 @@
 const int TIME_WEEK = 604800;
 const int TIME_HOUR = 3600;
 const int TEN_MIN = 600;
-const int NUMBER_OF_PLOT = 15;
+const int NUMBER_OF_PLOT = 21;
 const int POS_GRAPH = 0;
 const int NEG_GRAPH = 1;
 const double WATSON_LOWEST_VAL = .5;
@@ -53,13 +53,10 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     updatePlot();
     if (!timerStarted)
     {
-//        QTimer *updatePlot = new QTimer(this);
-//        connect(updatePlot, SIGNAL(timeout()), this, SLOT(updatePlot()));
-//        updatePlot->start(1000);
 
         QTimer *updateData = new QTimer(this);
         connect(updateData, SIGNAL(timeout()), this, SLOT(updateData()));
-        updateData->start(12000);
+        updateData->start(30000);
         timerStarted = true;
     }
 }
@@ -150,8 +147,8 @@ void MainWindow::setupWidgets()
     ui->plot->graph(POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
     ui->plot->graph(NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
 
-    ui->plot->graph(POS_GRAPH)->setName("Positive Sentiment");
-    ui->plot->graph(NEG_GRAPH)->setName("Negative Sentiment");
+    ui->plot->graph(POS_GRAPH)->setName("Twitter Positive Sentiment");
+    ui->plot->graph(NEG_GRAPH)->setName("Twitter Negative Sentiment");
 
     ui->plot->graph(NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::red));
 
