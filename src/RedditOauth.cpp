@@ -15,8 +15,8 @@ using namespace web::http::experimental::listener;
 RedditOauth::RedditOauth(utility::string_t subreddit)
 {
     s_reddit_subreddit = subreddit;
-
-    utility::string_t line;
+    
+    std::string line;
     std::ifstream tokenFile("../resources/reddit_token_data.txt");
     if (tokenFile.is_open())
     {
@@ -56,7 +56,7 @@ void RedditOauth::setTokens()
     http_client redditClient(U("https://www.reddit.com/api/"), config);
 
     http_request reqRed(methods::POST);
-    uri_builder builder("v1/access_token");
+    uri_builder builder(U("v1/access_token"));
     builder.append_query(U("grant_type"), U("authorization_code"));
     builder.append_query(U("code"), s_reddit_current_token);
     builder.append_query(U("redirect_uri"), s_reddit_redirect_uri);
@@ -86,12 +86,12 @@ void RedditOauth::setTokens()
 
    // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
    // {
-        s_reddit_current_token = response_body["access_token"].as_string();
+        s_reddit_current_token = utility::conversions::to_string_t(response_body[U("access_token")].as_string());
         //s_reddit_refresh_token = response_body["refresh_token"].as_string();
 
         std::ofstream tokenFile;
         tokenFile.open("../resources/reddit_token_data.txt");
-        tokenFile << s_reddit_current_token << "\n" << s_reddit_refresh_token;
+        tokenFile << utility::conversions::to_utf8string(s_reddit_current_token) << "\n" << utility::conversions::to_utf8string(s_reddit_refresh_token);
         tokenFile.close();
    // }
 
@@ -102,7 +102,7 @@ void RedditOauth::setTokens()
 
 void RedditOauth::getTokens()
 {
-    utility::string_t line;
+    std::string line;
     std::ifstream tokenFile("../resources/reddit_token_data.txt");
     if (tokenFile.is_open())
     {
@@ -110,7 +110,7 @@ void RedditOauth::getTokens()
         while (getline(tokenFile,line))
         {
             if (count == 0)
-                s_reddit_current_token = line;
+                s_reddit_current_token = utility::conversions::to_string_t(line);
             else
                 //s_reddit_refresh_token = line;
             count++;
@@ -140,7 +140,7 @@ void RedditOauth::refreshTokens()
     http_client redditClient(U("https://www.reddit.com/api/"), config);
 
     http_request reqRed(methods::POST);
-    uri_builder builder("v1/access_token");
+    uri_builder builder(U("v1/access_token"));
     builder.append_query(U("grant_type"), U("refresh_token"));
     builder.append_query(U("refresh_token"), s_reddit_refresh_token);
 
@@ -170,7 +170,7 @@ void RedditOauth::refreshTokens()
 
     // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
     // {
-    s_reddit_current_token = response_body["access_token"].as_string();
+    s_reddit_current_token = response_body[U("access_token")].as_string();
     //s_reddit_refresh_token = response_body["refresh_token"].as_string();
     UTC_time = UTC_temp;
     std::ofstream tokenFile;
@@ -214,13 +214,13 @@ void RedditOauth::readComments()
             })
             .wait();
 
-    size_t tempLastRead = response_body["data"]["children"][0]["data"]["created"].as_integer();
+    size_t tempLastRead = response_body[U("data")][U("children")][0][U("data")][U("created")].as_integer();
 
-    for (int i = 0; i < response_body["data"]["children"].size(); i++)
+    for (int i = 0; i < response_body[U("data")][U("children")].size(); i++)
     {
         //if  (response_body["data"]["children"][i]["data"]["created"].as_integer() > last_comment_read)
         //{
-            comments.push_back(response_body["data"]["children"][i]["data"]["body"].as_string());
+            comments.push_back(response_body[U("data")][U("children")][i][U("data")][U("body")].as_string());
         //}
     }
 
@@ -262,7 +262,7 @@ void RedditOauth::readSubscriberCount()
             })
             .wait();
 
-    subscriber_count = response_body["data"]["subscribers"].as_integer();
+    subscriber_count = response_body[U("data")][U("subscribers")].as_integer();
     //ucout << response_body.serialize() << std::endl;
     ucout << "subcribers: " << subscriber_count << std::endl;
 }
