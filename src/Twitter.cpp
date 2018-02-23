@@ -234,6 +234,7 @@ Apollo::Bot::Twitter::~Twitter()
 
 void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
+//    std::co
     ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
     target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));

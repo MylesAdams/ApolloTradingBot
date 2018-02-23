@@ -71,20 +71,32 @@
        <property name="text">
         <string>Bitcoin</string>
        </property>
+       <property name="toolTip">
+        <string>BTC</string>
+       </property>
       </item>
       <item>
        <property name="text">
         <string>Bitcoin Cash</string>
+       </property>
+       <property name="toolTip">
+        <string>$BCH</string>
        </property>
       </item>
       <item>
        <property name="text">
         <string>Ethereum</string>
        </property>
+       <property name="toolTip">
+        <string>$ETH</string>
+       </property>
       </item>
       <item>
        <property name="text">
         <string>Litecoin</string>
+       </property>
+       <property name="toolTip">
+        <string>$LTC</string>
        </property>
       </item>
      </widget>

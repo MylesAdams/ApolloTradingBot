@@ -211,8 +211,7 @@ void RedditOauth::readComments()
 
                 response_body = json_task.get();
 
-            })
-            .wait();
+            }).wait();
 
     size_t tempLastRead = response_body["data"]["children"][0]["data"]["created"].as_integer();
 
@@ -220,7 +219,7 @@ void RedditOauth::readComments()
     {
         //if  (response_body["data"]["children"][i]["data"]["created"].as_integer() > last_comment_read)
         //{
-            comments.push_back(response_body["data"]["children"][i]["data"]["body"].as_string());
+        comments.push_back(response_body["data"]["children"][i]["data"]["body"].as_string());
         //}
     }
 
@@ -230,6 +229,18 @@ void RedditOauth::readComments()
         ucout << comments[i] << std::endl;
     ucout << "last comment read id: " << last_comment_read << std::endl;
     ucout << response_body.serialize();
+//
+//    try
+//    {
+//        reddit_call.wait();
+//    }
+//    catch (const std::exception &e)
+//    {
+//        std::cout << e.what() << std::endl;
+//    }
+//            .wait();
+
+
 }
 
 void RedditOauth::readSubscriberCount()

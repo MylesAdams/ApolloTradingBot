@@ -13,8 +13,11 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 
 const int TIME_WEEK = 604800;
+const int TIME_HOUR = 3600;
+const int TEN_MIN = 600;
 const int NUMBER_OF_PLOT = 15;
 const int POS_GRAPH = 0;
 const int NEG_GRAPH = 1;
@@ -33,15 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     twitterBot = new Apollo::Bot::Twitter();
     watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
 
-
-//    for (auto& com : comments)
-//    {
-//        std::cout << com.content << std::endl;
-//    }
-
-//    std::cout << str << std::endl;
-
-
     timerStarted = false;
 }
 
@@ -53,7 +47,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     currentItem = item;
-    twitterBot->setSearchQuery(currentItem->text().toStdString());
+
+    twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
     updatePlot();
     if (!timerStarted)
     {
@@ -116,7 +111,13 @@ void MainWindow::updatePlot()
         if (upper > 15)
             ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
         else
-            ui->plot->xAxis->setRange(qx[0], qx[0] + 12*15);
+        {
+            if ((qx[qx.size() -1] - TEN_MIN) > qx[0])
+                ui->plot->xAxis->setRange(qx[0], qx[qx.size() - 1]);
+            else
+                ui->plot->xAxis->setRange(qx[0], qx[0] + TEN_MIN);
+
+        }
         plot();
     }
 }
@@ -124,7 +125,19 @@ void MainWindow::updatePlot()
 void MainWindow::updateData()
 {
     std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
-    watsonAnalyzer->toneToFile(commentsToString(twitterBot->getData()), utility::conversions::to_string_t(filename));
+    std::replace(filename.begin(), filename.end(), ' ', '_');
+
+    std::cout << filename << std::endl;
+    auto comments = twitterBot->getData();
+
+    std::cout << comments.size() << std::endl;
+
+    for (auto com : comments)
+    {
+        std::cout << com.content << std::endl;
+    }
+
+    watsonAnalyzer->toneToFile(commentsToString(comments), utility::conversions::to_string_t(filename));
 
     updatePlot();
 }
@@ -133,12 +146,16 @@ void MainWindow::setupWidgets()
 {
     ui->plot->addGraph();
     ui->plot->addGraph();
+
     ui->plot->graph(POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
     ui->plot->graph(NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+
     ui->plot->graph(POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
     ui->plot->graph(NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
+
     ui->plot->graph(POS_GRAPH)->setName("Positive Sentiment");
     ui->plot->graph(NEG_GRAPH)->setName("Negative Sentiment");
+
     ui->plot->graph(NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::red));
 
     ui->plot->yAxis->setRange(0,1);
@@ -146,7 +163,7 @@ void MainWindow::setupWidgets()
 
     ui->plot->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
-    dateTicker->setDateTimeFormat("d MMM\nyyyy");
+    dateTicker->setDateTimeFormat("d MMM\nhh:mm");
     dateTicker->setTickCount(7);
 
     ui->plot->xAxis->setTicker(dateTicker);
@@ -162,6 +179,7 @@ void MainWindow::setupWidgets()
 void MainWindow::runBots()
 {
     auto comments = twitterBot->getData();
+
 }
 
 void MainWindow::normalizeGraphs()
