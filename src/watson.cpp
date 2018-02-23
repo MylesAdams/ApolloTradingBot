@@ -144,9 +144,7 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     // Average ratings.
     positive_rating = (count_pos > 0) ? (positive_rating / count_pos) : WATSON_LOWEST_VAL;
     negative_rating = (count_neg > 0) ? -1 * (negative_rating / count_neg) : WATSON_LOWEST_VAL;
-
-    std::cout << positive_rating << "," << negative_rating << std::endl;
-
+    
     // TODO: Throw logical error if ratings are < 0.5 or >1 
 
     // Get timestamp.

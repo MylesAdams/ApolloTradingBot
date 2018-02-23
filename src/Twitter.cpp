@@ -2,7 +2,7 @@
 
 std::string Apollo::Bot::Twitter::percentEncode(const utility::string_t& s)
 {
-//    std::string str = utility::conversions::utf16_to_utf8(s);
+    //    std::string str = utility::conversions::utf16_to_utf8(s);
     std::string str = utility::conversions::to_utf8string(s);
     std::vector<unsigned char> buffer;
     for (int i = 0; i < str.size(); ++i)
@@ -48,7 +48,7 @@ void Apollo::Bot::Twitter::saveSettings()
     doc.AddMember("consumer_secret", Value(this->consumer_secret_, doc.GetAllocator()), doc.GetAllocator());
     doc.AddMember("oauth_access_token_key", Value(this->oauth_access_token_key_, doc.GetAllocator()), doc.GetAllocator());
     doc.AddMember("oauth_access_token_secret", Value(this->oauth_access_token_secret_, doc.GetAllocator()), doc.GetAllocator());
-    doc.AddMember("highest_timestamp_seen", Value(this->highest_timestamp_seen_), doc.GetAllocator());
+    doc.AddMember("highest_timestamp_seen", Value(this->highest_timestamp_seen_, doc.GetAllocator()), doc.GetAllocator());
 
     rapidjson::OStreamWrapper osw(file);
     rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
@@ -175,22 +175,29 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Do
 {
     std::vector<Comment> comments;
 
-    unsigned long long int temp_highest_seen = this->highest_timestamp_seen_;
+    auto temp_highest_seen = this->highest_timestamp_seen_;
     for (size_t i = 0; i < document["statuses"].Size(); ++i)
     {
         auto& tweet = document["statuses"][i];
-        std::string created_at = document["statuses"][i]["created_at"].GetString();
-        utility::datetime date;
-        date.from_string(utility::conversions::to_string_t(created_at));
-        auto utc = date.utc_timestamp();
-        if (utc > this->highest_timestamp_seen_)
-        {
-            comments.push_back(Comment(document["statuses"][i]["full_text"].GetString(), "placeholder"));
-            if (utc > temp_highest_seen)
-                temp_highest_seen = utc;
-        }
+        auto id_str = tweet["id_str"].GetString();
+        std::string time = tweet["created_at"].GetString();
+        comments.push_back(Comment(tweet["full_text"].GetString(), id_str));
+
+        if (this->compareBigNumbers(id_str, temp_highest_seen))
+            temp_highest_seen = id_str;
+
     }
     this->highest_timestamp_seen_ = temp_highest_seen;
+
+    //update the greatest id seen in the target.
+    for (auto& param : this->target_.request_parameters)
+    {
+        if (param.key == U("since_id"))
+        {
+            param.value = utility::conversions::to_string_t(highest_timestamp_seen_);
+            break;
+        }
+    }
     return comments;
 }
 
@@ -213,7 +220,7 @@ Apollo::Bot::Twitter::Twitter()
         this->consumer_secret_ = doc["consumer_secret"].GetString();
         this->oauth_access_token_key_ = doc["oauth_access_token_key"].GetString();
         this->oauth_access_token_secret_ = doc["oauth_access_token_secret"].GetString();
-        this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetUint64();
+        this->highest_timestamp_seen_ = doc["highest_timestamp_seen"].GetString();
     }
     else //create the JSON config file
     {
@@ -221,7 +228,7 @@ Apollo::Bot::Twitter::Twitter()
         this->consumer_secret_ = "";
         this->oauth_access_token_key_ = "";
         this->oauth_access_token_secret_ = "";
-        this->highest_timestamp_seen_ = 0;
+        this->highest_timestamp_seen_ = "0";
         this->saveSettings();
         throw std::runtime_error("Empty resource file -- /res/twitter.json does not contain keys, Twitter object could not be constructed.");
     }
@@ -234,11 +241,12 @@ Apollo::Bot::Twitter::~Twitter()
 
 void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
-//    std::co
+    //    std::co
     ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
     target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
     target.request_parameters.push_back(RequestParameter(U("q"), utility::conversions::to_string_t(query)));
-    //target.request_parameters.push_back(RequestParameter(U(""), U(""))); since last utc param
+    target.request_parameters.push_back(RequestParameter(U("since_id"), utility::conversions::to_string_t(this->highest_timestamp_seen_))); //since last utc param
+    target.request_parameters.push_back(RequestParameter(U("result_type"), U("recent")));
     this->target_ = target;
 }

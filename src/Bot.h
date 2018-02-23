@@ -31,7 +31,7 @@ namespace Apollo {
         protected:
             //fields
             Apollo::Bot::ScraperTarget target_;
-            unsigned long long int highest_timestamp_seen_;
+            std::string highest_timestamp_seen_;
 
             //methods
             virtual void saveSettings() = 0;
@@ -42,6 +42,7 @@ namespace Apollo {
              //gavin likes farts
             //helpers
             std::string trim(const std::string& str);
+            bool compareBigNumbers(const std::string& a, const std::string& b);
         public:
             Bot();
             virtual ~Bot();

@@ -21,6 +21,25 @@ std::string Apollo::Bot::Bot::trim(const std::string & str)
     return str.substr(first, (last - first + 1));
 }
 
+//returns true if a > b. Returns false if a <= b
+bool Apollo::Bot::Bot::compareBigNumbers(const std::string & a, const std::string & b)
+{
+    if (a.size() != b.size())
+        return a.size() > b.size(); //a and b have different number of digits,
+                                    //both are unsigned integers -> greater value can be determined by checking who has more digits
+    else
+    {
+        for (size_t i = 0; i < a.size(); ++i)
+        {
+            int a_num = a[i] - '0';
+            int b_num = b[i] - '0';
+            if (a_num != b_num)
+                return a_num > b_num;
+        }
+        return false;  //a == b
+    }
+}
+
 Apollo::Bot::Bot::Bot()
 {
 }
@@ -49,6 +68,6 @@ std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
     comments.insert(comments.end(), target_comments.begin(), target_comments.end());
 
     ////regex the comments to get all valid words (and ignore stopwords)
-
+    this->saveSettings();
     return cleanComments(comments);
 }

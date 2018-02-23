@@ -47,7 +47,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     currentItem = item;
-
+    std::cout << "Twitter query:\t" << currentItem->toolTip().toStdString();
     twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
     updatePlot();
     if (!timerStarted)
@@ -131,11 +131,6 @@ void MainWindow::updateData()
     auto comments = twitterBot->getData();
 
     std::cout << comments.size() << std::endl;
-
-    for (auto com : comments)
-    {
-        std::cout << com.content << std::endl;
-    }
 
     watsonAnalyzer->toneToFile(commentsToString(comments), utility::conversions::to_string_t(filename));
 
