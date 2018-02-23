@@ -280,5 +280,5 @@ void RedditOauth::readSubscriberCount()
 
 void RedditOauth::setSubreddit(utility::string_t subreddit)
 {
-    s_reddit_subreddit =
+    s_reddit_subreddit = subreddit;
 }
