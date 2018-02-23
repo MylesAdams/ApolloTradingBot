@@ -18,7 +18,7 @@ private:
     const utility::string_t s_reddit_secret = (U("nH8HZW7W8X-meUt15cZA2kFfVD8"));
     const utility::string_t s_reddit_client = (U("UH7RWCuYA_qBIA"));
     const utility::string_t s_reddit_response_type = (U("code"));
-    const utility::string_t s_reddit_state = (U(setRandString()));
+    const utility::string_t s_reddit_state = (utility::conversions::to_string_t(setRandString()));
     const utility::string_t s_reddit_redirect_uri = (U("https://mylesadams.github.io/ApolloTradingBot/"));
     const utility::string_t s_reddit_duration = (U("permanent"));
     const utility::string_t s_reddit_scope = (U("read"));

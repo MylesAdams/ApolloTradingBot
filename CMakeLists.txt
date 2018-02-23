@@ -41,13 +41,6 @@ INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 # If you make a new *.cpp file, place it here:
 set(SOURCES
   ${SOURCES}
-  # src/gdax_accnt.cpp
-  # src/exchange_manager.cpp
-  # src/binance_accnt.cpp
-  # src/api_key.cpp
-  # src/api_test.cpp
-  # src/gui_test_driver.cpp
-  src/kucoin_accnt.cpp
   src/qcustomplot.cpp
   src/main.cpp
   src/mainwindow.cpp
@@ -55,21 +48,13 @@ set(SOURCES
   src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
-  # src/main2.cpp
   )
 
 # Put any header files you create here:
 set(HEADERS
   ${HEADERS}
     src/Comment.h
-    # src/kucoin_accnt.h
-    # src/NotFoundException.h
-    # src/gdax_accnt.h
-    # src/exchange_manager.h
-    # src/exchange_accnt.h
-    # src/coin.h
-    # src/binance_accnt.h
-    # src/api_key.h
+    src/NotFoundException.h
     src/qcustomplot.h
     src/mainwindow.h
     src/mainwindow.ui
