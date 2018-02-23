@@ -49,6 +49,7 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     currentItem = item;
 
     twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
+    updateData();
     updatePlot();
     if (!timerStarted)
     {
@@ -82,6 +83,7 @@ void MainWindow::updatePlot()
 {
     clearData();
     std::string filepath = "../resources/" + currentItem->text().toStdString() + ".json";
+    std::replace(filepath.begin(), filepath.end(), ' ', '_');
     std::ifstream json_file;
     json_file.open(filepath);
 

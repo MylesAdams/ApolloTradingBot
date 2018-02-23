@@ -80,7 +80,7 @@
         <string>Bitcoin Cash</string>
        </property>
        <property name="toolTip">
-        <string>$BCH</string>
+        <string>BCH</string>
        </property>
       </item>
       <item>
@@ -88,7 +88,7 @@
         <string>Ethereum</string>
        </property>
        <property name="toolTip">
-        <string>$ETH</string>
+        <string>ETH</string>
        </property>
       </item>
       <item>
@@ -96,7 +96,7 @@
         <string>Litecoin</string>
        </property>
        <property name="toolTip">
-        <string>$LTC</string>
+        <string>LTC</string>
        </property>
       </item>
      </widget>
