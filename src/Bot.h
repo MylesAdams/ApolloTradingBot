@@ -5,16 +5,23 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <fstream>
+#include <algorithm>
 
 #include "Comment.h"
+#include "RequestParameter.h"
+#include "ScraperTarget.h"
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-
+#define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include "rapidjson/ostreamwrapper.h"
+
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+#include <cpprest/json.h>  
+#include <openssl/hmac.h>
 
 namespace Apollo {
     namespace Bot { // Put all classes that extend Bot in the Bot namespace
@@ -22,27 +29,27 @@ namespace Apollo {
         {
         private:
         protected:
-            //init ctor
-            Bot();
-
             //fields
+            Apollo::Bot::ScraperTarget target_;
+            std::string highest_timestamp_seen_;
 
-            //complete_urls -- valid urls that are immediately accessible without concatenating anything to them. You will need at least one of these.
-            //incomple_urls -- base urls that must have things concatenated to them in order to be a valid url
-            std::vector<std::string> COMPLETE_URLS_;
-            std::vector<std::string> INCOMPLETE_URLS_;
             //methods
-            virtual std::stringstream requestResponse(const std::string& target_url);
+            virtual void saveSettings() = 0;
+            virtual std::string requestResponse(const ScraperTarget& target) = 0;
             virtual std::vector<Comment> parseJSON(const rapidjson::Document& document) = 0;    // implementation is specific to derived class as the DOM varies from site to site.
             virtual std::vector<Comment> cleanComments(std::vector<Comment>& comments) = 0;
-
+            utility::string_t stripBase64(const utility::string_t& s);
+             //gavin likes farts
             //helpers
             std::string trim(const std::string& str);
+            bool compareBigNumbers(const std::string& a, const std::string& b);
         public:
+            Bot();
             virtual ~Bot();
             
             //methods
             virtual std::vector<Comment> getData();
+            virtual void setSearchQuery(const std::string& query) = 0;
         }; //end of Bot abstract class
     }//end of Bot namespace
 }//end of Apollo namespace

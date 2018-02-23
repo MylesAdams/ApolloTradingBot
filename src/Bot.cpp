@@ -1,19 +1,15 @@
 #include "Bot.h"
 
-Apollo::Bot::Bot::Bot()
+utility::string_t Apollo::Bot::Bot::stripBase64(const utility::string_t & s)
 {
-}
+    std::vector<unsigned char> buffer;
+    buffer.reserve(s.size());
+    for (unsigned int i = 0; i < s.size(); ++i)
+        if (isalnum(s[i]))
+            buffer.push_back(s[i]);
 
-std::stringstream Apollo::Bot::Bot::requestResponse(const std::string & target_url)
-{
-    std::stringstream response;
-    curlpp::Cleanup cleaner; // curlpp's RAII -- not really sure if this is deprecated but all examples still use it
-    curlpp::Easy easy_request;
-    easy_request.setOpt(curlpp::Options::Url(target_url));
-    easy_request.setOpt(curlpp::options::WriteStream(&response));
-    easy_request.perform(); // TODO add exception handling -- this can throw
-
-    return response;
+    utility::string_t stripped_string(buffer.begin(), buffer.end());
+    return stripped_string;
 }
 
 std::string Apollo::Bot::Bot::trim(const std::string & str)
@@ -25,6 +21,29 @@ std::string Apollo::Bot::Bot::trim(const std::string & str)
     return str.substr(first, (last - first + 1));
 }
 
+//returns true if a > b. Returns false if a <= b
+bool Apollo::Bot::Bot::compareBigNumbers(const std::string & a, const std::string & b)
+{
+    if (a.size() != b.size())
+        return a.size() > b.size(); //a and b have different number of digits,
+                                    //both are unsigned integers -> greater value can be determined by checking who has more digits
+    else
+    {
+        for (size_t i = 0; i < a.size(); ++i)
+        {
+            int a_num = a[i] - '0';
+            int b_num = b[i] - '0';
+            if (a_num != b_num)
+                return a_num > b_num;
+        }
+        return false;  //a == b
+    }
+}
+
+Apollo::Bot::Bot::Bot()
+{
+}
+
 Apollo::Bot::Bot::~Bot()
 {
 }
@@ -32,22 +51,23 @@ Apollo::Bot::Bot::~Bot()
 std::vector<Apollo::Comment> Apollo::Bot::Bot::getData()
 {
     std::vector<Comment> comments;
-    for (auto& complete_url : this->COMPLETE_URLS_)
-    {
-        //send a request and receive a response
-        std::stringstream target_response = requestResponse(complete_url);
+    if (target_.resource_url.size() == 0)
+        std::cout << "Apollo::Bot has no targets!" << std::endl;
 
-        //parse the response into a rapidjson Document
-        rapidjson::Document target_document;
-        target_document.Parse(target_response.str().c_str());
+    //send a request and receive a response
+    std::string target_response = requestResponse(target_);
 
-        //parse the JSON Document for "comments"
-        std::vector<Comment> target_comments = parseJSON(target_document);
+    //parse the response into a rapidjson Document
+    rapidjson::Document target_document;
+    target_document.Parse(target_response.c_str());
 
-        //add target_comments to comments vector
-        comments.insert(comments.end(), target_comments.begin(), target_comments.end());
-    }
+    //parse the JSON Document for "comments"
+    std::vector<Comment> target_comments = parseJSON(target_document);
 
-    //regex the comments to get all valid words (and ignore stopwords)
+    //add target_comments to comments vector
+    comments.insert(comments.end(), target_comments.begin(), target_comments.end());
+
+    ////regex the comments to get all valid words (and ignore stopwords)
+    this->saveSettings();
     return cleanComments(comments);
 }

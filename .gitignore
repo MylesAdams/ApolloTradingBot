@@ -53,3 +53,8 @@ MakeFile
 *.cmake
 /lib/curlpp/extras/*
 cmake-build-debug
+CMakeLists.txt.user
+build-debug/
+
+# vscode files
+.vscode*
