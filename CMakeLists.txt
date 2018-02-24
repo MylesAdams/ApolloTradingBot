@@ -67,6 +67,9 @@ set(HEADERS
     src/ScraperTarget.h
     src/RedditOauth.h
     src/RedditOauth.cpp
+    src/BadTargetException.h
+    src/BadStatusException.h
+    src/BadResourceException.h
   )
 
 

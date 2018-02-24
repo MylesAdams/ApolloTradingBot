@@ -3,6 +3,9 @@
 
 #ifndef watson_h
 #define watson_h
+
+#include "BadStatusException.h"
+
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
 #include <rapidjson/document.h>
