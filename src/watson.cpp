@@ -7,10 +7,14 @@ const double WATSON_LOWEST_VAL = .5;
 
 // Constructor for watson object.
 Apollo::Watson::Watson(utility::string_t user, utility::string_t pass)
-    : config(), req(web::http::methods::POST)
-{
+    : config(), req(web::http::methods::POST) {
+
+    // Set credentials.
     web::credentials creds(user, pass);
     config.set_credentials(creds);
+
+    // Assert
+    assert(creds.is_set());
 
     // Set request uri with builder to string.
     web::uri_builder builder(U("/v3/tone"));                            
@@ -25,8 +29,6 @@ utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_in
     // String to hold sentiment.
     utility::string_t sentiment_str;
 
-    web::json::value json_obj;
-
     // Create watson_client.
     web::http::client::http_client watson_client(U("https://gateway.watsonplatform.net/tone-analyzer/api/"), this->config);
 
@@ -38,19 +40,24 @@ utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_in
     watson_call.then([](web::http::http_response response)
     {
         // Report error.
-        if (response.status_code() != web::http::status_codes::OK)
-        {
-            throw Apollo::Bot::BadStatusException();
+        if (response.status_code() != web::http::status_codes::OK) {
+            std::string msg = "Status code from server was not OK: ";
+            std::string status = std::to_string(response.status_code());
+            throw Apollo::Bot::BadStatusException(msg, status);
         }
+
         // Extract body into vector.
         return response.extract_string();
-    }).then([&sentiment_str](pplx::task<utility::string_t> string_task)
-    {
+
+    // Hookup task to process json.
+    }).then([&sentiment_str](pplx::task<utility::string_t> string_task) {
+
         //Process extracted json.
         sentiment_str = string_task.get();
-    }).wait();
 
+    }).wait(); //Collect outstanding i/o.
 
+    // Return string.
     return sentiment_str;
 }
 
@@ -72,12 +79,15 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 
         // Report error.
         if (response.status_code() != web::http::status_codes::OK) {
-            // TODO: throw exception
+            std::string msg = "Status code from server was not OK: ";
+            std::string status = std::to_string(response.status_code());
+            throw Apollo::Bot::BadStatusException(msg, status);
         }
 
         // Extract body into vector.
         return response.extract_json();
 
+    // Hookup task to process json.
     }).then([&json_obj](pplx::task<web::json::value> json_task) {
 
         //Process extracted json.
@@ -129,12 +139,10 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
 
     // Generate entry.
     rapidjson::Value v;
-
     v.SetObject();
     v.AddMember("PosRating", rapidjson::Value(pos), allocator);
     v.AddMember("NegRating", rapidjson::Value(neg), allocator);
     v.AddMember("Time", rapidjson::Value(utc), allocator);
-
     doc.PushBack(v, allocator);
 
     // Use json writer to output to file.
