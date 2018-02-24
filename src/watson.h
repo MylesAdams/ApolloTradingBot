@@ -35,7 +35,7 @@ namespace Apollo
     private: // Helper functions.
         Watson();                                                                               // Default constructor.
         int rateTone(const utility::string_t &tone);                                            // Helper. Rates tones. -1, 0, or 1,
-        void evaluator(const web::json::value& json_sentiment, double& pos, double& neg);       // Helper. Gets max pos/neg tone.
+        void evaluator(web::json::value& json_sentiment, double& pos, double& neg);       // Helper. Gets max pos/neg tone.
 
     private: // Forbiden functions.
         Watson(Watson &copy) = delete;                       // Forbid copy constructor.

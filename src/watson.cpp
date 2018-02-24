@@ -173,11 +173,11 @@ int Apollo::Watson::rateTone(const utility::string_t & tone)
 }
 
 // Helper function gets negative and positive tones (by ref) with highest confidence rating.
-void Apollo::Watson::evaluator(const web::json::value & json_sentiment, double & pos, double & neg) {
+void Apollo::Watson::evaluator(web::json::value & json_sentiment, double & pos, double & neg) {
 
     // declare variables to track negative and positive ratings.
-    double pos = 0;
-    double neg = 0;
+    pos = 0;
+    neg = 0;
 
     // Loop through tones given by json returned by watson.
     for (size_t i = 0; i < json_sentiment[U("document_tone")][U("tones")].size(); i++)

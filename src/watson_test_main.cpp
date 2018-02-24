@@ -1,7 +1,7 @@
 // File: watson_test_main.cpp
 // Written by ANDREW LAUX 
 
-#define watson_test   0
+#define watson_test   1
 
 #include <iostream>
 #include "watson.h"
@@ -21,6 +21,9 @@ int main() {
     ucin >> pass;
     ucin.get();
     ucout << U("\n");
+
+    // Create Watson object.
+    Apollo::Watson watson_obj(user, pass);
 
     //Exit
     ucin.get();
