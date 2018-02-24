@@ -33,15 +33,13 @@ std::string Apollo::Bot::FourChan::requestResponse(const ScraperTarget & target)
 
     std::string response;
     http_client client(this->BASE_URL_);
-    client.request(req)
-        .then([](http_response res)
-        {
-            return res.extract_utf8string();
-        })
-        .then([&response](pplx::task<std::string> utf8str)
-        {
-            response = utf8str.get();
-        }).wait();
+    client.request(req).then([](http_response res)
+    {
+        return res.extract_utf8string();
+    }).then([&response](pplx::task<std::string> utf8str)
+    {
+        response = utf8str.get();
+    }).wait();
 
     return response;
 }
@@ -51,13 +49,13 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
     unsigned long long temp_highest_post_seen = this->highest_post_seen_;
     unsigned long long temp_highest_timestamp_seen = this->highest_timestamp_seen_;
     std::vector<Apollo::Comment> comments;
-    for (int page_idx = 0; page_idx < document.Size(); ++page_idx)
+
+    for (auto& page : document.GetArray())
     {
-        const rapidjson::Value& threads = document[page_idx]["threads"];
-        for (int thread_idx = 0; thread_idx < threads.Size(); ++thread_idx)
+        for (auto& thread : page["threads"].GetArray())
         {
-            unsigned long long int thread_no = threads[thread_idx]["no"].GetInt();
-            unsigned long long int last_modified = threads[thread_idx]["last_modified"].GetInt();
+            unsigned long long int thread_no = thread["no"].GetInt();
+            unsigned long long int last_modified = thread["last_modified"].GetInt();
             if (last_modified > this->highest_timestamp_seen_)
             {
                 if (last_modified > temp_highest_timestamp_seen)
@@ -65,32 +63,24 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
 
                 utility::string_t thread_request_path = U("/biz/thread/") + utility::conversions::to_string_t(std::to_string(thread_no)) + U(".json");
                 std::string thread_response = requestResponse(ScraperTarget(this->BASE_URL_, thread_request_path));
-                rapidjson::Document thread;
-                thread.Parse(thread_response.c_str());
+                rapidjson::Document thread_contents;
+                thread_contents.Parse(thread_response.c_str());
 
-                rapidjson::Value &posts = thread["posts"];
-                for (int com_idx = 0; com_idx < posts.Size(); ++com_idx)
+                for (auto& comment : thread_contents["posts"].GetArray())
                 {
-                    rapidjson::Value &comment = posts[com_idx];
                     if (comment.HasMember("com"))
                     {
                         unsigned long long post_no = comment["no"].GetInt();
                         if (post_no > this->highest_post_seen_)
                         {
                             std::string comment_content = comment["com"].GetString();
-                            //put to lower case
+
+                            //make the comment lowercased to search for the (always lowercased) search_pattern_
                             std::transform(comment_content.begin(), comment_content.end(), comment_content.begin(), ::tolower);
-                            bool matched_pattern = false;
-                            for (const auto& pattern : this->search_patterns_)
-                            {
-                                if (comment_content.find(pattern) != std::string::npos)
-                                {
-                                    matched_pattern = true;
-                                    break;
-                                }
-                            }
-                            if (matched_pattern)
-                                comments.push_back(Comment(comment_content, std::to_string(post_no)));
+                            
+                            if (comment_content.find(this->search_pattern_) != std::string::npos)
+                                comments.push_back(Comment(comment["com"].GetString(), std::to_string(post_no)));
+                           
                             if (post_no > temp_highest_post_seen)
                                 temp_highest_post_seen = post_no;
                         }
@@ -121,12 +111,12 @@ Apollo::Bot::FourChan::FourChan()
     ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"));
     this->target_ = target;
 
-    std::ifstream res;
-    res.open(this->RESOURCE_FILE_);
-    if (res.is_open())
+    std::ifstream file;
+    file.open(this->RESOURCE_FILE_);
+    if (file.peek() != std::ifstream::traits_type::eof())
     {
         std::stringstream ss;
-        ss << res.rdbuf();
+        ss << file.rdbuf();
         unsigned long long num;
         if (ss >> num)
             if (num > highest_post_seen_)
@@ -135,6 +125,8 @@ Apollo::Bot::FourChan::FourChan()
             if (num > highest_timestamp_seen_)
                 highest_timestamp_seen_ = num;
     }
+    else
+        std::cout << "Warning -- No FourChan resource file" << std::endl;
 }
 
 Apollo::Bot::FourChan::~FourChan()
@@ -146,5 +138,5 @@ void Apollo::Bot::FourChan::setSearchQuery(const std::string & query)
 {
     std::string q = query;
     std::transform(q.begin(), q.end(), q.begin(), ::tolower);
-    this->search_patterns_.push_back(q);
+    this->search_pattern_ = q;
 }

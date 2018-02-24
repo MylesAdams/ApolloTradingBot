@@ -2,13 +2,12 @@
 
 std::string Apollo::Bot::Twitter::percentEncode(const utility::string_t& s)
 {
-    //    std::string str = utility::conversions::utf16_to_utf8(s);
     std::string str = utility::conversions::to_utf8string(s);
     std::vector<unsigned char> buffer;
     for (int i = 0; i < str.size(); ++i)
     {
         unsigned ch = str[i];
-        if ((ch > 0x60 && ch < 0x7B) || (ch > 0x2F && ch < 0x3A) || (ch > 0x40 && ch < 0x5B) || ch == 0x2D || ch == 0x2E || ch == 0x5F || ch == 0x7E)   //twitter api doesn't want these character percent encoded
+        if ((ch > 0x60 && ch < 0x7B) || (ch > 0x2F && ch < 0x3A) || (ch > 0x40 && ch < 0x5B) || ch == 0x2D || ch == 0x2E || ch == 0x5F || ch == 0x7E)   //twitter api doesn't want these characters percent encoded
             buffer.push_back(ch);
         else
         {
@@ -67,7 +66,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     //get target info
     auto RESOURCE_URL = target.resource_url;
     auto request_path = target.request_path;
-    std::vector<RequestParameter> request_parameters = target.request_parameters;
+    auto request_parameters = target.request_parameters;
 
     // Get time since UNIX epoch
     uint64_t utc = datetime::utc_timestamp();
@@ -85,6 +84,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     const string_t oauth_version = U("1.0");
     //=============this
 
+    //this will benecessary to sort all of the parameters by key
     request_parameters.push_back(RequestParameter(U("oauth_consumer_key"), oauth_consumer_key));
     request_parameters.push_back(RequestParameter(U("oauth_nonce"), oauth_nonce));
     request_parameters.push_back(RequestParameter(U("oauth_signature_method"), oauth_signature_method));
@@ -92,25 +92,27 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     request_parameters.push_back(RequestParameter(U("oauth_token"), oauth_token));
     request_parameters.push_back(RequestParameter(U("oauth_version"), oauth_version));
 
+    //sort parameters by key, as required by Twitter's API
     std::sort(request_parameters.begin(), request_parameters.end());
 
     std::string parameter_string;
     for (const auto& param : request_parameters)
         parameter_string.append(percentEncode(param.key) + '=' + percentEncode(param.value) + '&');
     parameter_string.pop_back(); // removes the last '&'
-
-    //create output string
+    
+    //create the base string used for the signature
     const std::string method = "GET";
     const std::string signature_base_string = method + "&" + percentEncode(RESOURCE_URL + request_path) + "&" + percentEncode(utility::conversions::to_string_t(parameter_string));
 
-    //create signing key
+    //create the key that will be used to sign the base string, producing a signature
     const std::string signing_key = percentEncode(utility::conversions::to_string_t(this->consumer_secret_)) + "&" + percentEncode(utility::conversions::to_string_t(this->oauth_access_token_secret_));
 
-    //convert to stuff HMAC will take
+    //HMAC requires specific parameter types
     unsigned char* signature_base_array = new unsigned char[signature_base_string.size()];
     for (size_t i = 0; i < signature_base_string.size(); ++i)
         signature_base_array[i] = signature_base_string[i];
 
+    //create the signature with SHA1 encryption
     unsigned char signature_bytes[EVP_MAX_MD_SIZE];
     unsigned int signature_bytes_length;
     HMAC(EVP_sha1(), signing_key.c_str(), signing_key.size(), signature_base_array, signature_base_string.size(), signature_bytes, &signature_bytes_length);
@@ -120,6 +122,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     for (size_t i = 0; i < signature_bytes_length; ++i)
         signature_vector.push_back(signature_bytes[i]);
 
+    //encode the signature in base64
     utility::string_t oauth_signature = utility::conversions::to_base64(signature_vector);
 
     //free allocated memory
@@ -131,10 +134,14 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     // Declare request.
     http_request req(methods::GET);
     const string_t content_type = U("application/json");
-    req.headers().set_content_type(content_type);								// Sets content type to application/json.
+    req.headers().set_content_type(content_type); // Sets content type to application/json.
+   
+    //build the request path
     uri_builder builder(request_path);
     for (auto& param : target.request_parameters)
-        builder.append_query(param.key, utility::conversions::to_string_t(percentEncode(param.value)));
+        builder.append_query(param.key, utility::conversions::to_string_t(percentEncode(param.value)), false);
+
+    //set request path
     req.set_request_uri(builder.to_string());
 
     //build the authorization header
@@ -146,19 +153,25 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
         + percentEncode(U("oauth_token")) + "=\"" + percentEncode(oauth_token) + "\", "
         + percentEncode(U("oauth_version")) + "=\"" + percentEncode(oauth_version) + "\"";
 
+    //add adders to the request
     req.headers().add(U("Accept"), U("/*/"));
     req.headers().add(U("Connection"), U("close"));
     req.headers().add(U("Authorization"), utility::conversions::to_string_t(authorization_header));
+    
+    //string to hold the response
     std::string response;
     try
     {
-
         // Send https request.
         pplx::task<http_response> my_request = my_client.request(req);
         my_request.then([](http_response res)
         {
             auto stat = res.status_code();
-            std::cout << "Twitter status code:\t" << stat << std::endl;
+            if (stat != 200)  //200 is good status code. Everything else indicates an unusable server response
+            {
+                throw Apollo::Bot::BadStatusException("Bad Twitter status code " + std::to_string(stat));
+            }
+
             return res.extract_vector();
         }).then([&response](pplx::task<std::vector<unsigned char>> vector_task)
         {
@@ -166,8 +179,15 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
             response.assign(v.begin(), v.end());
         }).wait(); // Wait for task group to complete.	
     }
-    catch (...) {} //TODO -- make this actually handle the exception properly
-
+    catch (const Apollo::Bot::BadStatusException& e)
+    {
+        throw;
+    }
+    catch (const std::exception& e)
+    {
+        throw;
+    }
+    
     return response;
 }
 
@@ -185,7 +205,6 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Do
 
         if (this->compareBigNumbers(id_str, temp_highest_seen))
             temp_highest_seen = id_str;
-
     }
     this->highest_timestamp_seen_ = temp_highest_seen;
 
@@ -203,6 +222,10 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::parseJSON(const rapidjson::Do
 
 std::vector<Apollo::Comment> Apollo::Bot::Twitter::cleanComments(std::vector<Comment>& comments)
 {
+    for (auto& comment : comments)
+    {
+        this->trim(comment.content);
+    }
     return comments;
 }
 
@@ -230,7 +253,7 @@ Apollo::Bot::Twitter::Twitter()
         this->oauth_access_token_secret_ = "";
         this->highest_timestamp_seen_ = "0";
         this->saveSettings();
-        throw std::runtime_error("Empty resource file -- /res/twitter.json does not contain keys, Twitter object could not be constructed.");
+        throw Apollo::Bot::BadResourceException();
     }
 }
 
@@ -241,7 +264,8 @@ Apollo::Bot::Twitter::~Twitter()
 
 void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
-    //    std::co
+    if (query.size() > 10)
+        throw Apollo::Bot::BadTargetException("Bad Twitter target. Query must be no more than 10 characters");
     ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
     target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));

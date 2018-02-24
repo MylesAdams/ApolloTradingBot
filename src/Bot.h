@@ -11,6 +11,9 @@
 #include "Comment.h"
 #include "RequestParameter.h"
 #include "ScraperTarget.h"
+#include "BadResourceException.h"
+#include "BadTargetException.h"
+#include "BadStatusException.h"
 
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
@@ -28,7 +31,12 @@ namespace Apollo {
         class Bot
         {
         private:
+
         protected:
+            //ctors
+            Bot();
+            virtual ~Bot();
+
             //fields
             Apollo::Bot::ScraperTarget target_;
             std::string highest_timestamp_seen_;
@@ -44,12 +52,25 @@ namespace Apollo {
             std::string trim(const std::string& str);
             bool compareBigNumbers(const std::string& a, const std::string& b);
         public:
-            Bot();
-            virtual ~Bot();
             
-            //methods
+            //public methods
+
+            /*
+            @author: Gavin Frazar
+            Parameters: none
+            Return values: A vector of "Comment" objects. Comment is a simple key/value struct which holds two strings. One string to hold the contents of the comment, and another string to hold the ID of the user who posted the comment.
+            Pre-conditions: The bot which uses this method must have a valid target to scrape data from. Its target social media site must be online and working. Watson Tone Analyzer must be working. Any rate limits must not have been exceeded on watson or
+                            social media.
+            Post-conditions: None. Any vector of comments returned is valid, even an empty vector of comments. It's entirely valid for there to be no comments returned by the search.
+            Exceptions: This method will throw if any of the pre-conditions are not met. The following exceptions can be thrown:
+                        -BadStatusException
+            */
             virtual std::vector<Comment> getData();
+
+            //While this method is public, it is also purely virtual, and therefore must be overridden in derived classes (which means documentation will be specific to the class overriding it).
+            //For documentation of this method, see the overrides in derived classes.
             virtual void setSearchQuery(const std::string& query) = 0;
+
         }; //end of Bot abstract class
     }//end of Bot namespace
 }//end of Apollo namespace
