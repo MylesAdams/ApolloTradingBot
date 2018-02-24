@@ -277,3 +277,8 @@ void RedditOauth::readSubscriberCount()
     //ucout << response_body.serialize() << std::endl;
     ucout << "subcribers: " << subscriber_count << std::endl;
 }
+
+void RedditOauth::setSubreddit(utility::string_t subreddit)
+{
+    s_reddit_subreddit = subreddit;
+}
