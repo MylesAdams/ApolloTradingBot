@@ -10,7 +10,7 @@ namespace Apollo
     {
         class Twitter : public Bot
         {
-        private:
+        protected:
             std::string consumer_key_;
             std::string consumer_secret_;
             std::string oauth_access_token_key_;
@@ -22,12 +22,12 @@ namespace Apollo
             const utility::string_t BASE_URL_ = U("https://api.twitter.com");
             const utility::string_t MAX_SEARCH_COUNT_ = U("300");
 
-        protected:
             virtual void saveSettings() override;
             virtual std::string requestResponse(const ScraperTarget& target) override;
             virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) override;
             virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments) override;
-            
+            virtual utility::string_t generateNonce(uint64_t utc);
+            virtual void checkSig(const utility::string_t& sig);
         public:
             //ctor
             /*

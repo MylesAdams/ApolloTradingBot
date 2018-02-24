@@ -23,10 +23,10 @@ std::string Apollo::Bot::FourChan::requestResponse(const ScraperTarget & target)
     using namespace concurrency::streams;		// Asynchronous streams.
     using utility::string_t;
 
-    const string_t METHOD(U("GET"));
+    const string_t METHOD(target.request_method);
     const string_t CONTENT_TYPE(U("application/json"));
 
-    http_request req(methods::GET);
+    http_request req(METHOD);
     req.headers().set_content_type(CONTENT_TYPE);
     uri_builder builder(target.request_path);
     req.set_request_uri(builder.to_string());
@@ -62,7 +62,7 @@ std::vector<Apollo::Comment> Apollo::Bot::FourChan::parseJSON(const rapidjson::D
                     temp_highest_timestamp_seen = last_modified;
 
                 utility::string_t thread_request_path = U("/biz/thread/") + utility::conversions::to_string_t(std::to_string(thread_no)) + U(".json");
-                std::string thread_response = requestResponse(ScraperTarget(this->BASE_URL_, thread_request_path));
+                std::string thread_response = requestResponse(ScraperTarget(this->BASE_URL_, thread_request_path, web::http::methods::GET));
                 rapidjson::Document thread_contents;
                 thread_contents.Parse(thread_response.c_str());
 
@@ -108,7 +108,7 @@ Apollo::Bot::FourChan::FourChan()
 {
     this->highest_post_seen_ = 0;
     this->highest_timestamp_seen_ = 0;
-    ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"));
+    ScraperTarget target(this->BASE_URL_, U("/biz/threads.json"), web::http::methods::GET);
     this->target_ = target;
 
     std::ifstream file;

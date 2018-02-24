@@ -109,7 +109,7 @@ target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
 # Unit tests
 enable_testing()
-add_executable(TwitterTest tests/TwitterTest.cpp )
-target_link_libraries(TwitterTest ${CPPRESTSDK_LIBRARIES})
-target_include_directories(TwitterTest PRIVATE ${INCLUDES})
-add_test(Tester TwitterTest)
+add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
+target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
+target_include_directories(TwitterTester PRIVATE ${INCLUDES})
+add_test(Tester1 TwitterTester)
