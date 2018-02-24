@@ -1,7 +1,7 @@
 // File: watson_test_main.cpp
 // Written by ANDREW LAUX 
 
-#define watson_test   1
+#define watson_test   0
 
 #include <iostream>
 #include "watson.h"
