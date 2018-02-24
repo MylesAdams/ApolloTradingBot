@@ -6,9 +6,8 @@
 const double WATSON_LOWEST_VAL = .5;
 
 // Constructor for watson object.
-Apollo::Watson::Watson(utility::string_t user, utility::string_t pass) :
-    config(),
-    req(web::http::methods::POST)
+Apollo::Watson::Watson(utility::string_t user, utility::string_t pass)
+    : config(), req(web::http::methods::POST)
 {
     web::credentials creds(user, pass);
     config.set_credentials(creds);
@@ -21,8 +20,8 @@ Apollo::Watson::Watson(utility::string_t user, utility::string_t pass) :
 }
 
 // Function: Returns sentiment as stringified JSON.
-utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_input) {
-
+utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_input)
+{
     // String to hold sentiment.
     utility::string_t sentiment_str;
 
@@ -36,27 +35,19 @@ utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_in
 
     // Attempt request.
     pplx::task<web::http::http_response> watson_call = watson_client.request(req);
-    watson_call
-
-        // Hookup response continuation
-        .then([](web::http::http_response response) {
-
+    watson_call.then([](web::http::http_response response)
+    {
         // Report error.
-        if (response.status_code() != web::http::status_codes::OK) {
-            // TODO: throw exception
+        if (response.status_code() != web::http::status_codes::OK)
+        {
+            throw Apollo::Bot::BadStatusException();
         }
-
         // Extract body into vector.
         return response.extract_string();
-    })
-
-        // Hookup continuation to process body.
-        .then([&sentiment_str](pplx::task<utility::string_t> string_task) {
-
+    }).then([&sentiment_str](pplx::task<utility::string_t> string_task)
+    {
         //Process extracted json.
         sentiment_str = string_task.get();
-
-        // Collect outstanding tasks.
     }).wait();
 
 
@@ -64,8 +55,8 @@ utility::string_t Apollo::Watson::toneToString(const utility::string_t & tone_in
 }
 
 // Function: Outputs sentiment to <coinID>.josn.
-web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input) {
-
+web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input)
+{
     // Response json.
     web::json::value json_obj;
 
@@ -77,26 +68,20 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 
     // Attempt request.
     pplx::task<web::http::http_response> watson_call = watson_client.request(req);
-    watson_call
-
-        // Hookup response continuation
-        .then([](web::http::http_response response) {
-
+    watson_call.then([](web::http::http_response response)
+    {
         // Report error.
-        if (response.status_code() != web::http::status_codes::OK) {
+        if (response.status_code() != web::http::status_codes::OK)
+        {
             // TODO: throw exception
         }
-
         // Extract body into vector.
         return response.extract_json();
-    })
-
-        // Hookup continuation to process body.
-        .then([&json_obj](pplx::task<web::json::value> json_task) {
+    }).then([&json_obj](pplx::task<web::json::value> json_task)
+    {
 
         //Process extracted json.
         json_obj = json_task.get();
-
     }).wait(); // Collect outstanding tasks.
 
     // Return obj
@@ -104,8 +89,8 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 }
 
 // Function writes tone sentiment to file.
-void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name) {
-
+void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name)
+{
     // Call toneToJson to get json object.
     web::json::value json_sentiment = toneToJson(tone_input);
 
@@ -116,8 +101,8 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     double count_pos = 0;
 
     // Loop through tones given by json returned by watson.
-    for (size_t i = 0; i < json_sentiment[U("document_tone")][U("tones")].size(); i++) {
-
+    for (size_t i = 0; i < json_sentiment[U("document_tone")][U("tones")].size(); i++)
+    {
         // Collect sentiment values.
         auto value_tone = json_sentiment[U("document_tone")][U("tones")][i][U("tone_name")];
         auto value_score = json_sentiment[U("document_tone")][U("tones")][i][U("score")];
@@ -128,23 +113,24 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
         double rating = score * rateTone(tone);
 
         // Increment positive. 
-        if (rating > 0) {
+        if (rating > 0)
+        {
             positive_rating += rating;
             count_pos++;
         }
 
         // Increment negative.
-        else if (rating < 0) {
+        else if (rating < 0)
+        {
             negative_rating += rating;
             count_neg++;
         }
-
     }
 
     // Average ratings.
     positive_rating = (count_pos > 0) ? (positive_rating / count_pos) : WATSON_LOWEST_VAL;
     negative_rating = (count_neg > 0) ? -1 * (negative_rating / count_neg) : WATSON_LOWEST_VAL;
-    
+
     // TODO: Throw logical error if ratings are < 0.5 or >1 
 
     // Get timestamp.
@@ -157,7 +143,8 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     rapidjson::Document doc;
 
     // File already exists.
-    if (check_file.good()) {
+    if (check_file.good())
+    {
 
         // Wrap std::ifstream object.
         rapidjson::IStreamWrapper isw(check_file);
@@ -187,14 +174,11 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
     doc.Accept(writer);
     out.close();
-
-
-
 }
 
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.
-int Apollo::Watson::rateTone(const utility::string_t & tone) {
-
+int Apollo::Watson::rateTone(const utility::string_t & tone)
+{
     //Rating
     int rating = 0;
 
