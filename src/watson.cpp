@@ -13,7 +13,7 @@ Apollo::Watson::Watson(utility::string_t user, utility::string_t pass)
     config.set_credentials(creds);
 
     // Set request uri with builder to string.
-    web::uri_builder builder(U("/v3/tone"));                            // URI object.
+    web::uri_builder builder(U("/v3/tone"));                            
     builder.append_query(U("version"), U("2017-09-21"));
     builder.append_query(U("sentences"), U("false"));
     req.set_request_uri(builder.to_string());
@@ -68,20 +68,21 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 
     // Attempt request.
     pplx::task<web::http::http_response> watson_call = watson_client.request(req);
-    watson_call.then([](web::http::http_response response)
-    {
+    watson_call.then([](web::http::http_response response) {
+
         // Report error.
-        if (response.status_code() != web::http::status_codes::OK)
-        {
+        if (response.status_code() != web::http::status_codes::OK) {
             // TODO: throw exception
         }
+
         // Extract body into vector.
         return response.extract_json();
-    }).then([&json_obj](pplx::task<web::json::value> json_task)
-    {
+
+    }).then([&json_obj](pplx::task<web::json::value> json_task) {
 
         //Process extracted json.
         json_obj = json_task.get();
+
     }).wait(); // Collect outstanding tasks.
 
     // Return obj
@@ -94,44 +95,12 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     // Call toneToJson to get json object.
     web::json::value json_sentiment = toneToJson(tone_input);
 
-    // declare variables to track negative and positive ratings.
-    double positive_rating = 0;
-    double negative_rating = 0;
-    double count_neg = 0;
-    double count_pos = 0;
+    // Declare varibles to hold rating.
+    double pos;
+    double neg;
 
-    // Loop through tones given by json returned by watson.
-    for (size_t i = 0; i < json_sentiment[U("document_tone")][U("tones")].size(); i++)
-    {
-        // Collect sentiment values.
-        auto value_tone = json_sentiment[U("document_tone")][U("tones")][i][U("tone_name")];
-        auto value_score = json_sentiment[U("document_tone")][U("tones")][i][U("score")];
-        double score = value_score.as_double();
-        utility::string_t tone = value_tone.as_string();
-
-        // Get rating.
-        double rating = score * rateTone(tone);
-
-        // Increment positive. 
-        if (rating > 0)
-        {
-            positive_rating += rating;
-            count_pos++;
-        }
-
-        // Increment negative.
-        else if (rating < 0)
-        {
-            negative_rating += rating;
-            count_neg++;
-        }
-    }
-
-    // Average ratings.
-    positive_rating = (count_pos > 0) ? (positive_rating / count_pos) : WATSON_LOWEST_VAL;
-    negative_rating = (count_neg > 0) ? -1 * (negative_rating / count_neg) : WATSON_LOWEST_VAL;
-
-    // TODO: Throw logical error if ratings are < 0.5 or >1 
+    // Invoke evaluator.
+    evaluator(json_sentiment, pos, neg);
 
     // Get timestamp.
     int utc = static_cast<int>(utility::datetime::utc_timestamp());
@@ -162,8 +131,8 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     rapidjson::Value v;
 
     v.SetObject();
-    v.AddMember("PosRating", rapidjson::Value(positive_rating), allocator);
-    v.AddMember("NegRating", rapidjson::Value(negative_rating), allocator);
+    v.AddMember("PosRating", rapidjson::Value(pos), allocator);
+    v.AddMember("NegRating", rapidjson::Value(neg), allocator);
     v.AddMember("Time", rapidjson::Value(utc), allocator);
 
     doc.PushBack(v, allocator);
@@ -202,3 +171,40 @@ int Apollo::Watson::rateTone(const utility::string_t & tone)
     // Unknown sentiment.
     return rating;
 }
+
+// Helper function gets negative and positive tones (by ref) with highest confidence rating.
+void Apollo::Watson::evaluator(const web::json::value & json_sentiment, double & pos, double & neg) {
+
+    // declare variables to track negative and positive ratings.
+    double pos = 0;
+    double neg = 0;
+
+    // Loop through tones given by json returned by watson.
+    for (size_t i = 0; i < json_sentiment[U("document_tone")][U("tones")].size(); i++)
+    {
+        // Collect sentiment values.
+        auto value_tone = json_sentiment[U("document_tone")][U("tones")][i][U("tone_name")];
+        auto value_score = json_sentiment[U("document_tone")][U("tones")][i][U("score")];
+        double score = value_score.as_double();
+        utility::string_t tone = value_tone.as_string();
+
+        // Get rating.
+        double rating = score * rateTone(tone);
+
+        // Increment positive. 
+        if (rating > 0) {
+            if (rating > pos) pos = rating;
+        }
+
+        // Increment negative.
+        else if (rating < 0) {
+            if (rating > neg) neg = rating;
+        }
+    }
+
+    //Assert that ratings were computed correctly.
+    assert(pos >= 0);
+    assert(neg <= 0);
+}
+
+

@@ -14,28 +14,32 @@
 #include <rapidjson/istreamwrapper.h>
 #include <iostream>
 #include <fstream>
+#include <exception>
+#include <assert.h>
 
 namespace Apollo
 {
 // Class: Watson
     class Watson
     {
-    private:
-        web::http::client::http_client_config config;        // Passed to client constructor. Holds username and pass.
-        web::http::http_request req;                        // Http request object. Has method and uri.
+    private: // Data members.
+        web::http::client::http_client_config config;           // Passed to client constructor. Holds username and pass.
+        web::http::http_request req;                            // Http request object. Has method and uri.
 
-    public:
-        Watson(utility::string_t user, utility::string_t pass);
+    public: // Public functions.
+        Watson(utility::string_t user, utility::string_t pass);                                         // Explicit contructor.
+        utility::string_t toneToString(const utility::string_t &tone_input);                            // Throws exception.
+        web::json::value toneToJson(const utility::string_t &tone_input);                               // Throws exception.
+        void toneToFile(const utility::string_t &tone_input, const utility::string_t &file_name);       // Throws exception.
 
-        utility::string_t toneToString(const utility::string_t &tone_input);                        // Throws exception.
-        web::json::value toneToJson(const utility::string_t &tone_input);                            // Throws exception.
-        void toneToFile(const utility::string_t &tone_input, const utility::string_t &file_name);    // Throws exception.
-    private:
-        Watson();
+    private: // Helper functions.
+        Watson();                                                                               // Default constructor.
+        int rateTone(const utility::string_t &tone);                                            // Helper. Rates tones. -1, 0, or 1,
+        void evaluator(const web::json::value& json_sentiment, double& pos, double& neg);       // Helper. Gets max pos/neg tone.
 
-        Watson(Watson &copy) = delete;                                // Forbid copy constructor.
-        Watson &operator=(Watson &copy) = delete;                    // Forbid assignment.
-        int rateTone(const utility::string_t &tone);                // Helper. Rates tones. -1, 0, or 1,
+    private: // Forbiden functions.
+        Watson(Watson &copy) = delete;                       // Forbid copy constructor.
+        Watson &operator=(Watson &copy) = delete;            // Forbid assignment.
     };
 }
 
