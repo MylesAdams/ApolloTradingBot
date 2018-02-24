@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include "Twitter.h"
+#include "FourChan.h"
 #include "watson.h"
 
 namespace Ui {
