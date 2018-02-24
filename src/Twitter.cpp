@@ -64,33 +64,29 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     using namespace concurrency::streams;		// Asynchronous streams.
 
     //get target info
-    auto RESOURCE_URL = target.resource_url;
-    auto request_path = target.request_path;
+    const auto RESOURCE_URL = target.resource_url;
+    const auto REQUEST_PATH = target.request_path;
     auto request_parameters = target.request_parameters;
 
     // Get time since UNIX epoch
-    uint64_t utc = datetime::utc_timestamp();
-
-    std::vector<unsigned char> seed;
-    for (int i = 0; i < 32; ++i)
-        seed.push_back(utc % (31 * (i % 7 + 1)));   //generates 32 bytes of pseudo random data
+    uint64_t utc = this->getTime();
 
     //encode===========
-    const string_t oauth_consumer_key = utility::conversions::to_string_t(this->consumer_key_);
-    const string_t oauth_nonce = this->stripBase64(utility::conversions::to_base64(seed)); //convert to base64 -> strip non-words -> set nonce
-    const string_t oauth_signature_method = U("HMAC-SHA1");
-    const string_t oauth_timestamp = utility::conversions::to_string_t(std::to_string(utc));
-    const string_t oauth_token = utility::conversions::to_string_t(this->oauth_access_token_key_);
-    const string_t oauth_version = U("1.0");
+    const string_t OAUTH_CONSUMER_KEY = utility::conversions::to_string_t(this->consumer_key_);
+    const string_t OAUTH_NONCE = this->generateNonce(utc); //convert to base64 -> strip non-words -> set nonce
+    const string_t OAUTH_SIGNATURE_METHOD = U("HMAC-SHA1");
+    const string_t OAUTH_TIMESTAMP = utility::conversions::to_string_t(std::to_string(utc));
+    const string_t OAUTH_TOKEN = utility::conversions::to_string_t(this->oauth_access_token_key_);
+    const string_t OAUTH_VERSION = U("1.0");
     //=============this
 
     //this will benecessary to sort all of the parameters by key
-    request_parameters.push_back(RequestParameter(U("oauth_consumer_key"), oauth_consumer_key));
-    request_parameters.push_back(RequestParameter(U("oauth_nonce"), oauth_nonce));
-    request_parameters.push_back(RequestParameter(U("oauth_signature_method"), oauth_signature_method));
-    request_parameters.push_back(RequestParameter(U("oauth_timestamp"), oauth_timestamp));
-    request_parameters.push_back(RequestParameter(U("oauth_token"), oauth_token));
-    request_parameters.push_back(RequestParameter(U("oauth_version"), oauth_version));
+    request_parameters.push_back(RequestParameter(U("oauth_consumer_key"), OAUTH_CONSUMER_KEY));
+    request_parameters.push_back(RequestParameter(U("oauth_nonce"), OAUTH_NONCE));
+    request_parameters.push_back(RequestParameter(U("oauth_signature_method"), OAUTH_SIGNATURE_METHOD));
+    request_parameters.push_back(RequestParameter(U("oauth_timestamp"), OAUTH_TIMESTAMP));
+    request_parameters.push_back(RequestParameter(U("oauth_token"), OAUTH_TOKEN));
+    request_parameters.push_back(RequestParameter(U("oauth_version"), OAUTH_VERSION));
 
     //sort parameters by key, as required by Twitter's API
     std::sort(request_parameters.begin(), request_parameters.end());
@@ -101,21 +97,21 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     parameter_string.pop_back(); // removes the last '&'
     
     //create the base string used for the signature
-    const std::string method = "GET";
-    const std::string signature_base_string = method + "&" + percentEncode(RESOURCE_URL + request_path) + "&" + percentEncode(utility::conversions::to_string_t(parameter_string));
+    const std::string METHOD = utility::conversions::to_utf8string(target.request_method);
+    const std::string SIGNATURE_BASE_STRING = METHOD + "&" + percentEncode(RESOURCE_URL + REQUEST_PATH) + "&" + percentEncode(utility::conversions::to_string_t(parameter_string));
 
     //create the key that will be used to sign the base string, producing a signature
-    const std::string signing_key = percentEncode(utility::conversions::to_string_t(this->consumer_secret_)) + "&" + percentEncode(utility::conversions::to_string_t(this->oauth_access_token_secret_));
+    const std::string SIGNING_KEY = percentEncode(utility::conversions::to_string_t(this->consumer_secret_)) + "&" + percentEncode(utility::conversions::to_string_t(this->oauth_access_token_secret_));
 
     //HMAC requires specific parameter types
-    unsigned char* signature_base_array = new unsigned char[signature_base_string.size()];
-    for (size_t i = 0; i < signature_base_string.size(); ++i)
-        signature_base_array[i] = signature_base_string[i];
+    unsigned char* signature_base_array = new unsigned char[SIGNATURE_BASE_STRING.size()];
+    for (size_t i = 0; i < SIGNATURE_BASE_STRING.size(); ++i)
+        signature_base_array[i] = SIGNATURE_BASE_STRING[i];
 
     //create the signature with SHA1 encryption
     unsigned char signature_bytes[EVP_MAX_MD_SIZE];
     unsigned int signature_bytes_length;
-    HMAC(EVP_sha1(), signing_key.c_str(), signing_key.size(), signature_base_array, signature_base_string.size(), signature_bytes, &signature_bytes_length);
+    HMAC(EVP_sha1(), SIGNING_KEY.c_str(), SIGNING_KEY.size(), signature_base_array, SIGNATURE_BASE_STRING.size(), signature_bytes, &signature_bytes_length);
 
     //convert from array of bytes to vector of bytes
     std::vector<unsigned char> signature_vector;
@@ -123,7 +119,8 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
         signature_vector.push_back(signature_bytes[i]);
 
     //encode the signature in base64
-    utility::string_t oauth_signature = utility::conversions::to_base64(signature_vector);
+    const utility::string_t OAUTH_SIGNATURE = utility::conversions::to_base64(signature_vector);
+    this->checkSig(OAUTH_SIGNATURE);
 
     //free allocated memory
     delete[] signature_base_array;
@@ -132,12 +129,11 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     http_client my_client(RESOURCE_URL);
 
     // Declare request.
-    http_request req(methods::GET);
-    const string_t content_type = U("application/json");
-    req.headers().set_content_type(content_type); // Sets content type to application/json.
+    http_request req(target.request_method);
+    req.headers().set_content_type(U("application/json")); // Sets content type to application/json.
    
     //build the request path
-    uri_builder builder(request_path);
+    uri_builder builder(REQUEST_PATH);
     for (auto& param : target.request_parameters)
         builder.append_query(param.key, utility::conversions::to_string_t(percentEncode(param.value)), false);
 
@@ -145,13 +141,13 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     req.set_request_uri(builder.to_string());
 
     //build the authorization header
-    auto authorization_header = "OAuth " + percentEncode(U("oauth_consumer_key")) + "=\"" + percentEncode(oauth_consumer_key) + "\", "
-        + percentEncode(U("oauth_nonce")) + "=\"" + percentEncode(oauth_nonce) + "\", "
-        + percentEncode(U("oauth_signature")) + "=\"" + percentEncode(oauth_signature) + "\", "
-        + percentEncode(U("oauth_signature_method")) + "=\"" + percentEncode(oauth_signature_method) + "\", "
-        + percentEncode(U("oauth_timestamp")) + "=\"" + percentEncode(oauth_timestamp) + "\", "
-        + percentEncode(U("oauth_token")) + "=\"" + percentEncode(oauth_token) + "\", "
-        + percentEncode(U("oauth_version")) + "=\"" + percentEncode(oauth_version) + "\"";
+    auto authorization_header = "OAuth " + percentEncode(U("oauth_consumer_key")) + "=\"" + percentEncode(OAUTH_CONSUMER_KEY) + "\", "
+        + percentEncode(U("oauth_nonce")) + "=\"" + percentEncode(OAUTH_NONCE) + "\", "
+        + percentEncode(U("oauth_signature")) + "=\"" + percentEncode(OAUTH_SIGNATURE) + "\", "
+        + percentEncode(U("oauth_signature_method")) + "=\"" + percentEncode(OAUTH_SIGNATURE_METHOD) + "\", "
+        + percentEncode(U("oauth_timestamp")) + "=\"" + percentEncode(OAUTH_TIMESTAMP) + "\", "
+        + percentEncode(U("oauth_token")) + "=\"" + percentEncode(OAUTH_TOKEN) + "\", "
+        + percentEncode(U("oauth_version")) + "=\"" + percentEncode(OAUTH_VERSION) + "\"";
 
     //add adders to the request
     req.headers().add(U("Accept"), U("/*/"));
@@ -169,7 +165,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
             auto stat = res.status_code();
             if (stat != 200)  //200 is good status code. Everything else indicates an unusable server response
             {
-                throw Apollo::Bot::BadStatusException("Bad Twitter status code " + std::to_string(stat));
+                throw Apollo::Bot::BadStatusException("Bad Twitter status code", std::to_string(stat));
             }
 
             return res.extract_vector();
@@ -229,6 +225,20 @@ std::vector<Apollo::Comment> Apollo::Bot::Twitter::cleanComments(std::vector<Com
     return comments;
 }
 
+utility::string_t Apollo::Bot::Twitter::generateNonce(uint64_t utc)
+{
+    std::vector<unsigned char> seed;
+    for (int i = 0; i < 32; ++i)
+        seed.push_back(utc % (31 * (i % 7 + 1)));   //generates 32 bytes of pseudo random data
+    return this->stripBase64(utility::conversions::to_base64(seed));
+}
+
+void Apollo::Bot::Twitter::checkSig(const utility::string_t & sig)
+{
+    //this is function is just for unit testing to check that the oauth_signature is properly generated
+    return;
+}
+
 Apollo::Bot::Twitter::Twitter()
 {
     std::ifstream file(RESOURCE_FILE_);
@@ -259,14 +269,13 @@ Apollo::Bot::Twitter::Twitter()
 
 Apollo::Bot::Twitter::~Twitter()
 {
-    this->saveSettings();
 }
 
 void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
     if (query.size() > 500)
         throw Apollo::Bot::BadTargetException("Bad Twitter target. Query must be no more than 500 characters");
-    ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
+    ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"), web::http::methods::GET);
     target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
     target.request_parameters.push_back(RequestParameter(U("q"), utility::conversions::to_string_t(query)));

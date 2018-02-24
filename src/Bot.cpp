@@ -40,6 +40,11 @@ bool Apollo::Bot::Bot::compareBigNumbers(const std::string & a, const std::strin
     }
 }
 
+uint64_t Apollo::Bot::Bot::getTime()
+{
+    return utility::datetime::utc_timestamp();
+}
+
 Apollo::Bot::Bot::Bot()
 {
 }
