@@ -58,11 +58,11 @@ namespace Apollo
             @author: Gavin Frazar
             Parameters: query - string containing the query a user would like to search all of Twitter for.
             Return values: void
-            pre-conditions: The query must be no more than 10 characters long.
+            pre-conditions: The query must be no more than 500 characters long.
             post-conditions: Twitter's internal ScraperTarget must be set and contain a correct url, request path, and 5 RequestParameter objects in its vector, as follows:
                                 - "count" : "[0-9]+"
                                 - "tweet_mode" : "extended"
-                                - "q" : "query" (the query must be no longer than 10 characters)
+                                - "q" : "query" (the query must be no longer than 500 characters)
                                 - "result_type" : "recent"
             Exceptions: This method will throw if the pre-condition is not met. The following exception(s) can be thrown:
                         -BadTargetException

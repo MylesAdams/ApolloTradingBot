@@ -264,8 +264,8 @@ Apollo::Bot::Twitter::~Twitter()
 
 void Apollo::Bot::Twitter::setSearchQuery(const std::string & query)
 {
-    if (query.size() > 10)
-        throw Apollo::Bot::BadTargetException("Bad Twitter target. Query must be no more than 10 characters");
+    if (query.size() > 500)
+        throw Apollo::Bot::BadTargetException("Bad Twitter target. Query must be no more than 500 characters");
     ScraperTarget target(BASE_URL_, U("/1.1/search/tweets.json"));
     target.request_parameters.push_back(RequestParameter(U("count"), this->MAX_SEARCH_COUNT_));
     target.request_parameters.push_back(RequestParameter(U("tweet_mode"), U("extended")));
