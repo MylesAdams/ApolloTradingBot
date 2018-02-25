@@ -5,6 +5,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
+if(MSVC)
+  add_compile_options(/W4)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
 if (APPLE)
   set(OPENSSL_ROOT_DIR /usr/local/opt/openssl/)
   set(OPT_CPPFLAGS "-stdlib=libc++ -I/usr/local/opt/openssl/include")
@@ -27,16 +33,8 @@ endif()
 
 FIND_PACKAGE(Boost 1.66 COMPONENTS program_options REQUIRED)
 FIND_PACKAGE(OpenSSL REQUIRED)
-# FIND_PACKAGE(Qt5Widgets REQUIRED)
-# FIND_PACKAGE(Qt5PrintSupport REQUIRED)
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
-
 find_package(cpprestsdk REQUIRED)
-
-include_directories(src)
-include_directories(lib/rapidjson/include)
-INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
-
 
 # If you make a new *.cpp file, place it here:
 set(SOURCES
@@ -48,40 +46,57 @@ set(SOURCES
   src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
-  )
+)
 
 # Put any header files you create here:
 set(HEADERS
   ${HEADERS}
-    src/Comment.h
-    src/NotFoundException.h
-    src/qcustomplot.h
-    src/mainwindow.h
-    src/mainwindow.ui
-    src/Bot.h
-    src/FourChan.h
-    src/Twitter.h
-    src/watson.h
-    src/Comment.h
-    src/RequestParameter.h
-    src/ScraperTarget.h
-    src/RedditOauth.h
-    src/RedditOauth.cpp
-    src/BadTargetException.h
-    src/BadStatusException.h
-    src/BadResourceException.h
-  )
+  src/Comment.h
+  src/NotFoundException.h
+  src/qcustomplot.h
+  src/mainwindow.h
+  src/mainwindow.ui
+  src/Bot.h
+  src/FourChan.h
+  src/Twitter.h
+  src/watson.h
+  src/Comment.h
+  src/RequestParameter.h
+  src/ScraperTarget.h
+  src/RedditOauth.h
+  src/RedditOauth.cpp
+  src/BadTargetException.h
+  src/BadStatusException.h
+  src/BadResourceException.h
+)
 
+set(INCLUDES
+  ${INCLUDES}
+  src
+  lib/rapidjson/include
+  ${Boost_INCLUDE_DIR}
+)
+
+set(CPPRESTSDK_LIBRARIES
+  ${CPPRESTSDK_LIBRARIES}
+  cpprestsdk::cpprest
+  cpprestsdk::cpprestsdk_boost_internal
+  cpprestsdk::cpprestsdk_openssl_internal
+  cpprestsdk::cpprestsdk_zlib_internal
+)
+
+set(QT_LIBRARIES
+  ${QT_LIBRARIES}
+  Qt5::Widgets
+  Qt5::PrintSupport
+)
 
 set(LIBRARIES
   ${LIBRARIES}
-  cpprestsdk::cpprest
-  cpprestsdk::cpprestsdk_boost_internal
-  cpprestsdk::cpprestsdk_zlib_internal
-  cpprestsdk::cpprestsdk_openssl_internal
-  Qt5::Widgets
-  Qt5::PrintSupport
-  )
+  ${CPPRESTSDK_LIBRARIES}
+  ${QT_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
 
 source_group("Source files" FILES ${SOURCES})
 source_group("Header files" FILES ${HEADERS})
@@ -89,5 +104,12 @@ source_group("Header files" FILES ${HEADERS})
 # It is unnecessary to link against the header files. The reason I added Headers is a hack to add the header
 # files to the IDE project so they appear while working in an IDE.
 add_executable(ApolloTradingBot ${SOURCES} ${HEADERS})
+target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
+target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
-target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES} ${Boost_LIBRARIES} )
+# Unit tests
+enable_testing()
+add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
+target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
+target_include_directories(TwitterTester PRIVATE ${INCLUDES})
+add_test(TWitterSignatureGeneration TwitterTester)
