@@ -30,7 +30,7 @@ namespace Apollo
         Watson(utility::string_t user, utility::string_t pass);                                         // Explicit contructor.
         utility::string_t toneToString(const utility::string_t &tone_input);                            // Throws exception.
         web::json::value toneToJson(const utility::string_t &tone_input);                               // Throws exception.
-        void toneToFile(const utility::string_t &tone_input, const utility::string_t &file_name);       // Throws exception.
+        void toneToFile(utility::string_t &tone_input, const utility::string_t &file_name);       // Throws exception.
 
     private: // Helper functions.
         Watson();                                                                               // Default constructor.

@@ -64,8 +64,6 @@ set(HEADERS
   src/Comment.h
   src/RequestParameter.h
   src/ScraperTarget.h
-  # src/RedditOauth.h
-  # src/RedditOauth.cpp
   src/BadTargetException.h
   src/BadStatusException.h
   src/BadResourceException.h
@@ -114,4 +112,4 @@ enable_testing()
 add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
 target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
 target_include_directories(TwitterTester PRIVATE ${INCLUDES})
-add_test(TWitterSignatureGeneration TwitterTester)
+add_test(TwitterSignatureGeneration TwitterTester)

@@ -5,6 +5,10 @@
 #include "cpprest/http_listener.h"
 #include "cpprest/http_client.h"
 #include <fstream>
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/ostreamwrapper.h"
 
 using namespace web;
 using namespace web::http;
@@ -87,32 +91,23 @@ void Apollo::Bot::Reddit::setTokens()
     reddit_call
 
             .then([](http_response response) {
-                std::cout << response.status_code() << std::endl;
+//                std::cout << response.status_code() << std::endl;
 
                 return response.extract_json();
 
-            })
-            .then([&response_body](pplx::task<json::value > json_task){
+            }).then([&response_body](pplx::task<json::value > json_task){
 
                 response_body = json_task.get();
 
-            })
-            .wait();
+            }).wait();
 
-    // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
-    // {
     s_reddit_current_token = utility::conversions::to_string_t(response_body[U("access_token")].as_string());
-    //s_reddit_refresh_token = response_body["refresh_token"].as_string();
 
     std::ofstream tokenFile;
     tokenFile.open("../resources/reddit_token_data.txt");
     tokenFile << utility::conversions::to_utf8string(s_reddit_current_token) << "\n" << utility::conversions::to_utf8string(s_reddit_refresh_token);
     tokenFile.close();
-    // }
 
-    ucout << response_body.serialize() << std::endl;
-    //ucout << current_token << std::endl;
-    // ucout << refresh_token << std::endl;
 }
 
 void Apollo::Bot::Reddit::getTokens()
@@ -127,8 +122,10 @@ void Apollo::Bot::Reddit::getTokens()
             if (count == 0)
                 s_reddit_current_token = utility::conversions::to_string_t(line);
             else
+            {
                 //s_reddit_refresh_token = line;
                 count++;
+            }
         }
         tokenFile.close();
     }
@@ -142,7 +139,7 @@ void Apollo::Bot::Reddit::refreshTokens()
     int_fast64_t UTC_temp = utility::datetime::utc_timestamp();
     if (UTC_temp - 3590 < UTC_time)
     {
-        ucout << "no need to refresh token yet" << std::endl;
+//        ucout << "no need to refresh token yet" << std::endl;
         return;
     }
 
@@ -171,7 +168,7 @@ void Apollo::Bot::Reddit::refreshTokens()
     reddit_call
 
             .then([](http_response response) {
-                std::cout << response.status_code() << std::endl;
+//                std::cout << response.status_code() << std::endl;
 
                 return response.extract_json();
 
@@ -183,19 +180,12 @@ void Apollo::Bot::Reddit::refreshTokens()
             })
             .wait();
 
-    // if (response_body["access_token"].is_string() && response_body["refresh_token"].is_string())
-    // {
     s_reddit_current_token = response_body[U("access_token")].as_string();
-    //s_reddit_refresh_token = response_body["refresh_token"].as_string();
     UTC_time = UTC_temp;
     std::ofstream tokenFile;
     tokenFile.open("../resources/reddit_token_data.txt");
     tokenFile << UTC_time << "\n";
     tokenFile.close();
-    //
-    // }
-
-    //ucout << response_body.serialize() << std::endl;
 
 }
 
@@ -213,50 +203,34 @@ void Apollo::Bot::Reddit::readComments()
 
     comments.clear();
 
-    json::value response_body;
+//    json::value response_body;
+
+    std::string response;
 
     pplx::task<http_response> reddit_call = redditClient.request(reqRed);
     reddit_call
 
             .then([](http_response response) {
-                std::cout << response.status_code() << std::endl;
+//                std::cout << response.status_code() << std::endl;
 
-                return response.extract_json();
+//                return response.extract_json();
+                return response.extract_vector();
 
-            })
-            .then([&response_body](pplx::task<json::value > json_task){
-
-                response_body = json_task.get();
+            }).then([&response](pplx::task<std::vector<unsigned char>> vector_task){
+                auto v = vector_task.get();
+                response.assign(v.begin(), v.end());
 
             }).wait();
 
-    size_t tempLastRead = response_body[U("data")][U("children")][0][U("data")][U("created")].as_integer();
+    rapidjson::Document response_body;
+    response_body.Parse(response.c_str());
 
-    for (int i = 0; i < response_body[U("data")][U("children")].size(); i++)
-    {
-        //if  (response_body["data"]["children"][i]["data"]["created"].as_integer() > last_comment_read)
-        //{
-        comments.push_back(response_body[U("data")][U("children")][i][U("data")][U("body")].as_string());
-        //}
-    }
+    size_t tempLastRead = response_body["data"]["children"][0]["data"]["created"].GetDouble();
+
+    for (int i = 0; i < response_body["data"]["children"].Size(); i++)
+        comments.push_back(response_body["data"]["children"][i]["data"]["body"].GetString());
 
     last_comment_read = tempLastRead;
-
-    for (int i = 0; i < comments.size(); i++)
-        ucout << comments[i] << std::endl;
-    ucout << "last comment read id: " << last_comment_read << std::endl;
-    ucout << response_body.serialize();
-//
-//    try
-//    {
-//        reddit_call.wait();
-//    }
-//    catch (const std::exception &e)
-//    {
-//        std::cout << e.what() << std::endl;
-//    }
-//            .wait();
-
 
 }
 
@@ -278,7 +252,7 @@ void Apollo::Bot::Reddit::readSubscriberCount()
     reddit_call
 
             .then([](http_response response) {
-                std::cout << response.status_code() << std::endl;
+//                std::cout << response.status_code() << std::endl;
 
                 return response.extract_json();
 
@@ -291,7 +265,6 @@ void Apollo::Bot::Reddit::readSubscriberCount()
             .wait();
 
     subscriber_count = response_body[U("data")][U("subscribers")].as_integer();
-    //ucout << response_body.serialize() << std::endl;
     ucout << "subcribers: " << subscriber_count << std::endl;
 }
 
@@ -300,17 +273,24 @@ void Apollo::Bot::Reddit::setSubreddit(utility::string_t subreddit)
     s_reddit_subreddit = subreddit;
 }
 
+std::vector<utility::string_t> Apollo::Bot::Reddit::getComments()
+{
+    return comments;
+}
+
 void Apollo::Bot::Reddit::saveSettings() {}
+
 std::string Apollo::Bot::Reddit::requestResponse(const ScraperTarget& target) {return "";}
-std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document)
+
+std::vector<Apollo::Comment> Apollo::Bot::Reddit::parseJSON(const rapidjson::Document& document)
 {
     std::vector<Apollo::Comment> ret;
     return ret;
 }
-std::vector<Apollo::Comment> cleanComments(std::vector<Apollo::Comment>& comments)
+std::vector<Apollo::Comment> Apollo::Bot::Reddit::cleanComments(std::vector<Apollo::Comment>& comments)
 {
     std::vector<Apollo::Comment> ret;
     return ret;
 }
 
-void setSearchQuery(const std::string& query){}
+void Apollo::Bot::Reddit::setSearchQuery(const std::string& query){}

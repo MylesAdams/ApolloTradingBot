@@ -105,8 +105,15 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 }
 
 // Function writes tone sentiment to file.
-void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name)
+void Apollo::Watson::toneToFile(utility::string_t & tone_input, const utility::string_t & file_name)
 {
+    if (tone_input.size() >= 128000)
+    {
+        std::string tempStr = utility::conversions::to_utf8string(tone_input);
+        tempStr = tempStr.substr(0, 127999);
+        tone_input = utility::conversions::to_string_t(tempStr);
+    }
+
     // Call toneToJson to get json object.
     web::json::value json_sentiment = toneToJson(tone_input);
 
@@ -156,6 +163,7 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
     doc.Accept(writer);
     out.close();
+
 }
 
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.

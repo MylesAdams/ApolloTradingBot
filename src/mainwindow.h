@@ -40,7 +40,6 @@ private:
     void clearData();
     void plot();
     void setupWidgets();
-    void runBots();
     void normalizeGraphs();
     void normalizeData(QVector<double>& vec);
     void updatePlot();

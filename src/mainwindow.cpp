@@ -56,7 +56,7 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     std::cout << "Query:\t" << currentItem->toolTip().toStdString() << std::endl;
 
     twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
-    fourchanBot->setSearchQuery(currentItem->toolTip().toStdString());
+    fourchanBot->setSearchQuery(currentItem->statusTip().toStdString());
     redditBot->setSubreddit(utility::conversions::to_string_t(currentItem->toolTip().toStdString()));
 
 
@@ -147,13 +147,15 @@ void MainWindow::updateData()
 
     std::cout << filename << std::endl;
     auto t_comments = twitterBot->getData();
+    std::cout << "Twitter Size: " << t_comments.size() << std::endl;
     auto f_comments = fourchanBot->getData();
+    std::cout << "4Chan Size: " << f_comments.size() << std::endl;
     redditBot->readComments();
-    auto r_comments = redditBot->comments;
+    auto r_comments = redditBot->getComments();
+    std::cout << "Reddit Size: " << r_comments.size() << std::endl;
 
-//    std::cout << comments.size() << std::endl;
-
-    watsonAnalyzer->toneToFile(commentsToString(t_comments, f_comments, r_comments), utility::conversions::to_string_t(filename));
+    utility::string_t tone_input = commentsToString(t_comments, f_comments, r_comments);
+    watsonAnalyzer->toneToFile(tone_input, utility::conversions::to_string_t(filename));
 
     updatePlot();
 }
@@ -210,12 +212,6 @@ void MainWindow::setupWidgets()
     ui->Binance->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->Kucoin->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->Tabs->setCurrentIndex(0);
-}
-
-void MainWindow::runBots()
-{
-    auto comments = twitterBot->getData();
-
 }
 
 void MainWindow::normalizeGraphs()
