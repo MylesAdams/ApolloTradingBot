@@ -45,7 +45,7 @@ private:
     void updatePlot();
 
     // Move to other file later
-    utility::string_t commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<utility::string_t> r_comments);
+    utility::string_t commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<std::string> r_comments);
 };
 
 #endif // MAINWINDOW_H

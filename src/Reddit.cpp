@@ -273,7 +273,7 @@ void Apollo::Bot::Reddit::setSubreddit(utility::string_t subreddit)
     s_reddit_subreddit = subreddit;
 }
 
-std::vector<utility::string_t> Apollo::Bot::Reddit::getComments()
+std::vector<std::string> Apollo::Bot::Reddit::getComments()
 {
     return comments;
 }

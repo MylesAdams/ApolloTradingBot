@@ -45,7 +45,7 @@ namespace Apollo
             size_t last_comment_read = 0;
             size_t subscriber_count;
             bool hasToken = false;
-            std::vector<utility::string_t> comments;
+            std::vector<std::string> comments;
 
             utility::string_t buildRedditOauthURL();
 
@@ -126,7 +126,7 @@ namespace Apollo
             pre-conditions: none
             post-conditions: Comments in the private comments vector will be returned.
             */
-            std::vector<utility::string_t> getComments();
+            std::vector<std::string> getComments();
 
 
 
