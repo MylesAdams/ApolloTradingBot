@@ -46,6 +46,7 @@ set(SOURCES
   src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
+  src/Reddit.cpp
 )
 
 # Put any header files you create here:
@@ -63,11 +64,12 @@ set(HEADERS
   src/Comment.h
   src/RequestParameter.h
   src/ScraperTarget.h
-  src/RedditOauth.h
-  src/RedditOauth.cpp
+  # src/RedditOauth.h
+  # src/RedditOauth.cpp
   src/BadTargetException.h
   src/BadStatusException.h
   src/BadResourceException.h
+  src/Reddit.h
 )
 
 set(INCLUDES

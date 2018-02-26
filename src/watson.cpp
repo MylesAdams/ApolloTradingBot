@@ -1,7 +1,7 @@
 // File: watson.cpp
 // Written by ANDREW LAUX
 
-#include "watson.h"
+#include "Watson.h"
 
 const double WATSON_LOWEST_VAL = .5;
 

@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Twitter.h"
-#include "watson.h"
+#include "Watson.h"
 #include "Comment.h"
 
 #include <QTimer>
@@ -19,8 +19,12 @@ const int TIME_WEEK = 604800;
 const int TIME_HOUR = 3600;
 const int TEN_MIN = 600;
 const int NUMBER_OF_PLOT = 21;
-const int POS_GRAPH = 0;
-const int NEG_GRAPH = 1;
+const int TWITTER_POS_GRAPH = 0;
+const int TWITTER_NEG_GRAPH = 1;
+const int FOURCHAN_POS_GRAPH = 2;
+const int FOURCHAN_NEG_GRAPH = 3;
+const int REDDIT_POS_GRAPH = 4;
+const int REDDIT_NEG_GRAPH = 5;
 const double WATSON_LOWEST_VAL = .5;
 const int NORMALIZE_VAL = 2;
 utility::string_t WATSON_USERNAME = U("c032fda0-5c02-490d-8e00-ab00de2e5f40");
@@ -34,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setupWidgets();
 
     twitterBot = new Apollo::Bot::Twitter();
+    redditBot = new Apollo::Bot::Reddit();
+    fourchanBot = new Apollo::Bot::FourChan();
     watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
 
     timerStarted = false;
@@ -47,8 +53,13 @@ MainWindow::~MainWindow()
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     currentItem = item;
-    std::cout << "Twitter query:\t" << currentItem->toolTip().toStdString();
+    std::cout << "Query:\t" << currentItem->toolTip().toStdString() << std::endl;
+
     twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
+    fourchanBot->setSearchQuery(currentItem->toolTip().toStdString());
+    redditBot->setSubreddit(utility::conversions::to_string_t(currentItem->toolTip().toStdString()));
+
+
     updateData();
     updatePlot();
     if (!timerStarted)
@@ -66,12 +77,20 @@ void MainWindow::clearData()
     qx.clear();
     qy_pos.clear();
     qy_neg.clear();
+//    f_qy_pos.clear();
+//    f_qy_neg.clear();
+//    r_qy_pos.clear();
+//    r_qy_neg.clear();
 }
 
 void MainWindow::plot()
 {
-    ui->plot->graph(POS_GRAPH)->setData(qx, qy_pos);
-    ui->plot->graph(NEG_GRAPH)->setData(qx, qy_neg);
+    ui->plot->graph(TWITTER_POS_GRAPH)->setData(qx, qy_pos);
+    ui->plot->graph(TWITTER_NEG_GRAPH)->setData(qx, qy_neg);
+//    ui->plot->graph(FOURCHAN_POS_GRAPH)->setData(qx, f_qy_pos);
+//    ui->plot->graph(FOURCHAN_NEG_GRAPH)->setData(qx, f_qy_neg);
+//    ui->plot->graph(REDDIT_POS_GRAPH)->setData(qx, r_qy_pos);
+//    ui->plot->graph(REDDIT_NEG_GRAPH)->setData(qx, r_qy_neg);
     ui->plot->replot();
     ui->plot->update();
 }
@@ -127,11 +146,14 @@ void MainWindow::updateData()
     std::replace(filename.begin(), filename.end(), ' ', '_');
 
     std::cout << filename << std::endl;
-    auto comments = twitterBot->getData();
+    auto t_comments = twitterBot->getData();
+    auto f_comments = fourchanBot->getData();
+    redditBot->readComments();
+    auto r_comments = redditBot->comments;
 
-    std::cout << comments.size() << std::endl;
+//    std::cout << comments.size() << std::endl;
 
-    watsonAnalyzer->toneToFile(commentsToString(comments), utility::conversions::to_string_t(filename));
+    watsonAnalyzer->toneToFile(commentsToString(t_comments, f_comments, r_comments), utility::conversions::to_string_t(filename));
 
     updatePlot();
 }
@@ -140,17 +162,37 @@ void MainWindow::setupWidgets()
 {
     ui->plot->addGraph();
     ui->plot->addGraph();
+//    ui->plot->addGraph();
+//    ui->plot->addGraph();
+//    ui->plot->addGraph();
+//    ui->plot->addGraph();
 
-    ui->plot->graph(POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->plot->graph(NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(TWITTER_POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(TWITTER_NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+//    ui->plot->graph(FOURCHAN_POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+//    ui->plot->graph(FOURCHAN_NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+//    ui->plot->graph(REDDIT_POS_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
+//    ui->plot->graph(REDDIT_NEG_GRAPH)->setScatterStyle(QCPScatterStyle::ssCircle);
 
-    ui->plot->graph(POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
-    ui->plot->graph(NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
+    ui->plot->graph(TWITTER_POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
+    ui->plot->graph(TWITTER_NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
+//    ui->plot->graph(FOURCHAN_POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
+//    ui->plot->graph(FOURCHAN_NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
+//    ui->plot->graph(REDDIT_POS_GRAPH)->setLineStyle(QCPGraph::lsLine);
+//    ui->plot->graph(REDDIT_NEG_GRAPH)->setLineStyle(QCPGraph::lsLine);
 
-    ui->plot->graph(POS_GRAPH)->setName("Twitter Positive Sentiment");
-    ui->plot->graph(NEG_GRAPH)->setName("Twitter Negative Sentiment");
+    ui->plot->graph(TWITTER_POS_GRAPH)->setName("Positive Sentiment");
+    ui->plot->graph(TWITTER_NEG_GRAPH)->setName("Negative Sentiment");
+//    ui->plot->graph(FOURCHAN_POS_GRAPH)->setName("4Chan Positive Sentiment");
+//    ui->plot->graph(FOURCHAN_NEG_GRAPH)->setName("4Chan Negative Sentiment");
+//    ui->plot->graph(REDDIT_POS_GRAPH)->setName("Reddit Positive Sentiment");
+//    ui->plot->graph(REDDIT_NEG_GRAPH)->setName("Reddit Negative Sentiment");
 
-    ui->plot->graph(NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::red));
+    ui->plot->graph(TWITTER_NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::red));
+//    ui->plot->graph(FOURCHAN_POS_GRAPH)->setPen(QPen(Qt::GlobalColor::green));
+//    ui->plot->graph(FOURCHAN_NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::magenta));
+//    ui->plot->graph(REDDIT_POS_GRAPH)->setPen(QPen(Qt::GlobalColor::yellow));
+//    ui->plot->graph(REDDIT_NEG_GRAPH)->setPen(QPen(Qt::GlobalColor::black));
 
     ui->plot->yAxis->setRange(0,1);
     ui->plot->legend->setVisible(true);
@@ -180,6 +222,10 @@ void MainWindow::normalizeGraphs()
 {
     normalizeData(qy_pos);
     normalizeData(qy_neg);
+//    normalizeData(f_qy_pos);
+//    normalizeData(f_qy_neg);
+//    normalizeData(r_qy_pos);
+//    normalizeData(r_qy_neg);
 }
 
 void MainWindow::normalizeData(QVector<double>& vec)
@@ -190,12 +236,18 @@ void MainWindow::normalizeData(QVector<double>& vec)
     }
 }
 
-utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> comments)
+utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<utility::string_t> r_comments)
 {
     std::string str = "";
 
-    for (auto& comment : comments)
+    for (auto& comment : t_comments)
         str.append(comment.content);
+
+    for (auto& comment : f_comments)
+        str.append(comment.content);
+
+    for (auto& comment : r_comments)
+        str.append(utility::conversions::to_utf8string(comment));
 
     return utility::conversions::to_string_t(str);
 }
