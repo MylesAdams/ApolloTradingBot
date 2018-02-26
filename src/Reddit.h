@@ -120,7 +120,7 @@ namespace Apollo
             void readSubscriberCount();
 
             /*
-            @author: Roderic Deichler
+            @author: Myles Adams
             Parameters: none
             Return values: std::vector<utility::string_t> : Vector of comments
             pre-conditions: none
