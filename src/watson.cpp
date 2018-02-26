@@ -20,6 +20,11 @@ Apollo::Watson::Watson(utility::string_t user, utility::string_t pass)
     web::uri_builder builder(U("/v3/tone"));                            
     builder.append_query(U("version"), U("2017-09-21"));
     builder.append_query(U("sentences"), U("false"));
+
+    // Check that uri is valid.
+    if (!builder.is_valid()) throw std::invalid_argument("URI is invalid.");
+
+    // Build and set URI in request.
     req.set_request_uri(builder.to_string());
 }
 
