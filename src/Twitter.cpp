@@ -173,7 +173,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
         {
             auto v = vector_task.get();
             response.assign(v.begin(), v.end());
-        }).wait(); // Wait for task group to complete.	
+        }).wait(); // Wait for task group to complete.
     }
     catch (const Apollo::Bot::BadStatusException& e)
     {
@@ -183,7 +183,7 @@ std::string Apollo::Bot::Twitter::requestResponse(const ScraperTarget& target)
     {
         throw;
     }
-    
+
     return response;
 }
 

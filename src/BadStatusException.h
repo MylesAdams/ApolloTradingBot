@@ -2,6 +2,7 @@
 #define BADSTATUSEXCEPTION_H
 
 #include <stdexcept>
+#include <string>
 namespace Apollo
 {
     namespace Bot

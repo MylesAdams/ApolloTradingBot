@@ -5,8 +5,8 @@
 #include <QListWidgetItem>
 #include "Twitter.h"
 #include "FourChan.h"
-#include "watson.h"
-#include "RedditOauth.h"
+#include "Watson.h"
+#include "Reddit.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,26 +27,25 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QVector<double> qy_pos, qy_neg, qx;
+    QVector<double> qy_pos, qy_neg, /*f_qy_pos, f_qy_neg, r_qy_pos, r_qy_neg,*/ qx;
     QListWidgetItem* currentItem;
     bool timerStarted;
 
     Apollo::Bot::Twitter* twitterBot;
-    RedditOauth* redditBot;
+    Apollo::Bot::Reddit* redditBot;
+    Apollo::Bot::FourChan* fourchanBot;
     Apollo::Watson* watsonAnalyzer;
 
 
     void clearData();
     void plot();
     void setupWidgets();
-    void runBots();
     void normalizeGraphs();
     void normalizeData(QVector<double>& vec);
     void updatePlot();
 
     // Move to other file later
-    utility::string_t commentsToString(std::vector<Apollo::Comment> comments);
-
+    utility::string_t commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<utility::string_t> r_comments);
 };
 
 #endif // MAINWINDOW_H

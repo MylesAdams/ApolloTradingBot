@@ -1,7 +1,7 @@
 // File: watson.cpp
 // Written by ANDREW LAUX
 
-#include "watson.h"
+#include "Watson.h"
 
 const double WATSON_LOWEST_VAL = .5;
 
@@ -20,6 +20,11 @@ Apollo::Watson::Watson(utility::string_t user, utility::string_t pass)
     web::uri_builder builder(U("/v3/tone"));                            
     builder.append_query(U("version"), U("2017-09-21"));
     builder.append_query(U("sentences"), U("false"));
+
+    // Check that uri is valid.
+    if (!builder.is_valid()) throw std::invalid_argument("URI is invalid.");
+
+    // Build and set URI in request.
     req.set_request_uri(builder.to_string());
 }
 
@@ -100,8 +105,15 @@ web::json::value Apollo::Watson::toneToJson(const utility::string_t & tone_input
 }
 
 // Function writes tone sentiment to file.
-void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const utility::string_t & file_name)
+void Apollo::Watson::toneToFile(utility::string_t & tone_input, const utility::string_t & file_name)
 {
+    if (tone_input.size() >= 128000)
+    {
+        std::string tempStr = utility::conversions::to_utf8string(tone_input);
+        tempStr = tempStr.substr(0, 127999);
+        tone_input = utility::conversions::to_string_t(tempStr);
+    }
+
     // Call toneToJson to get json object.
     web::json::value json_sentiment = toneToJson(tone_input);
 
@@ -151,6 +163,7 @@ void Apollo::Watson::toneToFile(const utility::string_t & tone_input, const util
     rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
     doc.Accept(writer);
     out.close();
+
 }
 
 // Helper function rates tone. 1 for pos, 0 for neutral, -1 for neg.

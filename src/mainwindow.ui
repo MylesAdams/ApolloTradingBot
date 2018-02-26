@@ -74,6 +74,9 @@
        <property name="toolTip">
         <string>BTC</string>
        </property>
+       <property name="statusTip">
+        <string>bitcoin</string>
+       </property>
       </item>
       <item>
        <property name="text">
@@ -81,6 +84,9 @@
        </property>
        <property name="toolTip">
         <string>BCH</string>
+       </property>
+       <property name="statusTip">
+        <string>btc</string>
        </property>
       </item>
       <item>
@@ -90,6 +96,9 @@
        <property name="toolTip">
         <string>ETH</string>
        </property>
+       <property name="statusTip">
+        <string>ethereum</string>
+       </property>
       </item>
       <item>
        <property name="text">
@@ -97,6 +106,9 @@
        </property>
        <property name="toolTip">
         <string>LTC</string>
+       </property>
+       <property name="statusTip">
+        <string>litecoin</string>
        </property>
       </item>
      </widget>

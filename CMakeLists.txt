@@ -46,6 +46,7 @@ set(SOURCES
   src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
+  src/Reddit.cpp
 )
 
 # Put any header files you create here:
@@ -63,11 +64,10 @@ set(HEADERS
   src/Comment.h
   src/RequestParameter.h
   src/ScraperTarget.h
-  src/RedditOauth.h
-  src/RedditOauth.cpp
   src/BadTargetException.h
   src/BadStatusException.h
   src/BadResourceException.h
+  src/Reddit.h
 )
 
 set(INCLUDES
@@ -112,4 +112,4 @@ enable_testing()
 add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
 target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
 target_include_directories(TwitterTester PRIVATE ${INCLUDES})
-add_test(TWitterSignatureGeneration TwitterTester)
+add_test(TwitterSignatureGeneration TwitterTester)
