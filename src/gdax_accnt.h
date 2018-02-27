@@ -7,11 +7,13 @@
 
 //Derived class: GdaxAccnt
 class GdaxAccnt : public ExchangeAccnt {
-private:
+
+private: // Private data members.
 	string_t key;
 	string_t passphrase;
 	string_t secret;
-public:
+
+public: // Public methods.
 	GdaxAccnt() :
 		ExchangeAccnt(U("Gdax"), U("https://api.gdax.com")),
 		key(U("")),

@@ -3,15 +3,13 @@
 
 #ifndef coin_h
 #define coin_h
-#include <cpprest\http_client.h>
-
-// Define namespace.
-using namespace utility;
+#include <cpprest/http_client.h>
 
 //Class: Coin
 class coin {
-public:
-	string_t coin_id;
+
+public: // Data members.
+	utility::string_t coin_id;
 	double amount;
 };
 

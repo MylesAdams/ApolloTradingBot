@@ -1,7 +1,0 @@
-[Document tones]
-Joy:0.647418
-[Sentence tone frequencies]
-Joy:5
-Confident:2
-Tentative:3
-Analytical:1

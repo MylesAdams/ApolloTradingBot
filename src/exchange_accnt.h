@@ -19,7 +19,6 @@ public:
 	ExchangeAccnt() :id(U("")), url(U("")) {}
 	ExchangeAccnt(string_t id, string_t url) :id(id), url(url) {}
 	virtual bool isActive() {}
-	std::vector<
 };
 
 #endif // !exchange_accnt.h
