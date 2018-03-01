@@ -9,17 +9,17 @@
 class GdaxAccnt : public ExchangeAccnt {
 
 private: // Private data members.
-	string_t key;
-	string_t passphrase;
-	string_t secret;
+    string_t key;                           // API key tied to account.
+    string_t passphrase;                    // Passphrass from Gdax.
+    string_t secret;                        // Secreat from Gdax.
+
+private: // Private data members.
 
 public: // Public methods.
-	GdaxAccnt() :
-		ExchangeAccnt(U("Gdax"), U("https://api.gdax.com")),
-		key(U("")),
-		passphrase(U("")),
-		secret(U("")){}
-	bool isActive() override;
+    GdaxAccnt();
+    bool isActive() override;
+    void connect() override;
+    
 };
 
 #endif // !gdax_accnt_h

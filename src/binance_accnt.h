@@ -8,8 +8,7 @@
 //Derived class: BinanceAccnt
 class BinanceAccnt : public ExchangeAccnt {
 public:
-	BinanceAccnt() :ExchangeAccnt("Binance", "https://api.gdax.com") {}
-	void connect() override;
+    BinanceAccnt() :ExchangeAccnt("Binance", "https://api.gdax.com") {}
 };
 
 #endif // !gdax_accnt_h

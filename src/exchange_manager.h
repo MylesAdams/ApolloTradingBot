@@ -7,19 +7,15 @@
 #include"kucoin_accnt.h"
 #include"gdax_accnt.h"
 #include"binance_accnt.h"
-#include"NotFoundException.h"
-#include"vector"
 
 //Manager Class: ExchangeManager
 class ExchangeManager {
-public:
-	KucoinAccnt kucoin;
-	GdaxAccnt gdax;
-	BinanceAccnt binance;
-public:
-	std::vector<std::string> getInactive();
-	std::vector<std::string> getActive();
-	ExchangeAccnt* getById(std::string id);
+
+public: // Singleton data members.
+    static KucoinAccnt kucoin;
+    static GdaxAccnt gdax;
+    static BinanceAccnt binance;
+
 };
 
 #endif // !exchange_manager.h

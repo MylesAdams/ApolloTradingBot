@@ -5,5 +5,5 @@
 
 //Function: connect
 void KucoinAccnt::connect() {
-	//Needs code to connect to API.
+    //Needs code to connect to API.
 }
