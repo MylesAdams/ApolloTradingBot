@@ -6,9 +6,6 @@
 #include"exchange_accnt.h"
 
 //Derived class: BinanceAccnt
-class BinanceAccnt : public ExchangeAccnt {
-public:
-    BinanceAccnt() :ExchangeAccnt("Binance", "https://api.gdax.com") {}
-};
+
 
 #endif // !gdax_accnt_h

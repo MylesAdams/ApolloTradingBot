@@ -8,18 +8,19 @@
 //Derived class: GdaxAccnt
 class GdaxAccnt : public ExchangeAccnt {
 
-private: // Private data members.
-    string_t key;                           // API key tied to account.
-    string_t passphrase;                    // Passphrass from Gdax.
-    string_t secret;                        // Secreat from Gdax.
-
-private: // Private data members.
+private: // Private data.
+    string_t key;
+    string_t passphrase;
+    string_t secret;
 
 public: // Public methods.
     GdaxAccnt();
-    bool isActive() override;
+    bool hasCredentials() override;
     void connect() override;
-    
+    void setCredentials(string_t key, string_t secret, string_t passphrase) override;
+
+private: // Private methods.
+    void setCredentials(string_t key, string_t secret) override { assert(0); } // For Kucoin and Binance only.
 };
 
 #endif // !gdax_accnt_h

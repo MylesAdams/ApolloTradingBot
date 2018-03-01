@@ -7,8 +7,6 @@
 
 //Derived class: KucoinAccnt
 class KucoinAccnt : public ExchangeAccnt {
-public:
-    KucoinAccnt() :ExchangeAccnt("Kucoin", "https://api.kucoin.com") {}
 };
 
 #endif // kucoin_accnt.h

@@ -6,6 +6,8 @@
 #include<cpprest/http_client.h>
 #include<openssl/hmac.h>
 #include<vector>
+#include<assert.h>
+#include<exception>
 
 // Define namespace.
 using namespace utility;
@@ -17,17 +19,22 @@ public: // Public data members.
     string_t url;
     string_t id;
 
-protected: // Protected data members.
-    bool connected_state;
+protected: // Private data.
+    bool connected;
 
 public: // Public methods.
-    ExchangeAccnt() :id(U("")), url(U("")), connected_state(false) {}
-    ExchangeAccnt(string_t id, string_t url) :id(id), url(url), connected_state(false) {}
-    inline bool isConnected() { return this->connected_state; }
+    ExchangeAccnt() : id(U("")), url(U("")), connected(0) {};
+    ExchangeAccnt(string_t id, string_t url) : id(id), url(url), connected(0) {}
+    inline bool isConnected() { return this->connected; }
 
-protected: // Virtuals functions.
-    virtual bool isActive() {}
-    virtual void connect() {}
+protected: // Virtuals private methods.
+    virtual bool hasCredentials() = 0;
+
+public: // Virtual public methods.
+    virtual void setCredentials(string_t key, string_t secret, string_t passphrase) = 0;
+    virtual void setCredentials(string_t key, string_t secret) = 0;
+    virtual void connect() = 0;
+    virtual ~ExchangeAccnt() {};
     
 };
 

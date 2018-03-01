@@ -5,14 +5,11 @@
 
 // Default constructor 
 GdaxAccnt::GdaxAccnt() :
-    ExchangeAccnt(U("Gdax"), U("https://api.gdax.com")),
-    key(U("")),
-    passphrase(U("")),
-    secret(U("")) {
+    ExchangeAccnt(U("Gdax"), U("https://api-public.sandbox.gdax.com")) {
 }
 
-// Fucntion: isActive 
-bool GdaxAccnt::isActive() {
+// Fucntion: hasCredentials
+bool GdaxAccnt::hasCredentials() {
 
     // Exchange is considered access if credentials are not empty.
     return (!key.empty() && !passphrase.empty() && !secret.empty());
@@ -20,6 +17,12 @@ bool GdaxAccnt::isActive() {
 
 // Function: connect 
 void GdaxAccnt::connect() {
+
+    // If function was invoked without all credentials, throw exception.
+    if (!this->hasCredentials()) throw std::invalid_argument("Cannot connect with missing credentials.");
+
+    // Temp connectivity boolean.
+    bool connectivity = false;
 
     // Prepare pre-hash string.
     string_t request = U("/accounts");
@@ -34,7 +37,7 @@ void GdaxAccnt::connect() {
     }
 
     // Decode base64 secret.
-    std::vector<unsigned char> decoded_secret_vec = utility::conversions::from_base64(secret);
+    std::vector<unsigned char> decoded_secret_vec = utility::conversions::from_base64(this->secret);
 
     // Dump decoded_secret into byte arry.
     unsigned char* decoded_secret_ary = new unsigned char[decoded_secret_vec.size()];
@@ -74,16 +77,24 @@ void GdaxAccnt::connect() {
     // Create client.
     web::http::client::http_client gdax_client(this->url);
 
-    
-
-    // Get response from server.
+    // Check connectivity.
     pplx::task<web::http::http_response> gdax_call = gdax_client.request(req);
-    gdax_call.then([this](web::http::http_response respose) {
+    gdax_call.then([&connectivity](web::http::http_response respose) {
+        if (respose.status_code() == web::http::status_codes::OK) connectivity = true;
+        else connectivity = false;
+    }).wait();
 
-        // Check response status.
-        if (respose.status_code() != web::http::status_codes::OK) this->
+    // Modify state boolean in base class.
+    this->connected = connectivity;
+}
 
-    });
+// Public method: setCredentials - Correct overload for Gdax.
+void GdaxAccnt::setCredentials(string_t key, string_t secret, string_t passphrase) {
+
+    // Set credentials
+    this->key = key;
+    this->secret = secret;
+    this->passphrase = passphrase;
 }
 
 
