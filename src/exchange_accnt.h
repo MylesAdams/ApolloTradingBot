@@ -4,6 +4,7 @@
 #ifndef exchange_accnt_h
 #define exchange_accnt_h
 #include<cpprest/http_client.h>
+#include<cpprest/json.h>
 #include<openssl/hmac.h>
 #include<vector>
 #include<assert.h>
