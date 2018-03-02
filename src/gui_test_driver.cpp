@@ -10,7 +10,7 @@
 int main() {
 
     // Declare a pointer to an exchange account.
-    ExchangeAccnt* ptr = new GdaxAccnt();
+    ExchangeAccnt* ptr = new Apollo::Exchanges::GdaxAccnt();
     std::cout << "ExchangeAccnt pointer set to a GdaxAccnt object:" << std::endl;
 
     // Print out exchange info.

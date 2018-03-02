@@ -5,22 +5,31 @@
 #define gdax_accnt_h
 #include"exchange_accnt.h"
 
-//Derived class: GdaxAccnt
-class GdaxAccnt : public ExchangeAccnt {
+// Define namespace Apollo::Exchanges
+namespace Apollo {
+    namespace Exchanges {
 
-private: // Private data.
-    string_t key;
-    string_t passphrase;
-    string_t secret;
+        //Derived class: GdaxAccnt
+        class GdaxAccnt : public ExchangeAccnt {
 
-public: // Public methods.
-    GdaxAccnt();
-    bool hasCredentials() override;
-    void connect() override;
-    void setCredentials(string_t key, string_t secret, string_t passphrase) override;
+        private: // Private data.
+            utility::string_t key;
+            utility::string_t passphrase;
+            utility::string_t secret;
 
-private: // Private methods.
-    void setCredentials(string_t key, string_t secret) override { assert(0); } // For Kucoin and Binance only.
-};
+        public: // Public methods.
+            GdaxAccnt();
+            bool hasCredentials() override;
+            void update() override;
+            void connect() override;
+            void clearCredentials() override;
+            void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override;
+
+        private: // Private methods.
+            void setCredentials(utility::string_t key, utility::string_t secret) override { assert(0); } // For Kucoin and Binance only.
+        };
+    }
+}
+
 
 #endif // !gdax_accnt_h

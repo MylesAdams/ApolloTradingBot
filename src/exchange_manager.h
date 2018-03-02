@@ -12,9 +12,7 @@
 class ExchangeManager {
 
 public: // Singleton data members.
-    static KucoinAccnt kucoin;
-    static GdaxAccnt gdax;
-    static BinanceAccnt binance;
+    
 
 };
 

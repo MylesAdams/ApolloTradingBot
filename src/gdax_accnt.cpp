@@ -3,20 +3,32 @@
 
 #include"gdax_accnt.h"
 
-// Default constructor 
-GdaxAccnt::GdaxAccnt() :
+// -------------------
+// Default constructor
+// -------------------
+Apollo::Exchanges::GdaxAccnt::GdaxAccnt() :
     ExchangeAccnt(U("Gdax"), U("https://api-public.sandbox.gdax.com")) {
 }
 
-// Fucntion: hasCredentials
-bool GdaxAccnt::hasCredentials() {
+// -----------------------------
+// Public method: hasCredentials
+// -----------------------------
+bool Apollo::Exchanges::GdaxAccnt::hasCredentials() {
 
     // Exchange is considered to have credentials if the following are all not empty.
     return (!key.empty() && !passphrase.empty() && !secret.empty());
 }
 
-// Function: connect 
-void GdaxAccnt::connect() {
+// ---------------------
+// Public method: update
+// ---------------------
+void Apollo::Exchanges::GdaxAccnt::update() {
+}
+
+// -----------------
+// Function: connect
+// -----------------
+void Apollo::Exchanges::GdaxAccnt::connect() {
 
     // If function was invoked without all credentials, throw exception.
     if (!this->hasCredentials()) throw std::invalid_argument("Cannot connect with missing credentials.");
@@ -25,10 +37,10 @@ void GdaxAccnt::connect() {
     bool connectivity = false;
 
     // Prepare pre-hash string.
-    string_t request = U("/accounts");
-    string_t method = U("GET");
-    string_t timestamp = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp()));
-    string_t prehash = timestamp + method + request;
+    utility::string_t request = U("/accounts");
+    utility::string_t method = U("GET");
+    utility::string_t timestamp = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp()));
+    utility::string_t prehash = timestamp + method + request;
 
     // Dump prehash into byte vector.
     unsigned char* prehash_ary = new unsigned char[prehash.size()];
@@ -57,7 +69,7 @@ void GdaxAccnt::connect() {
     }
 
     // Encode signature in base64.
-    string_t coded_signature = conversions::to_base64(signature);
+    utility::string_t coded_signature = utility::conversions::to_base64(signature);
 
     // Delete allocated memory.
     delete[]decoded_secret_ary;
@@ -74,7 +86,6 @@ void GdaxAccnt::connect() {
     req.headers().add(U("CB-ACCESS-SIGN"), coded_signature);          // Sign header.
     req.headers().add(U("CB-ACCESS-TIMESTAMP"), timestamp);           // Timestamp header.
     req.headers().add(U("CB-ACCESS-PASSPHRASE"), this->passphrase);   // Passphrase header.
-    string_t resulting_req = req.to_string(); 
   
     // Create client.
     web::http::client::http_client gdax_client(this->url);
@@ -93,13 +104,20 @@ void GdaxAccnt::connect() {
     this->connected = connectivity;
 }
 
+// ---------------------------------------------------------
 // Public method: setCredentials - Correct overload for Gdax.
-void GdaxAccnt::setCredentials(string_t key, string_t secret, string_t passphrase) {
-
-    // Set credentials
+// ---------------------------------------------------------
+void Apollo::Exchanges::GdaxAccnt::setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) {
     this->key = key;
     this->secret = secret;
     this->passphrase = passphrase;
+}
+
+// -------------------------------
+// Public method: clearCredentials
+// -------------------------------
+void Apollo::Exchanges::GdaxAccnt::clearCredentials() {
+    setCredentials(U(""), U(""), U(""));
 }
 
 

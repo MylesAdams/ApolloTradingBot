@@ -5,13 +5,19 @@
 #define coin_h
 #include <cpprest/http_client.h>
 
-//Class: Coin
-class coin {
+//Define namespace Apollo::Exchanges::Coin
+namespace Apollo {
+    namespace Exchanges {
 
-public: // Data members.
-    utility::string_t coin_id;
-    double amount;
-};
+        //Class: Coin
+        class Coin {
+
+        public: // Data members.
+            utility::string_t coin_id;
+            double amount;
+        };
+    }
+}
 
 #endif // !coin.h
 
