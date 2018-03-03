@@ -5,8 +5,30 @@
 #define kucoin_accnt_h
 #include"exchange_accnt.h"
 
-//Derived class: KucoinAccnt
-class KucoinAccnt : public ExchangeAccnt {
-};
+// Define namespace Apollo::Exchanges::KucoinAccnt
+namespace Apollo {
+    namespace Exchanges {
+
+        //Derived class: KucoinAccnt
+        class KucoinAccnt : public ExchangeAccnt {
+
+        private: // Private data.
+            utility::string_t key;
+            utility::string_t secret;
+
+        public: // Public methods.
+            KucoinAccnt();
+            bool hasCredentials() override;
+            void update() override;
+            void connect() override;
+            void clearCredentials() override;
+            void setCredentials(utility::string_t key, utility::string_t secret) override; // Correct overload for Kucoin.
+
+        private: // Private methods.
+            void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override { assert(0); } // For GDAX only.
+
+        };
+    }
+}
 
 #endif // kucoin_accnt.h

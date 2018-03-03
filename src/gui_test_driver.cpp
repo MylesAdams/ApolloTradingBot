@@ -5,13 +5,14 @@
 #ifdef  test_gui
 #include <iostream>
 #include "gdax_accnt.h"
+#include "kucoin_accnt.h"
 
 // Execute main.
 int main() {
 
     // Declare a pointer to an exchange account.
-    ExchangeAccnt* ptr = new Apollo::Exchanges::GdaxAccnt();
-    std::cout << "ExchangeAccnt pointer set to a GdaxAccnt object:" << std::endl;
+    Apollo::Exchanges::ExchangeAccnt* ptr = new Apollo::Exchanges::GdaxAccnt();
+    ucout << U("ExchangeAccnt pointer set to a GdaxAccnt object:\n");
 
     // Print out exchange info.
     ucout << ptr->id << U(" \"") << ptr->url << U("\"  ");
@@ -42,12 +43,29 @@ int main() {
 
     // Print out exchange info.
     ucout << ptr->id << U(" \"") << ptr->url << U("\"  ");
-    if (ptr->isConnected()) ucout << U("Connected\n");
-    else ucout << U("Failed\n");
+    if (ptr->isConnected()) ucout << U("Connected\n\n");
+    else ucout << U("Failed\n\n");
+
+    // Update GDAX account.
+    ucout << U("Updating Gdax account.\n");
+    try { ptr->update(); }
+    catch (web::json::json_exception e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    // Print coins from account.
+    for (auto i : ptr->coins_vec) {
+        ucout << i.coin_id << U(": ");
+        ucout << i.amount << U("\n");
+    }
+
+    // Creating pointer to KucoinAccnt
+    Apollo::Exchanges::ExchangeAccnt* ptr2 = new Apollo::Exchanges::KucoinAccnt();
+    ucout << U("Creating pointer to KucoinAccnt object: \n");
 
     // Exit program successfully.
-    std::cout << "Press enter to exit program . . .";
-    std::cin.get();
+    ucout << U("\n Press enter to exit program . . .");
+    ucin.get();
     return 0;
 }
 

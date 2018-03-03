@@ -5,6 +5,7 @@
 #define exchange_accnt_h
 
 #include"coin.h"
+#include"BadStatusException.h"
 
 #include<cpprest/http_client.h>
 #include<cpprest/json.h>
@@ -22,7 +23,7 @@ namespace Apollo {
         class ExchangeAccnt {
 
         public: // Public data members.
-            std::vector<Coin> coins;
+            std::vector<Coin> coins_vec;
             utility::string_t url;
             utility::string_t id;
 

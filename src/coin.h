@@ -15,6 +15,10 @@ namespace Apollo {
         public: // Data members.
             utility::string_t coin_id;
             double amount;
+
+        public: // Public methods.
+            Coin() : coin_id(U("")), amount(0) {}
+            inline bool isOwned() { return amount; }
         };
     }
 }
