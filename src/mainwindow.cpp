@@ -3,6 +3,7 @@
 #include "Twitter.h"
 #include "Watson.h"
 #include "Comment.h"
+#include "GDAXPrice.h"
 
 #include <QTimer>
 #include <rapidjson/document.h>
@@ -10,6 +11,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <ctime>
 #include <vector>
@@ -43,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
 
     timerStarted = false;
+    counter = 5;
+    currentPrice = 0;
 }
 
 MainWindow::~MainWindow()
@@ -56,9 +60,11 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     std::cout << "Query:\t" << currentItem->toolTip().toStdString() << std::endl;
 
     twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
-    fourchanBot->setSearchQuery(currentItem->statusTip().toStdString());
-    redditBot->setSubreddit(utility::conversions::to_string_t(currentItem->toolTip().toStdString()));
-
+    std::cout << "Search query set for Twitter" << std::endl;
+    fourchanBot->setSearchQuery(currentItem->toolTip().toStdString());
+    std::cout << "Search query set for 4Chan" << std::endl;
+    redditBot->setSubreddit(utility::conversions::to_string_t(currentItem->statusTip().toStdString()));
+    std::cout << "Search query set for Reddit" << std::endl;
 
     updateData();
     updatePlot();
@@ -67,7 +73,7 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
         QTimer *updateData = new QTimer(this);
         connect(updateData, SIGNAL(timeout()), this, SLOT(updateData()));
-        updateData->start(30000);
+        updateData->start(6000);
         timerStarted = true;
     }
 }
@@ -122,42 +128,69 @@ void MainWindow::updatePlot()
 
             qy_pos.append(doc[ndx]["PosRating"].GetDouble());
             qy_neg.append(doc[ndx]["NegRating"].GetDouble());
+            std::cout << std::to_string(doc[ndx]["Time"].GetDouble()) << " | " << std::to_string(doc[ndx]["PosRating"].GetDouble()) << " | " <<  std::to_string(doc[ndx]["NegRating"].GetDouble()) << std::endl;
         }
 
         json_file.close();
         normalizeGraphs();
-        if (upper > 15)
-            ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
-        else
-        {
-            if ((qx[qx.size() -1] - TEN_MIN) > qx[0])
-                ui->plot->xAxis->setRange(qx[0], qx[qx.size() - 1]);
-            else
-                ui->plot->xAxis->setRange(qx[0], qx[0] + TEN_MIN);
+        ui->plot->xAxis->setRange(qx[qx.size() - 1] - TEN_MIN, qx[qx.size() - 1] + 10);
+//        if (upper > 15)
+//            ui->plot->xAxis->setRange(qx[0], qx[NUMBER_OF_PLOT - 1]);
+//        else
+//        {
+////            if ((qx[qx.size() -1] - TEN_MIN) > qx[0])
+////                ui->plot->xAxis->setRange(qx[0], qx[qx.size() - 1]);
+////            else
+////                ui->plot->xAxis->setRange(qx[0], qx[0] + TEN_MIN);
 
-        }
+////            std::cout << qx[qx.size() - 1] << " | " << qx[qx.size() - 1] + TEN_MIN << std::endl;
+//            ui->plot->xAxis->setRange(qx[qx.size() - 1], qx[qx.size() - 1] + TEN_MIN);
+//        }
         plot();
     }
 }
 
 void MainWindow::updateData()
 {
-    std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
-    std::replace(filename.begin(), filename.end(), ' ', '_');
+    std::cout << this->counter << std::endl;
+    std::stringstream price;
+    double priceDouble = Apollo::getAskingPriceGdax(utility::conversions::to_string_t(currentItem->toolTip().toStdString()));
+//    currentPrice.setf(std::fixed, std::floatField);
+    price.precision(2);
+    price << std::fixed;
+    price << "$" << priceDouble;
 
-    std::cout << filename << std::endl;
-    auto t_comments = twitterBot->getData();
-    std::cout << "Twitter Size: " << t_comments.size() << std::endl;
-    auto f_comments = fourchanBot->getData();
-    std::cout << "4Chan Size: " << f_comments.size() << std::endl;
-    redditBot->readComments();
-    auto r_comments = redditBot->getComments();
-    std::cout << "Reddit Size: " << r_comments.size() << std::endl;
+    if (priceDouble > this->currentPrice)
+        ui->priceText->setTextColor(Qt::GlobalColor::green);
+    else if (priceDouble < this->currentPrice)
+        ui->priceText->setTextColor(Qt::GlobalColor::red);
+    this->currentPrice = priceDouble;
 
-    utility::string_t tone_input = commentsToString(t_comments, f_comments, r_comments);
-    watsonAnalyzer->toneToFile(tone_input, utility::conversions::to_string_t(filename));
+    ui->priceText->setText(QString::fromStdString(price.str()));
+    std::cout << ui->priceText->toPlainText().toStdString() << std::endl;
 
-    updatePlot();
+    if (this->counter == 5)
+    {
+        std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
+        std::replace(filename.begin(), filename.end(), ' ', '_');
+
+        std::cout << filename << std::endl;
+        auto t_comments = twitterBot->getData();
+        std::cout << "Twitter Size: " << t_comments.size() << std::endl;
+        auto f_comments = fourchanBot->getData();
+        std::cout << "4Chan Size: " << f_comments.size() << std::endl;
+        redditBot->readComments();
+        auto r_comments = redditBot->getComments();
+        std::cout << "Reddit Size: " << r_comments.size() << std::endl;
+
+        utility::string_t tone_input = commentsToString(t_comments, f_comments, r_comments);
+        watsonAnalyzer->toneToFile(tone_input, utility::conversions::to_string_t(filename));
+        counter = 0;
+        updatePlot();
+    }
+    else
+        plot();
+    this->counter++;
 }
 
 void MainWindow::setupWidgets()
