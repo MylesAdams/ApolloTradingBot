@@ -30,6 +30,8 @@ private:
     QVector<double> qy_pos, qy_neg, /*f_qy_pos, f_qy_neg, r_qy_pos, r_qy_neg,*/ qx;
     QListWidgetItem* currentItem;
     bool timerStarted;
+    int counter;
+    double currentPrice;
 
     Apollo::Bot::Twitter* twitterBot;
     Apollo::Bot::Reddit* redditBot;

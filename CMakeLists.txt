@@ -47,6 +47,7 @@ set(SOURCES
   src/Twitter.cpp
   src/watson.cpp
   src/Reddit.cpp
+  src/GDAXPrice.cpp
 )
 
 # Put any header files you create here:
@@ -68,6 +69,7 @@ set(HEADERS
   src/BadStatusException.h
   src/BadResourceException.h
   src/Reddit.h
+  src/GDAXPrice.h
 )
 
 set(INCLUDES

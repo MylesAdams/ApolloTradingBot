@@ -30,7 +30,7 @@
       <x>790</x>
       <y>10</y>
       <width>200</width>
-      <height>580</height>
+      <height>521</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -152,6 +152,32 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QTextEdit" name="priceText">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>540</y>
+      <width>200</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>32</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="documentTitle">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string/>
+    </property>
    </widget>
   </widget>
  </widget>
