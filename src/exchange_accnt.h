@@ -15,6 +15,7 @@
 #include<assert.h>
 #include<exception>
 
+
 // Define namespace Apollo::Exchanges::ExchangeAccnt
 namespace Apollo {
     namespace Exchanges {
@@ -44,9 +45,12 @@ namespace Apollo {
             virtual void connect() = 0;
             virtual ~ExchangeAccnt() {};
 
+            //friend std::function<void(web::http::http_response response)> testResponse();
+
         };
     }
 }
+
 
 
 #endif // !exchange_accnt.h

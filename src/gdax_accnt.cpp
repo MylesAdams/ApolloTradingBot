@@ -85,26 +85,23 @@ void Apollo::Exchanges::GdaxAccnt::update() {
 
                                                                       // Create client.
     web::http::client::http_client gdax_client(this->url);
+    
+    // Make call to server.
+    pplx::task<web::http::http_response> gdax_call = gdax_client.request(req);
+    web::http::http_response response = gdax_call.get();
 
     // Check connectivity.
-    pplx::task<web::http::http_response> gdax_call = gdax_client.request(req);
-    gdax_call.then([](web::http::http_response response) {
-        if (response.status_code() != web::http::status_codes::OK) {
-            std::string msg = "Status code from Gdax server was not OK: ";
-            std::string status = std::to_string(response.status_code());
-            throw Apollo::Bot::BadStatusException(msg, status);
-        }
+    if (response.status_code() != web::http::status_codes::OK) {
+        this->connected = false;
+        std::string msg = "Status code from Gdax server was not OK: ";
+        std::string status = std::to_string(response.status_code());
+        throw Apollo::Bot::BadStatusException(msg, status);
+    }
 
-        //Extract json object.
-        return response.extract_json();
-   
-    // Get extracted json.
-    }).then([&temp_json](web::json::value extracted) {
-    
-        //Assign json.
-        temp_json = extracted;
-
-    // Get remainign I/O.
+    // Extract Json.
+    pplx::task<web::json::value> get_json = response.extract_json();
+    get_json.then([&temp_json](web::json::value json) {
+        temp_json = json;
     }).wait();
 
     // Process coins from json.
@@ -219,5 +216,4 @@ void Apollo::Exchanges::GdaxAccnt::setCredentials(utility::string_t key, utility
 void Apollo::Exchanges::GdaxAccnt::clearCredentials() {
     setCredentials(U(""), U(""), U(""));
 }
-
 

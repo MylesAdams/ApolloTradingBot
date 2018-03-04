@@ -59,9 +59,13 @@ int main() {
         ucout << i.amount << U("\n");
     }
 
-    // Creating pointer to KucoinAccnt
+    // Creating pointer to KucoinAccnt.
     Apollo::Exchanges::ExchangeAccnt* ptr2 = new Apollo::Exchanges::KucoinAccnt();
-    ucout << U("Creating pointer to KucoinAccnt object: \n");
+    ucout << U("\nCreating pointer to KucoinAccnt object: \n");
+    
+    // Set credentials.
+    ucout << U("Setting credentials.\n");
+    ptr2->setCredentials(U("5a9b2d5e4922257665d3dbf8"), U("bcff527d-65fc-4f3e-b823-e2c05c30977c"));
 
     // Exit program successfully.
     ucout << U("\n Press enter to exit program . . .");

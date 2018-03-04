@@ -31,6 +31,8 @@ KuCoin
 ------
 user:LamboLand48@gmail.com
 pass:1234Shill
+api-key:5a9b2d5e4922257665d3dbf8
+secret:bcff527d-65fc-4f3e-b823-e2c05c30977c
 
 Bittrex
 -------
