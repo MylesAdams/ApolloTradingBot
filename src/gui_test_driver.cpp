@@ -67,6 +67,15 @@ int main() {
     ucout << U("Setting credentials.\n");
     ptr2->setCredentials(U("5a9b2d5e4922257665d3dbf8"), U("bcff527d-65fc-4f3e-b823-e2c05c30977c"));
 
+    // Attempt to connect.
+    try { ptr2->connect(); }
+    catch (std::exception &e) { std::cout << e.what() << std::endl; }
+
+    // Print out exchange info.
+    ucout << ptr2->id << U(" \"") << ptr2->url << U("\"  ");
+    if (ptr2->isConnected()) ucout << U("Connected\n\n");
+    else ucout << U("Failed\n\n");
+
     // Exit program successfully.
     ucout << U("\n Press enter to exit program . . .");
     ucin.get();
