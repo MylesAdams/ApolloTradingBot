@@ -61,20 +61,23 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     HMAC(EVP_sha256(), secret_ary, this->secret.size(), encoded_ary, encoded.size(), encrypted, &encrypted_length);
  
     // Hex encode encrypted output.
-    std::stringstream ss;
+    utility::string_t signature;
+    int integer;
+    wchar_t hextable[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     for (size_t i = 0; i < encrypted_length; i++) {
-        ss << std::hex << (int)encrypted[i];
+        integer = encrypted[i];
+        signature.push_back(hextable[0x0000000f & integer >> 4]);
+        signature.push_back(hextable[0x0000000f & integer]);
     }
-    utility::string_t signature = utility::conversions::to_string_t(ss.str());
 
     // Create request.
     web::http::http_request req(web::http::methods::GET);
-    req.set_request_uri(endpoint);
+    req.set_request_uri(this->url + endpoint);
     req.headers().set_content_type(U("application/json"));
     req.headers().add(U("KC-API-KEY"), this->key);
-    req.headers().add(U("KC-API-NONCE"), nonce);
+    req.headers().add(U("KC-API-NONCE"), utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("000"));
     req.headers().add(U("KC-API-SIGNATURE"), signature);
-    size_t len = signature.size();
+
 
     //Create client.
     web::http::client::http_client myclient(this->url);
@@ -97,7 +100,7 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     ucout << U("\n");
     ucout << nonce;
     ucout << req.to_string();
-    int a;
+ 
 }
 
 ///////////////////////////////////
