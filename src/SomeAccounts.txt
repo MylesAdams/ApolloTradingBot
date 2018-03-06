@@ -19,8 +19,13 @@ pass:1234Shill!
 
 Binance
 -------
+url:https://api.binance.com
 user:LamboLand48@gmail.com
 pass:1234SHILL
+auth-reset-key:I5BH4006YT4AZ2R5
+api-key:UwklPm1KR7gWGcJe3VoXy08ZQ6uw20M0kHjQEQhtjH2slcAQT8h1iPhR62JdAUK2
+secret:053l6cBRbvIqqRLayUlJby8yTLSl3Pt0vnjRerHMxH6kEfHhmJQTiHLl6l9fcnfN
+
 
 Poloniex 
 --------

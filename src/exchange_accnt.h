@@ -43,10 +43,7 @@ namespace Apollo {
             virtual void clearCredentials() = 0;
             virtual void update() = 0;
             virtual void connect() = 0;
-            virtual ~ExchangeAccnt() {};
-
-            //friend std::function<void(web::http::http_response response)> testResponse();
-
+            virtual ~ExchangeAccnt() {}
         };
     }
 }

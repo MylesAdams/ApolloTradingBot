@@ -31,7 +31,7 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     
     // Generate signature
     utility::string_t endpoint = U("/v1/user/info");
-    utility::string_t nonce = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("999");
+    utility::string_t nonce = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("000");
     utility::string_t prehash = endpoint + U("/") + nonce + U("/");
 
     // Convert prehash to vector of bytes.
@@ -74,6 +74,7 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     req.headers().add(U("KC-API-KEY"), this->key);
     req.headers().add(U("KC-API-NONCE"), nonce);
     req.headers().add(U("KC-API-SIGNATURE"), signature);
+    size_t len = signature.size();
 
     //Create client.
     web::http::client::http_client myclient(this->url);
@@ -93,7 +94,10 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     utility::string_t extracted = extract_task.get();
 
     ucout << extracted;
+    ucout << U("\n");
     ucout << nonce;
+    ucout << req.to_string();
+    int a;
 }
 
 ///////////////////////////////////
