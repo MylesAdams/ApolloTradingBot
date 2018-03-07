@@ -76,6 +76,10 @@ int main() {
     if (ptr2->isConnected()) ucout << U("Connected\n\n");
     else ucout << U("Failed\n\n");
 
+    // Atempt update.
+    try { ptr2->update(); }
+    catch (std::exception &e) { e.what(); }
+
     // Exit program successfully.
     ucout << U("\n Press enter to exit program . . .");
     ucin.get();
