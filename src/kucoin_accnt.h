@@ -15,6 +15,7 @@ namespace Apollo {
         private: // Private data.
             utility::string_t key;
             utility::string_t secret;
+            int num_pages;
 
         public: // Public methods.
             KucoinAccnt();

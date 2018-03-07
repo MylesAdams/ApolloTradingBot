@@ -7,7 +7,8 @@
 // Default constructor
 //////////////////////
 Apollo::Exchanges::KucoinAccnt::KucoinAccnt() :
-    ExchangeAccnt(U("Kucoin"), U("https://api.kucoin.com")) {
+    ExchangeAccnt(U("Kucoin"), U("https://api.kucoin.com")),
+    num_pages(0) {
 }
 
 /////////////////////////////////
@@ -72,7 +73,7 @@ void Apollo::Exchanges::KucoinAccnt::update() {
     req.set_request_uri(builder.to_string());
     req.headers().set_content_type(U("application/json"));
     req.headers().add(U("KC-API-KEY"), this->key);
-    req.headers().add(U("KC-API-NONCE"), utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("000"));
+    req.headers().add(U("KC-API-NONCE"), nonce);
     req.headers().add(U("KC-API-SIGNATURE"), signature);
 
 
@@ -86,17 +87,69 @@ void Apollo::Exchanges::KucoinAccnt::update() {
     // Check connectivity.
     if (response.status_code() == web::http::status_codes::OK) {
         this->connected = true;
+
+        // Extract string from json.
+        pplx::task<web::json::value> extract_task = response.extract_json();
+        web::json::value extracted = extract_task.get();
+        utility::string_t extrct_str = extracted.serialize();
+
+        auto total_val = extracted[U("data")][U("pageNos")];
+        this->num_pages = total_val.as_integer();
+
+        // Make a request for each page.
+        int page;
+        size_t entries_on_page;
+        for (int p = 0; p < this->num_pages; p++) {
+            page = p + 1;
+
+            // Create request for account balance by page.
+            querystring = U("limit=20&page=") + page;
+            nonce = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp()));
+            nonce = nonce + U("00") + utility::conversions::to_string_t(std::to_string(page));
+            prehash = endpoint + U("/") + nonce + U("/") + querystring;
+            std::vector<unsigned char> prehash_vec_temp;
+            for (size_t i = 0; i < prehash.size(); i++) { prehash_vec_temp.push_back(static_cast<unsigned char>(prehash[i])); }
+            encoded = utility::conversions::to_base64(prehash_vec_temp);
+            unsigned char* encoded_ary_temp = new unsigned char[encoded.size()];
+            for (size_t i = 0; i < encoded.size(); i++) { encoded_ary_temp[i] = static_cast<unsigned char>(encoded[i]); }
+            unsigned char* secret_ary_temp = new unsigned char[this->secret.size()];
+            for (size_t i = 0; i < this->secret.size(); i++) { secret_ary_temp[i] = static_cast<unsigned char>(secret[i]); }
+            unsigned char encrypted_temp[EVP_MAX_MD_SIZE];
+            HMAC(EVP_sha256(), secret_ary_temp, this->secret.size(), encoded_ary_temp, encoded.size(), encrypted_temp, &encrypted_length);
+            utility::string_t signature_temp;
+            for (size_t i = 0; i < encrypted_length; i++) {
+                integer = encrypted_temp[i];
+                signature_temp.push_back(hextable[0x0000000f & integer >> 4]);
+                signature_temp.push_back(hextable[0x0000000f & integer]);
+            }
+            web::http::http_request req_temp(web::http::methods::GET);
+            web::uri_builder builder_temp(endpoint);
+            builder_temp.append_query(U("limit=20"));
+            builder_temp.append_query(U("page=")+ page);
+            req_temp.set_request_uri(builder_temp.to_string());
+            req_temp.headers().set_content_type(U("application/json"));
+            req_temp.headers().add(U("KC-API-KEY"), this->key);
+            req_temp.headers().add(U("KC-API-NONCE"), nonce);
+            req_temp.headers().add(U("KC-API-SIGNATURE"), signature_temp);
+
+            // Make call to server.
+            pplx::task<web::http::http_response> call_task = myclient.request(req_temp);
+            web::http::http_response response_temp = call_task.get();
+
+            // Check response status.
+            if (response_temp.status_code() == web::http::status_codes::OK) {
+                pplx::task<web::json::value> temp_extract_task = response_temp.extract_json();
+                web::json::value temp_json = temp_extract_task.get();
+                entries_on_page = temp_json[U("data")][U("datas")].size();
+            }
+
+        }
     }
+
+    // Bad server response.
     else this->connected = false;
-
-    // Extract string from json.
-    pplx::task<utility::string_t> extract_task = response.extract_string();
-    utility::string_t extracted = extract_task.get();
-
-    ucout << extracted;
-    ucout << U("\n");
-    ucout << nonce;
-    ucout << req.to_string();
+    
+   
 }
 
 /////////////////////////
@@ -150,7 +203,7 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     req.set_request_uri(this->url + endpoint);
     req.headers().set_content_type(U("application/json"));
     req.headers().add(U("KC-API-KEY"), this->key);
-    req.headers().add(U("KC-API-NONCE"), utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("000"));
+    req.headers().add(U("KC-API-NONCE"), nonce);
     req.headers().add(U("KC-API-SIGNATURE"), signature);
 
 
@@ -167,14 +220,7 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     }
     else this->connected = false;
 
-    // Extract string from json.
-    pplx::task<utility::string_t> extract_task = response.extract_string();
-    utility::string_t extracted = extract_task.get();
-
-    ucout << extracted;
-    ucout << U("\n");
-    ucout << nonce;
-    ucout << req.to_string();
+    
  
 }
 
