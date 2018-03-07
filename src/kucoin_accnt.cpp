@@ -112,10 +112,10 @@ void Apollo::Exchanges::KucoinAccnt::update() {
             encoded = utility::conversions::to_base64(prehash_vec_temp);
             unsigned char* encoded_ary_temp = new unsigned char[encoded.size()];
             for (size_t i = 0; i < encoded.size(); i++) { encoded_ary_temp[i] = static_cast<unsigned char>(encoded[i]); }
-            unsigned char* secret_ary_temp = new unsigned char[this->secret.size()];
-            for (size_t i = 0; i < this->secret.size(); i++) { secret_ary_temp[i] = static_cast<unsigned char>(secret[i]); }
+            
             unsigned char encrypted_temp[EVP_MAX_MD_SIZE];
-            HMAC(EVP_sha256(), secret_ary_temp, this->secret.size(), encoded_ary_temp, encoded.size(), encrypted_temp, &encrypted_length);
+            encrypted_length = 0;
+            HMAC(EVP_sha256(), secret_ary, this->secret.size(), encoded_ary_temp, encoded.size(), encrypted_temp, &encrypted_length);
             utility::string_t signature_temp;
             for (size_t i = 0; i < encrypted_length; i++) {
                 integer = encrypted_temp[i];
