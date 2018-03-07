@@ -64,8 +64,9 @@ namespace Apollo
             //helper function for setting the state
             std::string setRandString()
             {
-                char randString[10];
-                for (int ndx = 0; ndx < sizeof(randString) - 1; ndx++)
+                std::string randString;
+                randString.resize(10);
+                for (int ndx = 0; ndx < randString.size(); ndx++)
                     randString[ndx] = 'A' + rand() % 26;
                 return randString;
             }
