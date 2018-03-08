@@ -40,7 +40,7 @@ find_package(cpprestsdk REQUIRED)
 set(SOURCES
   ${SOURCES}
   src/qcustomplot.cpp
-  src/main.cpp
+  # src/main.cpp
   src/mainwindow.cpp
   src/Bot.cpp
   src/FourChan.cpp
@@ -48,6 +48,8 @@ set(SOURCES
   src/watson.cpp
   src/Reddit.cpp
   src/GDAXPrice.cpp
+  src/TradingBot.cpp
+  src/PriceData.cpp
 )
 
 # Put any header files you create here:
@@ -70,6 +72,9 @@ set(HEADERS
   src/BadResourceException.h
   src/Reddit.h
   src/GDAXPrice.h
+  src/TradingBot.h
+  src/PriceData.h
+  src/PriceDataTarget.h
 )
 
 set(INCLUDES
@@ -105,9 +110,13 @@ source_group("Header files" FILES ${HEADERS})
 
 # It is unnecessary to link against the header files. The reason I added Headers is a hack to add the header
 # files to the IDE project so they appear while working in an IDE.
-add_executable(ApolloTradingBot ${SOURCES} ${HEADERS})
+add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
 target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
 target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
+
+add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
+target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
+target_link_libraries(PriceDataTest PRIVATE ${LIBRARIES})
 
 # Unit tests
 enable_testing()
