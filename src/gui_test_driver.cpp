@@ -1,7 +1,7 @@
 // File: gui_test_driver.cpp
 // Written by ANDREW LAUX
 
-#define test_gui 1
+#define test_gui 0
 #ifdef  test_gui
 #include <iostream>
 #include "gdax_accnt.h"
