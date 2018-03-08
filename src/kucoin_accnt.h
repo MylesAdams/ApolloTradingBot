@@ -26,6 +26,7 @@ namespace Apollo {
             void setCredentials(utility::string_t key, utility::string_t secret) override; // Correct overload for Kucoin.
 
         private: // Private methods.
+            web::http::http_response getResponse(utility::string_t endpoint, utility::string_t nonce, utility::string_t querystring = U(""));
             void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override { assert(0); } // For GDAX only.
 
         };

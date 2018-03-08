@@ -80,6 +80,12 @@ int main() {
     try { ptr2->update(); }
     catch (std::exception &e) { e.what(); }
 
+    // Print coins from account.
+    for (auto i : ptr2->coins_vec) {
+        ucout << i.coin_id << U(": ");
+        ucout << i.amount << U("\n");
+    }
+
     // Exit program successfully.
     ucout << U("\n Press enter to exit program . . .");
     ucin.get();
