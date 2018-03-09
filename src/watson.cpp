@@ -219,7 +219,7 @@ void Apollo::Watson::evaluator(web::json::value & json_sentiment, double & pos, 
 
         // Increment negative.
         else if (rating < 0) {
-            if (rating > neg) neg = rating;
+            if (rating < neg) neg = rating;
         }
     }
 
