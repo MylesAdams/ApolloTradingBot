@@ -265,7 +265,7 @@ void MainWindow::normalizeData(QVector<double>& vec)
     }
 }
 
-utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<std::string> r_comments)
+utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<utility::string_t> r_comments)
 {
     std::string str = "";
 
