@@ -40,7 +40,9 @@ int main()
 
     Apollo::Bot::PriceData priceBot;
     ucout << priceBot.full_request_path_ << std::endl;
-    std::cout << priceBot.requestPriceData() << std::endl;
+//    std::cout << priceBot.requestPriceData() << std::endl;
+
+    std::cout << priceBot.getIntervalAverage() << std::endl;
 
     return 0;
 

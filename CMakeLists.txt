@@ -50,6 +50,8 @@ set(SOURCES
   src/GDAXPrice.cpp
   src/TradingBot.cpp
   src/PriceData.cpp
+  src/TradingBot.cpp
+  src/TradingSession.cpp
 )
 
 # Put any header files you create here:
@@ -75,6 +77,8 @@ set(HEADERS
   src/TradingBot.h
   src/PriceData.h
   src/PriceDataTarget.h
+  src/TradingBot.h
+  src/TradingSession.h
 )
 
 set(INCLUDES

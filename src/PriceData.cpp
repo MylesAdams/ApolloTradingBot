@@ -12,14 +12,12 @@ using namespace web::http::experimental::listener;
 
 Apollo::Bot::PriceData::PriceData()
 {
-    this->highest_timestamp_seen_ =  "0";
-
     // Setup base url for cryptocompare's minutely OHLCV API
-    Apollo::Bot::PriceDataTarget target(utility::conversions::to_string_t(this->RESOUCE_URL_), utility::conversions::to_string_t(this->DEFAULT_REQUEST_PATH_), web::http::methods::GET);
+    Apollo::Bot::PriceDataTarget target(utility::conversions::to_string_t(this->RESOUCE_URL_), utility::conversions::to_string_t(this->DEFAULT_INTERVAL_REQUEST_PATH_), web::http::methods::GET);
     this->price_data_target_ = target;
 
     // Set request to default 12 hour average for BTC -> USD
-    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS);
+    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_);
     updateFullRequestPath();
 
 }
@@ -30,7 +28,6 @@ Apollo::Bot::PriceData::~PriceData()
 
 void Apollo::Bot::PriceData::saveSettings()
 {
-    std::cout << "Hello" << std::endl;
 }
 
 std::string Apollo::Bot::PriceData::requestResponse(const ScraperTarget &target)
@@ -122,12 +119,7 @@ void Apollo::Bot::PriceData::setupRequest(std::string ticker_from, std::string t
     updateFullRequestPath();
 }
 
-void Apollo::Bot::PriceData::updateHighestTimestampSeen()
-{
-    time_t temp = utility::datetime::utc_timestamp();
-    if (temp - std::stoi(this->highest_timestamp_seen_)>= 60)
-        this->highest_timestamp_seen_ = temp - (temp % 60) + "";
-}
+
 
 void Apollo::Bot::PriceData::updateFullRequestPath()
 {
@@ -139,8 +131,10 @@ void Apollo::Bot::PriceData::updateFullRequestPath()
     this->full_request_path_ = builder.to_string();
 }
 
-std::string Apollo::Bot::PriceData::requestPriceData()
+std::string Apollo::Bot::PriceData::requestIntervalPriceData()
 {
+    //sample https://min-api.cryptocompare.com/data/histominute?fsym=ETH&tsym=USD&limit=1440&toTs=1520380800
+
     // Namespace.
     using namespace utility;                    // Common utilities like string conversions.
     using namespace web;                        // Common features like URIs.
@@ -168,11 +162,69 @@ std::string Apollo::Bot::PriceData::requestPriceData()
                                      }).wait();
 
     return response;
-
 }
 
+double Apollo::Bot::PriceData::getIntervalAverage()
+{
+    std::string json_as_string = requestIntervalPriceData();
 
+    rapidjson::Document doc;
+    doc.Parse(json_as_string);
 
+    double total_avgprice_x_vol = 0.0;
+    double total_vol = 0.0;
 
+    for (auto& minuteData : doc["Data"].GetArray())
+    {
+        total_avgprice_x_vol += ((minuteData["high"].GetDouble() + minuteData["low"].GetDouble() + minuteData["close"].GetDouble()) / 3) * minuteData["volumeto"].GetDouble();
+        total_vol += minuteData["volumeto"].GetDouble();
+    }
 
+    return (total_avgprice_x_vol / total_vol);
+}
 
+void Apollo::Bot::PriceData::updateInstantPriceRequestPath(std::string ticker)
+{
+    this->current_ticker_request_path_ = "/data/price?fsym=" + ticker + "&tsyms=BTC";
+}
+
+std::string Apollo::Bot::PriceData::requestLastPrice()
+{
+    // Namespace.
+    using namespace utility;                    // Common utilities like string conversions.
+    using namespace web;                        // Common features like URIs.
+    using namespace web::http;                  // Common HTTP functionality.
+    using namespace web::http::client;          // HTTP client features.
+    using namespace concurrency::streams;		// Asynchronous streams.
+
+    const utility::string_t METHOD(price_data_target_.request_method);
+    const utility::string_t CONTENT_TYPE(U("application/json"));
+
+    std::string response;
+
+    http_client client(this->RESOUCE_URL_);
+
+    http_request req(METHOD);
+    req.headers().set_content_type(CONTENT_TYPE);
+    req.set_request_uri(this->current_ticker_request_path_);
+
+    client.request(req).then([](http_response res)
+                             {
+                                 return res.extract_utf8string();
+                             }).then([&response](pplx::task<std::string> utf8str)
+                                     {
+                                         response = utf8str.get();
+                                     }).wait();
+
+    return response;
+}
+
+double Apollo::Bot::PriceData::getLastPrice()
+{
+    std::string json_as_string = requestLastPrice();
+
+    rapidjson::Document doc;
+    doc.Parse(json_as_string);
+
+    return doc["BTC"].GetDouble();
+}
