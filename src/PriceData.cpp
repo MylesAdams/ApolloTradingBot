@@ -18,7 +18,8 @@ Apollo::Bot::PriceData::PriceData()
 
     // Set request to default 12 hour average for BTC -> USD
     setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_);
-    updateFullRequestPath();
+	updateFullRequestPathInterval();
+	updateInstantPriceRequestPath(utility::conversions::to_utf8string(DEFAULT_TICKER_FROM_));
 
 }
 
@@ -69,14 +70,18 @@ void Apollo::Bot::PriceData::setTickerFrom(utility::string_t ticker_from, bool u
     {
         if (param.key == U("fsym"))
         {
-            param.value = utility::conversions::to_utf8string(ticker_from);
+            param.value = ticker_from;
             return;
         }
     }
-    this->price_data_target_.request_parameters.push_back(RequestParameter(U("fsym"), utility::conversions::to_utf8string(ticker_from)));
+    this->price_data_target_.request_parameters.push_back(RequestParameter(U("fsym"), ticker_from));
 
-    if (update_uri)
-        updateFullRequestPath();
+	if (update_uri)
+	{
+		updateInstantPriceRequestPath(utility::conversions::to_utf8string(ticker_from));
+		updateFullRequestPathInterval();
+	}
+		
 }
 
 void Apollo::Bot::PriceData::setTickerTo(utility::string_t ticker_to, bool update_uri = true)
@@ -85,14 +90,16 @@ void Apollo::Bot::PriceData::setTickerTo(utility::string_t ticker_to, bool updat
     {
         if (param.key == U("tsym"))
         {
-            param.value = utility::conversions::to_utf8string(ticker_to);
+            param.value = ticker_to;
             return;
         }
     }
-    this->price_data_target_.request_parameters.push_back(RequestParameter(U("tsym"), utility::conversions::to_utf8string(ticker_to)));
+    this->price_data_target_.request_parameters.push_back(RequestParameter(U("tsym"), ticker_to));
 
-    if (update_uri)
-        updateFullRequestPath();
+	// TODO: ADD EDITING TICKER_TO for INSTANT
+	if (update_uri)
+		updateFullRequestPathInterval();
+		
 }
 
 void Apollo::Bot::PriceData::setAveragePeriod(int time_in_hours, bool update_uri = true)
@@ -105,30 +112,31 @@ void Apollo::Bot::PriceData::setAveragePeriod(int time_in_hours, bool update_uri
             return;
         }
     }
-    this->price_data_target_.request_parameters.push_back(RequestParameter(U("limit"), utility::conversions::to_utf8string(std::to_string(time_in_hours * 60))));
+    this->price_data_target_.request_parameters.push_back(RequestParameter(U("limit"), utility::conversions::to_string_t(std::to_string(time_in_hours * 60))));
 
     if (update_uri)
-        updateFullRequestPath();
+		updateFullRequestPathInterval();
 }
 
-void Apollo::Bot::PriceData::setupRequest(std::string ticker_from, std::string ticker_to, int time_in_hours)
+void Apollo::Bot::PriceData::setupRequest(utility::string_t ticker_from, utility::string_t ticker_to, int time_in_hours)
 {
     setTickerFrom(ticker_from, false);
     setTickerTo(ticker_to, false);
     setAveragePeriod(time_in_hours, false);
-    updateFullRequestPath();
+	updateFullRequestPathInterval();
+	updateInstantPriceRequestPath(utility::conversions::to_utf8string(ticker_from));
 }
 
 
 
-void Apollo::Bot::PriceData::updateFullRequestPath()
+void Apollo::Bot::PriceData::updateFullRequestPathInterval()
 {
     uri_builder builder;
     builder.set_path(this->price_data_target_.request_path);
     for (auto param : this->price_data_target_.request_parameters)
-        builder.append_query(utility::conversions::to_utf8string(param.key), utility::conversions::to_utf8string(param.value));
+        builder.append_query(param.key, param.value);
 
-    this->full_request_path_ = builder.to_string();
+    this->full_request_path_interval_ = utility::conversions::to_utf8string(builder.to_string());
 }
 
 std::string Apollo::Bot::PriceData::requestIntervalPriceData()
@@ -151,7 +159,7 @@ std::string Apollo::Bot::PriceData::requestIntervalPriceData()
 
     http_request req(METHOD);
     req.headers().set_content_type(CONTENT_TYPE);
-    req.set_request_uri(this->full_request_path_);
+    req.set_request_uri(utility::conversions::to_string_t(this->full_request_path_interval_));
 
     client.request(req).then([](http_response res)
                              {
@@ -185,7 +193,7 @@ double Apollo::Bot::PriceData::getIntervalAverage()
 
 void Apollo::Bot::PriceData::updateInstantPriceRequestPath(std::string ticker)
 {
-    this->current_ticker_request_path_ = "/data/price?fsym=" + ticker + "&tsyms=BTC";
+    this->full_request_path_instant_ = "/data/price?fsym=" + ticker + "&tsyms=BTC";
 }
 
 std::string Apollo::Bot::PriceData::requestLastPrice()
@@ -206,7 +214,8 @@ std::string Apollo::Bot::PriceData::requestLastPrice()
 
     http_request req(METHOD);
     req.headers().set_content_type(CONTENT_TYPE);
-    req.set_request_uri(this->current_ticker_request_path_);
+
+    req.set_request_uri(utility::conversions::to_string_t(full_request_path_instant_));
 
     client.request(req).then([](http_response res)
                              {
@@ -226,5 +235,6 @@ double Apollo::Bot::PriceData::getLastPrice()
     rapidjson::Document doc;
     doc.Parse(json_as_string);
 
+	// BREAKS RIGHT HERE!!!!!!!!!! //
     return doc["BTC"].GetDouble();
 }

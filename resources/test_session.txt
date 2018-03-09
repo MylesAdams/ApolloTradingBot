@@ -1,0 +1,14 @@
+Session started at: 03-09-2018-06:30
+Session ended at: 03-09-2018-06:30
+Currency being traded: 
+
+Starting amount of BTC: 10
+Starting amount of : 0
+
+Ending amount of BTC: 10
+Ending amount of : 0
+
+Starting total in terms of BTC: 10
+Ending total in terms of BTC: 10
+
+Total Profits/Losses: 0 BTC

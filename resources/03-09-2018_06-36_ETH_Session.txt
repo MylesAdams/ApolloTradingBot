@@ -1,0 +1,14 @@
+Session started at: 03-09-2018_06-36
+Session ended at: 03-09-2018_06-36
+Currency being traded: ETH
+
+Starting amount of BTC: 10
+Starting amount of ETH: 0
+
+Ending amount of BTC: 10
+Ending amount of ETH: 0
+
+Starting total in terms of BTC: 10
+Ending total in terms of BTC: 10
+
+Total Profits/Losses: 0 BTC

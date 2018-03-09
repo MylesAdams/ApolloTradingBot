@@ -12,24 +12,30 @@ namespace Apollo {
         class GDAXTestExchange : public ExchangeAccnt
         {
         private:
-            double amount_btc_;
-            double amount_cur_;
+			GDAXTestExchange();
+			std::string trading_currency_ticker_;
+
 
         public:
-            GDAXTestExchange();
+			double amount_btc_;
+			double amount_cur_;
             GDAXTestExchange(std::string trading_currency);
-            bool hasCredentials() override;
-            void update() override;
-            void connect() override;
-            void clearCredentials() override;
-            void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override;
-            void buyCurrency(double amount);
-            void sellCurrency(double amount);
+			GDAXTestExchange(std::string trading_currency, double amount_btc, double amount_cur);
 
+			void setAmountBTC(double amount);
+			void setAmountCurrency(double amount);
+			void setCurrency(std::string trading_currency);
+            void buyCurrency(double amount_percent, double price);
+            void sellCurrency(double amount_percent, double price);
+
+			bool hasCredentials() override;
+			void update() override;
+			void connect() override;
+			void clearCredentials() override;
+			void setCredentials(utility::string_t key, utility::string_t secret) override;
+			void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override;
         };
     }
-
-
 }
 
 

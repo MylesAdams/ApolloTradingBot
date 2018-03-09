@@ -5,8 +5,12 @@
 #include <cpprest/asyncrt_utils.h>
 #include "cpprest/http_listener.h"
 #include "cpprest/http_client.h"
+#include <stdlib.h>
+#include <thread>
+#include <chrono> 
 
 #include "PriceData.h"
+#include "TradingBot.h"
 
 const int TIME_DAY = 86400;
 
@@ -38,11 +42,28 @@ int main()
 
 //    ucout << builder.to_string() << std::endl;
 
-    Apollo::Bot::PriceData priceBot;
-    ucout << priceBot.full_request_path_ << std::endl;
-//    std::cout << priceBot.requestPriceData() << std::endl;
+ //   Apollo::Bot::PriceData priceBot;
+	//priceBot.setupRequest(U("ETH"), U("BTC"), 12);
+ //   std::cout << priceBot.full_request_path_interval_ << std::endl;
+	//std::cout << priceBot.full_request_path_instant_ << std::endl;
+	//std::cout << priceBot.requestLastPrice() << std::endl;
 
-    std::cout << priceBot.getIntervalAverage() << std::endl;
+ //   std::cout << priceBot.getIntervalAverage() << std::endl;
+
+	Apollo::TradingBot testBot("ETH");
+	testBot.startSession();
+
+	std::cout << "SESSION STARTED" << std::endl;
+
+	for (int i = 0; i < 1; i++)
+	{
+		testBot.updateAndTrade();
+		std::this_thread::sleep_for(std::chrono::seconds(3));
+	}
+
+	testBot.endSession();
+
+	std::cout << "SESSION ENDED" << std::endl;
 
     return 0;
 

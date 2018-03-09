@@ -3,6 +3,8 @@
 
 #include "PriceData.h"
 #include "TradingSession.h"
+#include "GDAXTestExchange.h"
+#include "exchange_accnt.h"
 
 namespace Apollo
 {
@@ -13,6 +15,7 @@ namespace Apollo
         const double STOP_LOSS_PERCENT_ = .15;
 
         Apollo::Bot::PriceData price_bot_;
+		Apollo::Exchanges::GDAXTestExchange* exchange_;
         Apollo::TradingSession* current_trading_session_;
 
         // 12 hour (default) Volume Weighted Average Price
@@ -23,16 +26,23 @@ namespace Apollo
         // Minute Resolution
         int highest_timestamp_seen_;
 
+		std::string trading_currency_;
+
+		bool session_started_;
+
 
 
 
     public:
-        TradingBot();
+        TradingBot(std::string trading_currency);
         void updateAveragePrice();
         bool updateHighestTimestampSeen();
         void startSession();
+		void endSession();
         void updateLastTradingPrice();
         void makeTrades();
+
+		void updateAndTrade();
 
 
     };

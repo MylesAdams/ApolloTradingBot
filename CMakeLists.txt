@@ -52,6 +52,10 @@ set(SOURCES
   src/PriceData.cpp
   src/TradingBot.cpp
   src/TradingSession.cpp
+  src/binance_accnt.cpp
+  src/gdax_accnt.cpp
+  src/GDAXTestExchange.cpp
+  src/kucoin_accnt.cpp
 )
 
 # Put any header files you create here:
@@ -79,6 +83,12 @@ set(HEADERS
   src/PriceDataTarget.h
   src/TradingBot.h
   src/TradingSession.h
+  src/binance_accnt.h
+  src/exchange_accnt.h
+  src/exchange_manager.h
+  src/gdax_accnt.h
+  src/GDAXTestExchange.h
+  src/kucoin_accnt.h
 )
 
 set(INCLUDES
