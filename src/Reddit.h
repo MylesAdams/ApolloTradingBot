@@ -45,7 +45,7 @@ namespace Apollo
             size_t last_comment_read = 0;
             size_t subscriber_count;
             bool hasToken = false;
-            std::vector<std::string> comments;
+            std::vector<utility::string_t> comments;
 
             utility::string_t buildRedditOauthURL();
 
@@ -64,10 +64,20 @@ namespace Apollo
             //helper function for setting the state
             std::string setRandString()
             {
-                char randString[10];
-                for (int ndx = 0; ndx < sizeof(randString) - 1; ndx++)
-                    randString[ndx] = 'A' + rand() % 26;
-                return randString;
+				const int len = 10;
+				char s[len + 1];
+				static const char alphanum[] =
+					"0123456789"
+					"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					"abcdefghijklmnopqrstuvwxyz";
+
+				for (int i = 0; i < len; ++i) {
+					s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+				}
+
+				s[len] = 0;
+
+				return s;
             }
 
 
@@ -126,7 +136,7 @@ namespace Apollo
             pre-conditions: none
             post-conditions: Comments in the private comments vector will be returned.
             */
-            std::vector<std::string> getComments();
+            std::vector<utility::string_t> getComments();
 
 
 
