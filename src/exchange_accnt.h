@@ -43,6 +43,7 @@ namespace Apollo {
             virtual void clearCredentials() = 0;
             virtual void update() = 0;
             virtual void connect() = 0;
+            virtual bool buyAtMarket(utility::string_t coin_id, utility::string_t amount) = 0;
             virtual ~ExchangeAccnt() {}
         };
     }

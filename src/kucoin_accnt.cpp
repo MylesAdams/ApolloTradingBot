@@ -108,11 +108,25 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     else this->connected = false;
 }
 
+/////////////////////
+// Public method: buy
+/////////////////////
+bool Apollo::Exchanges::KucoinAccnt::buy(utility::string_t coin_id, double amount) {
+    return false;
+}
+
 ///////////////////////////////////
 // Publice method: clearCredentials
 ///////////////////////////////////
 void Apollo::Exchanges::KucoinAccnt::clearCredentials() {
     setCredentials(U(""), U(""));
+}
+
+/////////////////////////////
+// Public method: buyAtMarket
+/////////////////////////////
+bool Apollo::Exchanges::KucoinAccnt::buyAtMarket(utility::string_t coin_id, utility::string_t amount) {
+    return false;
 }
 
 ////////////////////////////////

@@ -22,7 +22,9 @@ namespace Apollo {
             bool hasCredentials() override;
             void update() override;
             void connect() override;
+            bool buy(utility::string_t coin_id, double amount);
             void clearCredentials() override;
+            bool buyAtMarket(utility::string_t coin_id, utility::string_t amount) override;
             void setCredentials(utility::string_t key, utility::string_t secret) override; // Correct overload for Kucoin.
 
         private: // Private methods.
