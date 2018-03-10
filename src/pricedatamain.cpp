@@ -50,12 +50,12 @@ int main()
 
  //   std::cout << priceBot.getIntervalAverage() << std::endl;
 
-	Apollo::TradingBot testBot("ETH");
+	Apollo::TradingBot testBot("ZCL");
 	testBot.startSession();
 
 	std::cout << "SESSION STARTED" << std::endl;
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 9600; i++)
 	{
 		testBot.updateAndTrade();
 		std::this_thread::sleep_for(std::chrono::seconds(3));

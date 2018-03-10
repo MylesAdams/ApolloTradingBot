@@ -17,7 +17,7 @@ Apollo::Bot::PriceData::PriceData()
     this->price_data_target_ = target;
 
     // Set request to default 12 hour average for BTC -> USD
-    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_);
+    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_, U("kucoin"));
 	updateFullRequestPathInterval();
 	updateInstantPriceRequestPath(utility::conversions::to_utf8string(DEFAULT_TICKER_FROM_));
 
@@ -66,7 +66,7 @@ void Apollo::Bot::PriceData::setSearchQuery(const std::string &query)
 
 void Apollo::Bot::PriceData::setTickerFrom(utility::string_t ticker_from, bool update_uri = true)
 {
-    for (RequestParameter param : this->price_data_target_.request_parameters)
+    for (RequestParameter& param : this->price_data_target_.request_parameters)
     {
         if (param.key == U("fsym"))
         {
@@ -81,12 +81,11 @@ void Apollo::Bot::PriceData::setTickerFrom(utility::string_t ticker_from, bool u
 		updateInstantPriceRequestPath(utility::conversions::to_utf8string(ticker_from));
 		updateFullRequestPathInterval();
 	}
-		
 }
 
 void Apollo::Bot::PriceData::setTickerTo(utility::string_t ticker_to, bool update_uri = true)
 {
-    for (RequestParameter param : this->price_data_target_.request_parameters)
+    for (RequestParameter& param : this->price_data_target_.request_parameters)
     {
         if (param.key == U("tsym"))
         {
@@ -104,11 +103,11 @@ void Apollo::Bot::PriceData::setTickerTo(utility::string_t ticker_to, bool updat
 
 void Apollo::Bot::PriceData::setAveragePeriod(int time_in_hours, bool update_uri = true)
 {
-    for (auto param : this->price_data_target_.request_parameters)
+    for (auto& param : this->price_data_target_.request_parameters)
     {
         if (param.key == U("limit"))
         {
-            param.value = utility::conversions::to_string_t((time_in_hours * 60) + "");
+            param.value = utility::conversions::to_string_t(std::to_string(time_in_hours * 60));
             return;
         }
     }
@@ -118,11 +117,12 @@ void Apollo::Bot::PriceData::setAveragePeriod(int time_in_hours, bool update_uri
 		updateFullRequestPathInterval();
 }
 
-void Apollo::Bot::PriceData::setupRequest(utility::string_t ticker_from, utility::string_t ticker_to, int time_in_hours)
+void Apollo::Bot::PriceData::setupRequest(utility::string_t ticker_from, utility::string_t ticker_to, int time_in_hours, utility::string_t exch_name)
 {
     setTickerFrom(ticker_from, false);
     setTickerTo(ticker_to, false);
     setAveragePeriod(time_in_hours, false);
+    setExchange(exch_name, false);
 	updateFullRequestPathInterval();
 	updateInstantPriceRequestPath(utility::conversions::to_utf8string(ticker_from));
 }
@@ -161,13 +161,22 @@ std::string Apollo::Bot::PriceData::requestIntervalPriceData()
     req.headers().set_content_type(CONTENT_TYPE);
     req.set_request_uri(utility::conversions::to_string_t(this->full_request_path_interval_));
 
-    client.request(req).then([](http_response res)
-                             {
-                                 return res.extract_utf8string();
-                             }).then([&response](pplx::task<std::string> utf8str)
-                                     {
-                                         response = utf8str.get();
-                                     }).wait();
+    try
+    {
+        client.request(req).then([](http_response res)
+                                 {
+                                     return res.extract_utf8string();
+                                 }).then([&response](pplx::task<std::string> utf8str)
+                                         {
+                                             if (response != "")
+                                                 response = utf8str.get();
+                                         }).wait();
+    }
+    catch (const web::http::http_exception& e)
+    {
+        std::cout << e.what() << std::endl << std::endl;
+    }
+
 
     return response;
 }
@@ -193,7 +202,7 @@ double Apollo::Bot::PriceData::getIntervalAverage()
 
 void Apollo::Bot::PriceData::updateInstantPriceRequestPath(std::string ticker)
 {
-    this->full_request_path_instant_ = "/data/price?fsym=" + ticker + "&tsyms=BTC";
+    this->full_request_path_instant_ = "/data/price?fsym=" + ticker + "&tsyms=BTC&e=cryptopia";
 }
 
 std::string Apollo::Bot::PriceData::requestLastPrice()
@@ -208,8 +217,6 @@ std::string Apollo::Bot::PriceData::requestLastPrice()
     const utility::string_t METHOD(price_data_target_.request_method);
     const utility::string_t CONTENT_TYPE(U("application/json"));
 
-    std::string response;
-
     http_client client(this->RESOUCE_URL_);
 
     http_request req(METHOD);
@@ -217,15 +224,32 @@ std::string Apollo::Bot::PriceData::requestLastPrice()
 
     req.set_request_uri(utility::conversions::to_string_t(full_request_path_instant_));
 
-    client.request(req).then([](http_response res)
-                             {
-                                 return res.extract_utf8string();
-                             }).then([&response](pplx::task<std::string> utf8str)
-                                     {
-                                         response = utf8str.get();
-                                     }).wait();
+    http_response response;
 
-    return response;
+    pplx::task<web::http::http_response> call = client.request(req);
+
+    response = call.
+    try
+    {
+        call.wait();
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        return "";
+    }
+
+
+    if (response.status_code() != web::http::status_codes::OK) {
+        std::string msg = "Status code from Gdax server was not OK: ";
+        std::string status = std::to_string(response.status_code());
+        throw Apollo::Bot::BadStatusException(msg, status);
+    }
+
+    pplx::task<web::json::value>  extract = response.extract_json();
+    web::json::value json = extract.get();
+
+    return json.serialize();
 }
 
 double Apollo::Bot::PriceData::getLastPrice()
@@ -237,4 +261,20 @@ double Apollo::Bot::PriceData::getLastPrice()
 
 	// BREAKS RIGHT HERE!!!!!!!!!! //
     return doc["BTC"].GetDouble();
+}
+
+void Apollo::Bot::PriceData::setExchange(utility::string_t exch_name, bool update_uri = true)
+{
+    for (RequestParameter& param : this->price_data_target_.request_parameters)
+    {
+        if (param.key == U("e"))
+        {
+            param.value = exch_name;
+            return;
+        }
+    }
+    this->price_data_target_.request_parameters.push_back(RequestParameter(U("e"), exch_name));
+
+    if (update_uri)
+        updateFullRequestPathInterval();
 }

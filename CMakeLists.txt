@@ -124,17 +124,17 @@ source_group("Header files" FILES ${HEADERS})
 
 # It is unnecessary to link against the header files. The reason I added Headers is a hack to add the header
 # files to the IDE project so they appear while working in an IDE.
-add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
-target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
-target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
+# add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
+# target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
+# target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
 add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
 target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
 target_link_libraries(PriceDataTest PRIVATE ${LIBRARIES})
 
 # Unit tests
-enable_testing()
-add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
-target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
-target_include_directories(TwitterTester PRIVATE ${INCLUDES})
-add_test(TwitterSignatureGeneration TwitterTester)
+# enable_testing()
+# add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
+# target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
+# target_include_directories(TwitterTester PRIVATE ${INCLUDES})
+# add_test(TwitterSignatureGeneration TwitterTester)

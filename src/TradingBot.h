@@ -11,8 +11,8 @@ namespace Apollo
     class TradingBot
     {
     private:
-        const double PERCENT_FROM_MEAN_ = .05;
-        const double STOP_LOSS_PERCENT_ = .15;
+        const double PERCENT_FROM_MEAN_ = .02;
+        const double STOP_LOSS_PERCENT_ = .08;
 
         Apollo::Bot::PriceData price_bot_;
 		Apollo::Exchanges::GDAXTestExchange* exchange_;

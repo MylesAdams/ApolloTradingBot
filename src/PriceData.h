@@ -40,7 +40,8 @@ namespace Apollo
             void setTickerFrom(utility::string_t ticker_from, bool update_uri);
             void setTickerTo(utility::string_t ticker_to, bool update_uri);
             void setAveragePeriod(int time_in_hours, bool update_uri);
-            void setupRequest(utility::string_t ticker_from, utility::string_t ticker_to, int time_in_hours);
+            void setExchange(utility::string_t exch_name, bool update_uri);
+            void setupRequest(utility::string_t ticker_from, utility::string_t ticker_to, int time_in_hours, utility::string_t exch_name);
             void updateFullRequestPathInterval();
             std::string requestIntervalPriceData();
             std::string requestLastPrice();
