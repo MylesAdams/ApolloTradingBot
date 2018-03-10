@@ -70,6 +70,7 @@ set(HEADERS
   src/BadResourceException.h
   src/Reddit.h
   src/GDAXPrice.h
+  src/catch.hpp
 )
 
 set(INCLUDES
@@ -115,3 +116,8 @@ add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
 target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
 target_include_directories(TwitterTester PRIVATE ${INCLUDES})
 add_test(TwitterSignatureGeneration TwitterTester)
+
+add_executable(FourChanTester tests/FourChanTest.cpp src/Bot.cpp src/FourChan.cpp)
+target_link_libraries(FourChanTester ${CPPRESTSDK_LIBRARIES})
+target_include_directories(FourChanTester PRIVATE ${INCLUDES})
+add_test(FourChanOne FourChanTester)
