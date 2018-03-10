@@ -4,6 +4,7 @@
 #define CATCH_CONFIG_MAIN 
 #include "catch.hpp"
 #include <string>
+#include <iostream>
 
 using Apollo::Bot::FourChan;
 using namespace web::http;
@@ -43,4 +44,3 @@ TEST_CASE("ForChan tests") {
 
 	}
 }
-
