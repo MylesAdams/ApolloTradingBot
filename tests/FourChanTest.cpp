@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 
-<<<<<<< HEAD
+
 using Apollo::Bot::FourChan;
 using namespace web::http;
 using utility::string_t;
@@ -57,7 +57,7 @@ TEST_CASE("ForChan tests") {
 	}
 }
 
-=======
+
 using Apollo::Bot::FourChan;
 using namespace web::http;
 using utility::string_t;
@@ -89,11 +89,23 @@ TEST_CASE("ForChan tests") {
 	}
 
 	SECTION("parse JSON") {
-		std::string json = "{\"hello\": \"world\",\"t\" : true,\"f\" : false,\"n\" : null,\"i\" : 123,\"pi\" : 3.1416,\"a\" : [1, 2, 3, 4]}";
+		
+		// example of a json from 4chan
+		std::string json = "[{\"page\": 1,\"threads\" : [	{	\"no\": 904256,	\"last_modified\" : 1443114714},  { \"no\": 4884770,  \"last_modified\" : 1512740123  },  {  \"no\": 8251047,  \"last_modified\" : 1520710289  }	]},  { \"page\": 2,  \"threads\" : [{	\"no\": 8251932,	\"last_modified\" : 1520710287	},	  {	  \"no\": 8249041,  \"last_modified\" : 1520710284  },	  {		  \"no\": 8251212,		  \"last_modified\" : 1520710283	  },	  {		  \"no\": 8251581,		  \"last_modified\" : 1520710133	  }	  ]  },	{		\"page\": 11,		\"threads\" : [					{						\"no\": 8249849,							\"last_modified\" : 1520706108					},	  {		  \"no\": 8249585,		  \"last_modified\" : 1520706084	  }		]	}]";
+		
 		rapidjson::Document document;
 		document.Parse(json);
+		std::vector<Apollo::Comment> testParse =fc.JSONparse(document);
+		std::string placeHolder = "placeHolder";
+		
+		// no new posts
+		if(testParse.size() == 0)
+			REQUIRE(placeHolder  == "placeHolder");
 
-
+		// new posts
+		else
+		REQUIRE(testParse[0].content != "placeHolder");
+		
 	}
 }
->>>>>>> 8b5f3c8c596b2971c538ffe2fa77b06f91394fc3
+
