@@ -52,7 +52,7 @@
    * `vcpkg install cpprestsdk cpprestsdk:x64-windows`
 
 5. Install Qt5-base
-   * `vcpkg install Qt5-base`
+   * `vcpkg install qt5-base`
    
 6. Install Boost-program-options
    * `vcpkg install boost-program-options`

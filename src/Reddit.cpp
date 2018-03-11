@@ -228,7 +228,7 @@ void Apollo::Bot::Reddit::readComments()
     size_t tempLastRead = response_body["data"]["children"][0]["data"]["created"].GetDouble();
 
     for (int i = 0; i < response_body["data"]["children"].Size(); i++)
-        comments.push_back(response_body["data"]["children"][i]["data"]["body"].GetString());
+        comments.push_back(utility::conversions::to_string_t(response_body["data"]["children"][i]["data"]["body"].GetString()));
 
     last_comment_read = tempLastRead;
 
