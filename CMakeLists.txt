@@ -136,10 +136,18 @@ target_link_libraries(BotTest ${CPPRESTSDK_LIBRARIES} Catch)
 target_include_directories(BotTest PRIVATE ${INCLUDES})
 add_test(Bot BotTest)
 
+# watson Tests
+add_executable(watsonTest tests/watsonTest.cpp src/watson.cpp)
+target_link_libraries(watsonTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(watsonTest PRIVATE ${INCLUDES})
+add_test(watson watsonTest)
+
+
 # Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
 set_tests_properties(
     # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
     FourChan
 	Bot
+	watson
         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
 
