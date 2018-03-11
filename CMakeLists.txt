@@ -70,7 +70,6 @@ set(HEADERS
   src/BadResourceException.h
   src/Reddit.h
   src/GDAXPrice.h
-  src/catch.hpp
 )
 
 set(INCLUDES
