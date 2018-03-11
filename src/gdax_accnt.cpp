@@ -220,45 +220,53 @@ bool Apollo::Exchanges::GdaxAccnt::buyAtMarket(utility::string_t coin_id, utilit
 
     // Build request.
     web::uri_builder builder(U("/orders"));
-    builder.append_query(U("type=market"));
-    builder.append_query(U("side=buy"));
-    builder.append_query(U("product_id=") + coin_id + U("-BTC"));
-    builder.append_query(U("size=") + amount);
+    
     utility::string_t request_str = builder.to_string();
     utility::string_t method = U("POST");
     utility::string_t timestamp = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp()));
+    utility::string_t body = U("{\"type\":\"market\", \"product_id\":\"ETH-BTC\", \"side\":\"buy\", \"size\":");
+    body = body + amount + U("}");
+    
+
 
     // Make buy call.
-    web::http::http_response response = getResponse(request_str, method, timestamp, U("/orders"));
+    web::http::http_response response = getResponse(request_str, method, timestamp, body);
 
     // Successful transaction flag.
     bool transaction_success = false;
     
     // If we got a good server response continue processing.
     if (response.status_code() == web::http::status_codes::OK) {
+        transaction_success = true;
 
-
-    }
         // Extract json form response.
         pplx::task<web::json::value> extract_task = response.extract_json();
         web::json::value json = extract_task.get();
         utility::string_t msg = json.serialize();
         ucout << msg << U("\n");
-
-    
-    
+        auto status_val = json[U("status")];
+        utility::string_t status = status_val.as_string();
+        if (status == U("pending")) transaction_success = true;
+    }
 
     return transaction_success;
+}
+
+////////////////////////////
+// Public method: buyAtLimit
+////////////////////////////
+bool Apollo::Exchanges::GdaxAccnt::buyAtLimit(utility::string_t coin_id, utility::string_t amount, utility::string_t price) {
+    return false;
 }
 
 /////////////////////////////////////
 // Private helper method: getResponse
 /////////////////////////////////////
-web::http::http_response Apollo::Exchanges::GdaxAccnt::getResponse(utility::string_t request, utility::string_t method, utility::string_t timestamp,  utility::string_t path)
+web::http::http_response Apollo::Exchanges::GdaxAccnt::getResponse(utility::string_t request, utility::string_t method, utility::string_t timestamp, utility::string_t body)
 {
 
     // Generate prehash string.
-    utility::string_t prehash = timestamp + method + path;
+    utility::string_t prehash = timestamp + method + request + body;
 
     // Dump prehash into byte vector.
     unsigned char* prehash_ary = new unsigned char[prehash.size()];
@@ -304,6 +312,7 @@ web::http::http_response Apollo::Exchanges::GdaxAccnt::getResponse(utility::stri
     req.headers().add(U("CB-ACCESS-SIGN"), coded_signature);          // Sign header.
     req.headers().add(U("CB-ACCESS-TIMESTAMP"), timestamp);           // Timestamp header.
     req.headers().add(U("CB-ACCESS-PASSPHRASE"), this->passphrase);   // Passphrase header.
+    req.set_body(body);
     utility::string_t req_str = req.to_string();
 
     // Create client and make request ot server.
