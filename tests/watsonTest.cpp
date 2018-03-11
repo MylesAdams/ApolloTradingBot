@@ -8,7 +8,7 @@
 
 
 
-TEST_CASE("ForChan tests") {
+TEST_CASE("watson tests") {
 	// all the watson stuff for the tests
 	Apollo::Watson* watsonAnalyzer;
 	utility::string_t WATSON_USERNAME = U("c032fda0-5c02-490d-8e00-ab00de2e5f40");

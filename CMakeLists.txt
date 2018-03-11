@@ -142,6 +142,12 @@ target_link_libraries(watsonTest ${CPPRESTSDK_LIBRARIES} Catch)
 target_include_directories(watsonTest PRIVATE ${INCLUDES})
 add_test(watson watsonTest)
 
+# GDAXPrice Tests
+add_executable(GDAXPriceTest tests/GDAXPriceTest.cpp src/GDAXPrice.cpp)
+target_link_libraries(GDAXPriceTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(GDAXPriceTest PRIVATE ${INCLUDES})
+add_test(GDAXPrice GDAXPriceTest)
+
 
 # Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
 set_tests_properties(
@@ -149,5 +155,6 @@ set_tests_properties(
     FourChan
 	Bot
 	watson
+	GDAXPrice
         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
 
