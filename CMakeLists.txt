@@ -124,16 +124,22 @@ target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
 target_include_directories(TwitterTester PRIVATE ${INCLUDES})
 add_test(TwitterSignatureGeneration TwitterTester)
 
-
 # FourChan Tests
 add_executable(FourChanTest tests/FourChanTest.cpp src/Bot.cpp src/FourChan.cpp)
 target_link_libraries(FourChanTest ${CPPRESTSDK_LIBRARIES} Catch)
 target_include_directories(FourChanTest PRIVATE ${INCLUDES})
 add_test(FourChan FourChanTest)
 
+# Bot Tests
+add_executable(BotTest tests/BotTest.cpp src/Bot.cpp src/FourChan.cpp)
+target_link_libraries(BotTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(BotTest PRIVATE ${INCLUDES})
+add_test(Bot BotTest)
+
 # Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
 set_tests_properties(
     # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
     FourChan
+	Bot
         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
 
