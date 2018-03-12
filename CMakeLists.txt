@@ -56,6 +56,7 @@ set(SOURCES
   src/gdax_accnt.cpp
   src/GDAXTestExchange.cpp
   src/kucoin_accnt.cpp
+  src/ApolloSplashScreen.cpp
 )
 
 # Put any header files you create here:
@@ -90,7 +91,8 @@ set(HEADERS
   src/gdax_accnt.h
   src/GDAXTestExchange.h
   src/kucoin_accnt.h
-        src/TimeoutException.h)
+        src/TimeoutException.h
+        src/ApolloSplashScreen.h)
 
 set(INCLUDES
   ${INCLUDES}
