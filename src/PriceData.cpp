@@ -3,6 +3,7 @@
 #include "cpprest/http_listener.h"
 #include "cpprest/http_client.h"
 #include "Comment.h"
+#include "TimeoutException.h"
 
 using namespace web;
 using namespace web::http;
@@ -163,18 +164,24 @@ std::string Apollo::Bot::PriceData::requestIntervalPriceData()
 
     try
     {
-        client.request(req).then([](http_response res)
-                                 {
-                                     return res.extract_utf8string();
-                                 }).then([&response](pplx::task<std::string> utf8str)
-                                         {
-                                             if (response != "")
-                                                 response = utf8str.get();
-                                         }).wait();
+        // 5
+        pplx::task<web::http::http_response> call = client.request(req);
+        http_response response = call.get();
+
+        if (response.status_code() != web::http::status_codes::OK) {
+            std::string msg = "Status code from Gdax server was not OK: ";
+            std::string status = std::to_string(response.status_code());
+            throw Apollo::Bot::BadStatusException(msg, status);
+        }
+
+        pplx::task<std::string> utf8str = response.extract_string();
+        std::string json_as_string = utf8str.get();
+
+        return json_as_string;
     }
-    catch (const web::http::http_exception& e)
+    catch (const std::exception& e)
     {
-        std::cout << e.what() << std::endl << std::endl;
+        throw Apollo::Bot::TimeoutException();
     }
 
 
@@ -183,21 +190,30 @@ std::string Apollo::Bot::PriceData::requestIntervalPriceData()
 
 double Apollo::Bot::PriceData::getIntervalAverage()
 {
-    std::string json_as_string = requestIntervalPriceData();
+    try {
+        std::string json_as_string = requestIntervalPriceData();
 
-    rapidjson::Document doc;
-    doc.Parse(json_as_string);
+        rapidjson::Document doc;
+        doc.Parse(json_as_string);
 
-    double total_avgprice_x_vol = 0.0;
-    double total_vol = 0.0;
+        double total_avgprice_x_vol = 0.0;
+        double total_vol = 0.0;
 
-    for (auto& minuteData : doc["Data"].GetArray())
+        // BREAKS HERE
+        for (auto& minuteData : doc["Data"].GetArray())
+        {
+            total_avgprice_x_vol += ((minuteData["high"].GetDouble() + minuteData["low"].GetDouble() + minuteData["close"].GetDouble()) / 3) * minuteData["volumeto"].GetDouble();
+            total_vol += minuteData["volumeto"].GetDouble();
+        }
+
+        return (total_avgprice_x_vol / total_vol);
+    }
+    catch (const std::exception& e)
     {
-        total_avgprice_x_vol += ((minuteData["high"].GetDouble() + minuteData["low"].GetDouble() + minuteData["close"].GetDouble()) / 3) * minuteData["volumeto"].GetDouble();
-        total_vol += minuteData["volumeto"].GetDouble();
+        throw e;
     }
 
-    return (total_avgprice_x_vol / total_vol);
+
 }
 
 void Apollo::Bot::PriceData::updateInstantPriceRequestPath(std::string ticker)
@@ -224,43 +240,50 @@ std::string Apollo::Bot::PriceData::requestLastPrice()
 
     req.set_request_uri(utility::conversions::to_string_t(full_request_path_instant_));
 
-    http_response response;
-
-    pplx::task<web::http::http_response> call = client.request(req);
-
-    response = call.
     try
     {
-        call.wait();
+        // 4
+        pplx::task<web::http::http_response> call = client.request(req);
+        http_response response = call.get();
+
+        if (response.status_code() != web::http::status_codes::OK) {
+            std::string msg = "Status code from Gdax server was not OK: ";
+            std::string status = std::to_string(response.status_code());
+            throw Apollo::Bot::BadStatusException(msg, status);
+        }
+
+        pplx::task<std::string> utf8str = response.extract_string();
+        std::string json_as_string = utf8str.get();
+
+        return json_as_string;
     }
-    catch (const std::exception& e)
+    catch (const http_exception& e)
     {
-        std::cout << e.what() << std::endl;
-        return "";
+        throw Apollo::Bot::TimeoutException();
     }
 
-
-    if (response.status_code() != web::http::status_codes::OK) {
-        std::string msg = "Status code from Gdax server was not OK: ";
-        std::string status = std::to_string(response.status_code());
-        throw Apollo::Bot::BadStatusException(msg, status);
-    }
-
-    pplx::task<web::json::value>  extract = response.extract_json();
-    web::json::value json = extract.get();
-
-    return json.serialize();
 }
 
 double Apollo::Bot::PriceData::getLastPrice()
 {
-    std::string json_as_string = requestLastPrice();
+    try
+    {
+        // 3
+        std::string json_as_string = requestLastPrice();
 
-    rapidjson::Document doc;
-    doc.Parse(json_as_string);
+        rapidjson::Document doc;
+        doc.Parse(json_as_string);
 
-	// BREAKS RIGHT HERE!!!!!!!!!! //
-    return doc["BTC"].GetDouble();
+        // BREAKS RIGHT HERE!!!!!!!!!! //
+        return doc["BTC"].GetDouble();
+    }
+    catch (const std::exception& e)
+    {
+        throw (e);
+    }
+
+
+
 }
 
 void Apollo::Bot::PriceData::setExchange(utility::string_t exch_name, bool update_uri = true)

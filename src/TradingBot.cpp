@@ -1,4 +1,5 @@
 #include "TradingBot.h"
+#include "TimeoutException.h"
 
 Apollo::TradingBot::TradingBot(std::string trading_currency)
 	: price_bot_(),
@@ -18,7 +19,16 @@ Apollo::TradingBot::TradingBot(std::string trading_currency)
 void Apollo::TradingBot::updateAveragePrice()
 {
     if (updateHighestTimestampSeen())
-        current_interval_average_ = price_bot_.getIntervalAverage();
+	{
+		try
+		{
+			current_interval_average_ = price_bot_.getIntervalAverage();
+		}
+		catch (const std::exception& e)
+		{
+			throw e;
+		}
+	}
 }
 
 bool Apollo::TradingBot::updateHighestTimestampSeen()
@@ -34,7 +44,19 @@ bool Apollo::TradingBot::updateHighestTimestampSeen()
 
 void Apollo::TradingBot::startSession()
 {
-    updateLastTradingPrice();
+	while(1)
+	{
+		try
+		{
+			// 1
+			updateLastTradingPrice();
+			break;
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+	}
 
 	current_trading_session_ = new Apollo::TradingSession();
 
@@ -56,7 +78,7 @@ void Apollo::TradingBot::endSession()
 
 	current_trading_session_->printSessionToFile();
 
-	delete current_trading_session_;
+    delete current_trading_session_;
 	current_trading_session_ = nullptr;
 
 	session_started_ = false;
@@ -64,7 +86,15 @@ void Apollo::TradingBot::endSession()
 
 void Apollo::TradingBot::updateLastTradingPrice()
 {
-    last_trading_price_ = price_bot_.getLastPrice();
+    try
+	{
+		// 2
+        last_trading_price_ = price_bot_.getLastPrice();
+    }
+    catch (const std::exception& e)
+    {
+		throw e;
+    }
 }
 
 void Apollo::TradingBot::makeTrades()
@@ -107,10 +137,17 @@ void Apollo::TradingBot::makeTrades()
 
 void Apollo::TradingBot::updateAndTrade()
 {
+	try
+	{
+		updateAveragePrice();
+		updateLastTradingPrice();
+		makeTrades();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
-	updateAveragePrice();
-	updateLastTradingPrice();
-	makeTrades();
 
 }
 

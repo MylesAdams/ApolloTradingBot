@@ -31,6 +31,7 @@ void Apollo::Exchanges::GDAXTestExchange::setAmountCurrency(double amount)
 	this->amount_cur_ = amount;
 }
 
+// price is (amt btc / 1 cur)
 void Apollo::Exchanges::GDAXTestExchange::buyCurrency(double amount_percent, double price)
 {
 	if (this->amount_btc_ <= 0.0)
@@ -40,13 +41,14 @@ void Apollo::Exchanges::GDAXTestExchange::buyCurrency(double amount_percent, dou
 		return;
 
 	double amount_in_btc = this->amount_btc_ * amount_percent;
-	double amount_in_cur = amount_in_btc * price;
+	double amount_in_cur = amount_in_btc / price;
 
 	this->amount_btc_ -= amount_in_btc;
 	this->amount_cur_ += amount_in_cur;
 
 }
 
+// price is (amt btc / 1 cur)
 void Apollo::Exchanges::GDAXTestExchange::sellCurrency(double amount_percent, double price)
 {
 	if (this->amount_cur_ <= 0.0)

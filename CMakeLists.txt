@@ -66,6 +66,7 @@ set(HEADERS
   src/qcustomplot.h
   src/mainwindow.h
   src/mainwindow.ui
+  src/mainwindow2.ui
   src/Bot.h
   src/FourChan.h
   src/Twitter.h
@@ -89,7 +90,7 @@ set(HEADERS
   src/gdax_accnt.h
   src/GDAXTestExchange.h
   src/kucoin_accnt.h
-)
+        src/TimeoutException.h)
 
 set(INCLUDES
   ${INCLUDES}
@@ -124,9 +125,9 @@ source_group("Header files" FILES ${HEADERS})
 
 # It is unnecessary to link against the header files. The reason I added Headers is a hack to add the header
 # files to the IDE project so they appear while working in an IDE.
-# add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
-# target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
-# target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
+add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
+target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
+target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
 add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
 target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
