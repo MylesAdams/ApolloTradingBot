@@ -57,6 +57,7 @@ set(SOURCES
   src/GDAXTestExchange.cpp
   src/kucoin_accnt.cpp
   src/ApolloSplashScreen.cpp
+  src/exchange_accnt.cpp
 )
 
 # Put any header files you create here:

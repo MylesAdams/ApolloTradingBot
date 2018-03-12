@@ -45,6 +45,7 @@ namespace Apollo {
             virtual void connect() = 0;
             virtual bool buyAtMarket(utility::string_t coin_id, utility::string_t amount) = 0;
             virtual bool buyAtLimit(utility::string_t coin_id, utility::string_t amount, utility::string_t price) = 0;
+            std::vector<Coin> getHoldings();
             virtual ~ExchangeAccnt() {}
         };
     }
