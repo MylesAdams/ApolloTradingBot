@@ -108,12 +108,53 @@ void Apollo::Exchanges::KucoinAccnt::connect() {
     else this->connected = false;
 }
 
+/////////////////////
+// Public method: buy
+/////////////////////
+bool Apollo::Exchanges::KucoinAccnt::buy(utility::string_t coin_id, double amount) {
+    return false;
+}
+
 ///////////////////////////////////
 // Publice method: clearCredentials
 ///////////////////////////////////
 void Apollo::Exchanges::KucoinAccnt::clearCredentials() {
     setCredentials(U(""), U(""));
 }
+
+////////////////////////////
+// Public method: buyAtLimit
+////////////////////////////
+bool Apollo::Exchanges::KucoinAccnt::buyAtLimit(utility::string_t coin_id, utility::string_t amount, utility::string_t price) {
+    
+    // Trasnaction success flag.
+    bool transaction_success = false;
+
+    // Generate signature.
+    utility::string_t method = U("POST");
+    utility::string_t endpoint = U("/v1/order");
+    utility::string_t querystring = U("amount=") + amount + U("&price=") + price + U("&symbol=") + coin_id + U("-BTC");
+    querystring = querystring + U("&type=BUY");
+    utility::string_t nonce = utility::conversions::to_string_t(std::to_string(utility::datetime::utc_timestamp())) + U("000");
+    utility::string_t prehash = endpoint + U("/") + nonce + U("/") + querystring;
+
+    // Check response.
+    web::http::http_response response = getResponse(endpoint, nonce, querystring, method);
+    if (response.status_code() == web::http::status_codes::OK) {
+        
+        // Extract json form response.
+        pplx::task<web::json::value> extract_task = response.extract_json();
+        web::json::value json = extract_task.get();
+        utility::string_t msg = json.serialize();
+        ucout << msg << U("\n");
+
+        auto success_val = json[U("success")];
+        transaction_success = success_val.as_bool();
+    }
+
+    return transaction_success;
+}
+
 
 ////////////////////////////////
 // Public method: setCredentials
@@ -126,7 +167,7 @@ void Apollo::Exchanges::KucoinAccnt::setCredentials(utility::string_t key, utili
 ////////////////////////////////////////
 // Private helper function: getResponse
 ////////////////////////////////////////
-web::http::http_response Apollo::Exchanges::KucoinAccnt::getResponse(utility::string_t endpoint, utility::string_t nonce, utility::string_t querystring) {
+web::http::http_response Apollo::Exchanges::KucoinAccnt::getResponse(utility::string_t endpoint, utility::string_t nonce, utility::string_t querystring, utility::string_t method) {
 
     // Generate prehash string.
     utility::string_t prehash = endpoint + U("/") + nonce + U("/") + querystring;
@@ -168,7 +209,8 @@ web::http::http_response Apollo::Exchanges::KucoinAccnt::getResponse(utility::st
     }
 
     // Create request.
-    web::http::http_request req(web::http::methods::GET);
+    web::http::http_request req;
+    if (method == U("POST")) req = web::http::http_request(web::http::methods::POST);
     web::uri_builder builder(endpoint);
     builder.append_query(querystring);
     req.set_request_uri(builder.to_string());
