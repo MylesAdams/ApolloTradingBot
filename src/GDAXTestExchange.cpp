@@ -93,3 +93,13 @@ void Apollo::Exchanges::GDAXTestExchange::setCredentials(utility::string_t key, 
 {
 	return;
 }
+
+bool Apollo::Exchanges::GDAXTestExchange::buyAtMarket(utility::string_t coin_id, utility::string_t amount)
+{
+    return false;
+}
+
+bool Apollo::Exchanges::GDAXTestExchange::buyAtMarket(utility::string_t coin_id, utility::string_t amount)
+{
+    return false;
+}
