@@ -27,6 +27,20 @@ namespace Apollo
             virtual std::vector<Apollo::Comment> parseJSON(const rapidjson::Document& document) override;
             virtual std::vector<Apollo::Comment> cleanComments(std::vector<Comment>& comments) override;
         public:
+			/*
+			these are made available for testing
+			*/
+			std::string getsearch_pattern_() {
+				return search_pattern_;
+			}
+			std::vector<Apollo::Comment> getcleanComments(std::vector<Comment>& comments) {
+				return cleanComments(comments);
+			}
+
+			std::vector<Apollo::Comment> JSONparse(const rapidjson::Document& document) {
+				return parseJSON(document);
+			}
+
             //ctor
             /*
             @author: Gavin Frazar

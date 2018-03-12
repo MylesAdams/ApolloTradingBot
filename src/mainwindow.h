@@ -30,6 +30,8 @@ private:
     QVector<double> qy_pos, qy_neg, /*f_qy_pos, f_qy_neg, r_qy_pos, r_qy_neg,*/ qx;
     QListWidgetItem* currentItem;
     bool timerStarted;
+    int counter;
+    double currentPrice;
 
     Apollo::Bot::Twitter* twitterBot;
     Apollo::Bot::Reddit* redditBot;
@@ -45,7 +47,7 @@ private:
     void updatePlot();
 
     // Move to other file later
-    utility::string_t commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<std::string> r_comments);
+    utility::string_t commentsToString(std::vector<Apollo::Comment> t_comments, std::vector<Apollo::Comment> f_comments, std::vector<utility::string_t> r_comments);
 };
 
 #endif // MAINWINDOW_H
