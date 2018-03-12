@@ -67,7 +67,6 @@ set(HEADERS
   src/qcustomplot.h
   src/mainwindow.h
   src/mainwindow.ui
-  src/mainwindow2.ui
   src/Bot.h
   src/FourChan.h
   src/Twitter.h
@@ -98,6 +97,7 @@ set(INCLUDES
   ${INCLUDES}
   src
   lib/rapidjson/include
+  lib/catch
   ${Boost_INCLUDE_DIR}
 )
 
@@ -115,6 +115,10 @@ set(QT_LIBRARIES
   Qt5::PrintSupport
 )
 
+set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/catch)
+add_library(Catch INTERFACE)
+target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
+
 set(LIBRARIES
   ${LIBRARIES}
   ${CPPRESTSDK_LIBRARIES}
@@ -131,13 +135,50 @@ add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
 target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
 target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
-add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
-target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
-target_link_libraries(PriceDataTest PRIVATE ${LIBRARIES})
+# add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
+# target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
+# target_link_libraries(PriceDataTest PRIVATE ${LIBRARIES})
 
-# Unit tests
-# enable_testing()
+# # Unit tests
+# enable_testing(true)
+
+# # Twitter Tests
 # add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
 # target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
 # target_include_directories(TwitterTester PRIVATE ${INCLUDES})
 # add_test(TwitterSignatureGeneration TwitterTester)
+
+# # FourChan Tests
+# add_executable(FourChanTest tests/FourChanTest.cpp src/Bot.cpp src/FourChan.cpp)
+# target_link_libraries(FourChanTest ${CPPRESTSDK_LIBRARIES} Catch)
+# target_include_directories(FourChanTest PRIVATE ${INCLUDES})
+# add_test(FourChan FourChanTest)
+
+# # Bot Tests
+# add_executable(BotTest tests/BotTest.cpp src/Bot.cpp src/FourChan.cpp)
+# target_link_libraries(BotTest ${CPPRESTSDK_LIBRARIES} Catch)
+# target_include_directories(BotTest PRIVATE ${INCLUDES})
+# add_test(Bot BotTest)
+
+# # watson Tests
+# add_executable(watsonTest tests/watsonTest.cpp src/watson.cpp)
+# target_link_libraries(watsonTest ${CPPRESTSDK_LIBRARIES} Catch)
+# target_include_directories(watsonTest PRIVATE ${INCLUDES})
+# add_test(watson watsonTest)
+
+# # GDAXPrice Tests
+# add_executable(GDAXPriceTest tests/GDAXPriceTest.cpp src/GDAXPrice.cpp)
+# target_link_libraries(GDAXPriceTest ${CPPRESTSDK_LIBRARIES} Catch)
+# target_include_directories(GDAXPriceTest PRIVATE ${INCLUDES})
+# add_test(GDAXPrice GDAXPriceTest)
+
+
+# # Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
+# set_tests_properties(
+#     # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
+#   FourChan
+# 	Bot
+# 	watson
+# 	GDAXPrice
+#         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
+

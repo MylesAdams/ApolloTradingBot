@@ -86,6 +86,12 @@ int main() {
         ucout << i.amount << U("\n");
     }
 
+    try { ptr->buyAtMarket(U("ETH"), U("1")); }
+    catch (std::exception &e) { e.what(); }
+
+    try { ptr2->buyAtLimit(U("ETH"), U("1"), U("10")); }
+    catch (std::exception &e) { e.what(); }
+
     // Exit program successfully.
     ucout << U("\n Press enter to exit program . . .");
     ucin.get();

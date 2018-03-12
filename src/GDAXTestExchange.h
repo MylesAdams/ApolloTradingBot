@@ -34,6 +34,8 @@ namespace Apollo {
 			void clearCredentials() override;
 			void setCredentials(utility::string_t key, utility::string_t secret) override;
 			void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override;
+            bool buyAtMarket(utility::string_t coin_id, utility::string_t amount);
+            bool buyAtLimit(utility::string_t coin_id, utility::string_t amount, utility::string_t price);
         };
     }
 }

@@ -22,11 +22,14 @@ namespace Apollo {
             bool hasCredentials() override;
             void update() override;
             void connect() override;
+            bool buy(utility::string_t coin_id, double amount);
             void clearCredentials() override;
+            bool buyAtLimit(utility::string_t coin_id, utility::string_t amount, utility::string_t price) override;
             void setCredentials(utility::string_t key, utility::string_t secret) override; // Correct overload for Kucoin.
 
         private: // Private methods.
-            web::http::http_response getResponse(utility::string_t endpoint, utility::string_t nonce, utility::string_t querystring = U(""));
+            web::http::http_response getResponse(utility::string_t endpoint, utility::string_t nonce, utility::string_t querystring = U(""), utility::string_t method = U("Get"));
+            bool buyAtMarket(utility::string_t coin_id, utility::string_t amount) override { assert(0); return 0; } // Not available on Kucoin.
             void setCredentials(utility::string_t key, utility::string_t secret, utility::string_t passphrase) override { assert(0); } // For GDAX only.
 
         };

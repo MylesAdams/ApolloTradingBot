@@ -174,8 +174,8 @@ std::string Apollo::Bot::PriceData::requestIntervalPriceData()
             throw Apollo::Bot::BadStatusException(msg, status);
         }
 
-        pplx::task<std::string> utf8str = response.extract_string();
-        std::string json_as_string = utf8str.get();
+        pplx::task<utility::string_t> utf8str_task = response.extract_string();
+        std::string json_as_string = utility::conversions::to_utf8string(utf8str_task.get());
 
         return json_as_string;
     }
@@ -252,8 +252,8 @@ std::string Apollo::Bot::PriceData::requestLastPrice()
             throw Apollo::Bot::BadStatusException(msg, status);
         }
 
-        pplx::task<std::string> utf8str = response.extract_string();
-        std::string json_as_string = utf8str.get();
+        pplx::task<utility::string_t> utf8str_task = response.extract_string();
+        std::string json_as_string = utility::conversions::to_utf8string(utf8str_task.get());
 
         return json_as_string;
     }
