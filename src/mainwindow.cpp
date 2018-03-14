@@ -3,7 +3,7 @@
 #include "Twitter.h"
 #include "Watson.h"
 #include "Comment.h"
-#include "GDAXPrice.h"
+#include "coin.h"
 
 #include <QTimer>
 #include <rapidjson/document.h>
@@ -39,43 +39,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setupWidgets();
 
-    twitterBot = new Apollo::Bot::Twitter();
-    redditBot = new Apollo::Bot::Reddit();
-    fourchanBot = new Apollo::Bot::FourChan();
-    watsonAnalyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
+    twitter_bot = new Apollo::Bot::Twitter();
+    reddit_bot = new Apollo::Bot::Reddit();
+    fourchan_bot = new Apollo::Bot::FourChan();
+    watson_analyzer = new Apollo::Watson(WATSON_USERNAME, WATSON_PASSWORD);
+    gdax_accnt = new Apollo::Exchanges::GdaxAccnt();
+    kucoin_accnt = new Apollo::Exchanges::KucoinAccnt();
 
     timerStarted = false;
-    counter = 5;
-    currentPrice = 0;
+    counter = 199;
+    have_gdax_wallet = false;
+    have_kucoin_wallet = false;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
-{
-    currentItem = item;
-    std::cout << "Query:\t" << currentItem->toolTip().toStdString() << std::endl;
-
-    twitterBot->setSearchQuery(currentItem->toolTip().toStdString());
-    std::cout << "Search query set for Twitter" << std::endl;
-    fourchanBot->setSearchQuery(currentItem->toolTip().toStdString());
-    std::cout << "Search query set for 4Chan" << std::endl;
-    redditBot->setSubreddit(utility::conversions::to_string_t(currentItem->statusTip().toStdString()));
-    std::cout << "Search query set for Reddit" << std::endl;
-
-    updateData();
-    updatePlot();
-    if (!timerStarted)
-    {
-
-        QTimer *updateData = new QTimer(this);
-        connect(updateData, SIGNAL(timeout()), this, SLOT(updateData()));
-        updateData->start(6000);
-        timerStarted = true;
-    }
 }
 
 void MainWindow::clearData()
@@ -152,44 +131,29 @@ void MainWindow::updatePlot()
 
 void MainWindow::updateData()
 {
-    std::cout << this->counter << std::endl;
-    std::stringstream price;
-    double priceDouble = Apollo::getAskingPriceGdax(utility::conversions::to_string_t(currentItem->toolTip().toStdString()));
-//    currentPrice.setf(std::fixed, std::floatField);
-    price.precision(2);
-    price << std::fixed;
-    price << "$" << priceDouble;
 
-    if (priceDouble > this->currentPrice)
-        ui->priceText->setTextColor(Qt::GlobalColor::green);
-    else if (priceDouble < this->currentPrice)
-        ui->priceText->setTextColor(Qt::GlobalColor::red);
-    this->currentPrice = priceDouble;
-
-    ui->priceText->setText(QString::fromStdString(price.str()));
-    std::cout << ui->priceText->toPlainText().toStdString() << std::endl;
-
-    if (this->counter == 5)
+    if (this->counter == 199)
     {
         std::string filename = "../resources/" + currentItem->text().toStdString() + ".json";
         std::replace(filename.begin(), filename.end(), ' ', '_');
 
         std::cout << filename << std::endl;
-        auto t_comments = twitterBot->getData();
+        auto t_comments = twitter_bot->getData();
         std::cout << "Twitter Size: " << t_comments.size() << std::endl;
-        auto f_comments = fourchanBot->getData();
+        auto f_comments = fourchan_bot->getData();
         std::cout << "4Chan Size: " << f_comments.size() << std::endl;
-        redditBot->readComments();
-        auto r_comments = redditBot->getComments();
+        reddit_bot->readComments();
+        auto r_comments = reddit_bot->getComments();
         std::cout << "Reddit Size: " << r_comments.size() << std::endl;
 
         utility::string_t tone_input = commentsToString(t_comments, f_comments, r_comments);
-        watsonAnalyzer->toneToFile(tone_input, utility::conversions::to_string_t(filename));
-        counter = 0;
+        watson_analyzer->toneToFile(tone_input, utility::conversions::to_string_t(filename));
+        counter = -1;
         updatePlot();
     }
     else
         plot();
+
     this->counter++;
 }
 
@@ -240,11 +204,6 @@ void MainWindow::setupWidgets()
     ui->plot->xAxis->setTicker(dateTicker);
     ui->plot->xAxis->setLabel("Date");
     ui->plot->yAxis->setLabel("Sentiment Index");
-
-    ui->GDAX->setAttribute(Qt::WA_MacShowFocusRect, false);
-    ui->Binance->setAttribute(Qt::WA_MacShowFocusRect, false);
-    ui->Kucoin->setAttribute(Qt::WA_MacShowFocusRect, false);
-    ui->Tabs->setCurrentIndex(0);
 }
 
 void MainWindow::normalizeGraphs()
@@ -279,4 +238,156 @@ utility::string_t MainWindow::commentsToString(std::vector<Apollo::Comment> t_co
         str.append(utility::conversions::to_utf8string(comment));
 
     return utility::conversions::to_string_t(str);
+}
+
+void MainWindow::on_add_update_gdax_clicked()
+{
+    this->gdax_accnt->setCredentials(utility::conversions::to_string_t(this->ui->key_gdax->text().toStdString()), utility::conversions::to_string_t(this->ui->secret_gdax->text().toStdString()), utility::conversions::to_string_t(this->ui->password_gdax->text().toStdString()));
+    this->gdax_accnt->connect();
+
+    QPalette palette;
+    if (this->gdax_accnt->isConnected())
+    {
+        this->ui->add_update_gdax->setText("Update");
+        this->ui->is_connected_gdax->setText("Connected");
+        palette.setColor(QPalette::WindowText, Qt::green);
+
+        this->ui->add_update_gdax->update();
+        this->ui->add_update_gdax->repaint();
+
+        this->gdax_accnt->update();
+
+        std::vector<Apollo::Exchanges::Coin>& wallet_coins = this->gdax_accnt->coins_vec;
+        std::sort(wallet_coins.begin(), wallet_coins.end(), std::greater<Apollo::Exchanges::Coin>());
+
+        if (!have_gdax_wallet)
+        {
+            this->ui->wallet_gdax->setColumnCount(2);
+            this->ui->wallet_gdax->setRowCount(wallet_coins.size());
+
+//            this->ui->wallet_gdax->horizontalHeader()->sectionResizeMode(QHeaderView::Stretch);
+            this->ui->wallet_gdax->setColumnWidth(0, 120);
+            this->ui->wallet_gdax->setHorizontalHeaderItem(0, new QTableWidgetItem("Coin"));
+            this->ui->wallet_gdax->setHorizontalHeaderItem(0, new QTableWidgetItem("Amount"));
+
+            for (int i = 0; i < wallet_coins.size(); i++)
+            {
+                this->ui->wallet_gdax->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(utility::conversions::to_utf8string(wallet_coins[i].coin_id))));
+                this->ui->wallet_gdax->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(std::to_string(wallet_coins[i].amount))));
+            }
+            this->have_gdax_wallet = true;
+        }
+        else
+        {
+            for (int i = 0; i < wallet_coins.size(); i++)
+            {
+                this->ui->wallet_gdax->item(i,1)->setText(QString::fromStdString(std::to_string(wallet_coins[i].amount)));
+            }
+        }
+
+    }
+    else
+    {
+        this->ui->add_update_gdax->setText("Add");
+        this->ui->is_connected_gdax->setText("Not Connected");
+        palette.setColor(QPalette::WindowText, Qt::red);
+    }
+    this->ui->is_connected_gdax->setPalette(palette);
+
+    this->ui->key_gdax->setText("");
+    this->ui->secret_gdax->setText("");
+    this->ui->password_gdax->setText("");
+}
+
+void MainWindow::on_add_update_ku_clicked()
+{
+    this->kucoin_accnt->setCredentials(utility::conversions::to_string_t(this->ui->key_ku->text().toStdString()), utility::conversions::to_string_t(this->ui->secret_ku->text().toStdString()));
+
+    this->kucoin_accnt->connect();
+
+    QPalette palette;
+    if (this->kucoin_accnt->isConnected())
+    {
+        this->ui->add_update_ku->setText("Update");
+        this->ui->is_connected_ku->setText("Connected");
+        palette.setColor(QPalette::WindowText, Qt::green);
+
+        this->ui->add_update_ku->update();
+        this->ui->add_update_ku->repaint();
+
+        this->kucoin_accnt->update();
+
+        std::vector<Apollo::Exchanges::Coin>& wallet_coins = this->kucoin_accnt->coins_vec;
+        std::sort(wallet_coins.begin(), wallet_coins.end(), std::greater<Apollo::Exchanges::Coin>());
+
+        if (!have_kucoin_wallet)
+        {
+            this->ui->wallet_ku->setColumnCount(2);
+            this->ui->wallet_ku->setRowCount(wallet_coins.size());
+
+            this->ui->wallet_ku->setColumnWidth(0, 110);
+            this->ui->wallet_ku->setColumnWidth(1, 110);
+            this->ui->wallet_ku->setHorizontalHeaderItem(0, new QTableWidgetItem("Coin"));
+            this->ui->wallet_ku->setHorizontalHeaderItem(1, new QTableWidgetItem("Amount"));
+
+//            this->ui->wallet_ku->horizontalHeader()->sectionResizeMode(QHeaderView::Stretch);
+
+            for (int i = 0; i < wallet_coins.size(); i++)
+            {
+                this->ui->wallet_ku->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(utility::conversions::to_utf8string(wallet_coins[i].coin_id))));
+                this->ui->wallet_ku->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(std::to_string(wallet_coins[i].amount))));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < wallet_coins.size(); i++)
+            {
+                this->ui->wallet_ku->item(i,1)->setText(QString::fromStdString(std::to_string(wallet_coins[i].amount)));
+            }
+        }
+
+    }
+    else
+    {
+        this->ui->add_update_ku->setText("Add");
+        this->ui->is_connected_ku->setText("Not Connected");
+        palette.setColor(QPalette::WindowText, Qt::red);
+    }
+    this->ui->is_connected_ku->setPalette(palette);
+
+    this->ui->key_ku->setText("");
+    this->ui->secret_ku->setText("");
+}
+
+void MainWindow::on_remove_gdax_clicked()
+{
+    this->gdax_accnt->clearCredentials();
+    this->gdax_accnt->connect();
+
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, Qt::red);
+
+    this->ui->add_update_gdax->setText("Add");
+    this->ui->is_connected_gdax->setText("Not Connected");
+    this->ui->is_connected_gdax->setPalette(palette);
+
+    this->ui->key_gdax->setText("");
+    this->ui->secret_gdax->setText("");
+    this->ui->password_gdax->setText("");
+}
+
+void MainWindow::on_remove_ku_clicked()
+{
+    this->kucoin_accnt->clearCredentials();
+    this->kucoin_accnt->connect();
+
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, Qt::red);
+
+    this->ui->add_update_ku->setText("Add");
+    this->ui->is_connected_ku->setText("Not Connected");
+    this->ui->is_connected_ku->setPalette(palette);
+
+    this->ui->key_ku->setText("");
+    this->ui->secret_ku->setText("");
 }

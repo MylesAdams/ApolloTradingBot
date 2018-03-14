@@ -19,6 +19,10 @@ namespace Apollo {
         public: // Public methods.
             Coin() : coin_id(U("")), amount(0) {}
             inline bool isOwned() { return amount; }
+            bool operator > (const Coin& coin) const
+                {
+                    return (amount > coin.amount);
+                }
         };
     }
 }

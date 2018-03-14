@@ -18,7 +18,6 @@ void ApolloSplashScreen::mousePressEvent(QMouseEvent *)
 
 void ApolloSplashScreen::keyPressEvent(QKeyEvent * k)
 {
-    std::cout << "WHAT" << std::endl;
     hide();
     l->hide();
     w->show();

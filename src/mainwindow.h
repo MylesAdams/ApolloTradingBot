@@ -7,6 +7,9 @@
 #include "FourChan.h"
 #include "Watson.h"
 #include "Reddit.h"
+#include "gdax_accnt.h"
+#include "kucoin_accnt.h"
+#include "TestExchange.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,8 +25,15 @@ public:
 
 
 private slots:
-    void on_listWidget_itemClicked(QListWidgetItem *item);
     void updateData();
+    void on_add_update_gdax_clicked();
+
+    void on_add_update_ku_clicked();
+
+    void on_remove_gdax_clicked();
+
+    void on_remove_ku_clicked();
+
 
 private:
     Ui::MainWindow *ui;
@@ -31,12 +41,18 @@ private:
     QListWidgetItem* currentItem;
     bool timerStarted;
     int counter;
-    double currentPrice;
+    bool have_gdax_wallet;
+    bool have_kucoin_wallet;
 
-    Apollo::Bot::Twitter* twitterBot;
-    Apollo::Bot::Reddit* redditBot;
-    Apollo::Bot::FourChan* fourchanBot;
-    Apollo::Watson* watsonAnalyzer;
+    Apollo::Bot::Twitter* twitter_bot;
+    Apollo::Bot::Reddit* reddit_bot;
+    Apollo::Bot::FourChan* fourchan_bot;
+    Apollo::Watson* watson_analyzer;
+    Apollo::Exchanges::GdaxAccnt* gdax_accnt;
+    Apollo::Exchanges::KucoinAccnt* kucoin_accnt;
+    Apollo::Exchanges::TestExchange* test_exchange;
+
+
 
 
     void clearData();

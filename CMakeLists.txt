@@ -54,7 +54,7 @@ set(SOURCES
   src/TradingSession.cpp
   src/binance_accnt.cpp
   src/gdax_accnt.cpp
-  src/GDAXTestExchange.cpp
+        src/TestExchange.cpp
   src/kucoin_accnt.cpp
   src/ApolloSplashScreen.cpp
   src/exchange_accnt.cpp
@@ -69,6 +69,7 @@ set(HEADERS
   src/mainwindow.h
   src/mainwindow.ui
   src/Bot.h
+  src/coin.h
   src/FourChan.h
   src/Twitter.h
   src/watson.h
@@ -89,7 +90,7 @@ set(HEADERS
   src/exchange_accnt.h
   src/exchange_manager.h
   src/gdax_accnt.h
-  src/GDAXTestExchange.h
+        src/TestExchange.h
   src/kucoin_accnt.h
         src/TimeoutException.h
         src/ApolloSplashScreen.h)

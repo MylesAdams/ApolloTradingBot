@@ -3,7 +3,7 @@
 
 #include "PriceData.h"
 #include "TradingSession.h"
-#include "GDAXTestExchange.h"
+#include "TestExchange.h"
 #include "exchange_accnt.h"
 
 namespace Apollo
@@ -15,7 +15,7 @@ namespace Apollo
         const double STOP_LOSS_PERCENT_ = .08;
 
         Apollo::Bot::PriceData price_bot_;
-		Apollo::Exchanges::GDAXTestExchange* exchange_;
+		Apollo::Exchanges::TestExchange* exchange_;
         Apollo::TradingSession* current_trading_session_;
 
         // 12 hour (default) Volume Weighted Average Price

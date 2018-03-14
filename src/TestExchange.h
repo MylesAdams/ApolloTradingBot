@@ -9,18 +9,18 @@
 
 namespace Apollo {
     namespace Exchanges {
-        class GDAXTestExchange : public ExchangeAccnt
+        class TestExchange : public ExchangeAccnt
         {
         private:
-			GDAXTestExchange();
+			TestExchange();
 			std::string trading_currency_ticker_;
 
 
         public:
 			double amount_btc_;
 			double amount_cur_;
-            GDAXTestExchange(std::string trading_currency);
-			GDAXTestExchange(std::string trading_currency, double amount_btc, double amount_cur);
+            TestExchange(std::string trading_currency);
+			TestExchange(std::string trading_currency, double amount_btc, double amount_cur);
 
 			void setAmountBTC(double amount);
 			void setAmountCurrency(double amount);

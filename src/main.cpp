@@ -22,11 +22,7 @@ int main(int argc, char *argv[])
     splash.setDummyWindowPtr(&v);
     splash.setPixmap(QPixmap("../resources/splash.png"));
     splash.show();
-//    splash.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     splash.grabKeyboard();
 
-
-//    QTimer::singleShot(3000, splash, SLOT(close()));
-//    QTimer::singleShot(3000, &w, SLOT(show()));
     return a.exec();
 }

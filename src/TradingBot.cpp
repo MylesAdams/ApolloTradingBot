@@ -3,7 +3,7 @@
 
 Apollo::TradingBot::TradingBot(std::string trading_currency)
 	: price_bot_(),
-	exchange_(new Apollo::Exchanges::GDAXTestExchange(trading_currency)),
+	exchange_(new Apollo::Exchanges::TestExchange(trading_currency)),
 	current_trading_session_(nullptr),
 	current_interval_average_(-1),
 	last_trading_price_(-1),

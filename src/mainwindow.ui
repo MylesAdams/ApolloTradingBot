@@ -17,167 +17,463 @@
    <widget class="QCustomPlot" name="plot" native="true">
     <property name="geometry">
      <rect>
+      <x>300</x>
+      <y>305</y>
+      <width>690</width>
+      <height>285</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="trading_plot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>690</width>
+      <height>285</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="exchanges">
+    <property name="geometry">
+     <rect>
       <x>10</x>
       <y>10</y>
-      <width>770</width>
+      <width>280</width>
       <height>580</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTabWidget" name="Tabs">
-    <property name="geometry">
-     <rect>
-      <x>790</x>
-      <y>10</y>
-      <width>200</width>
-      <height>521</height>
-     </rect>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="tabShape">
-     <enum>QTabWidget::Rounded</enum>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="GDAX">
-     <attribute name="title">
-      <string>GDAX</string>
-     </attribute>
-     <widget class="QListWidget" name="listWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>200</width>
-        <height>555</height>
-       </rect>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>0</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>Bitcoin</string>
-       </property>
-       <property name="toolTip">
-        <string>BTC</string>
-       </property>
-       <property name="statusTip">
-        <string>bitcoin</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Bitcoin Cash</string>
-       </property>
-       <property name="toolTip">
-        <string>BCH</string>
-       </property>
-       <property name="statusTip">
-        <string>btc</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Ethereum</string>
-       </property>
-       <property name="toolTip">
-        <string>ETH</string>
-       </property>
-       <property name="statusTip">
-        <string>ethereum</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Litecoin</string>
-       </property>
-       <property name="toolTip">
-        <string>LTC</string>
-       </property>
-       <property name="statusTip">
-        <string>litecoin</string>
-       </property>
-      </item>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="Binance">
-     <attribute name="title">
-      <string>Binance</string>
-     </attribute>
-     <widget class="QListWidget" name="listWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>200</width>
-        <height>555</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="Kucoin">
-     <attribute name="title">
-      <string>Kucoin</string>
-     </attribute>
-     <widget class="QListWidget" name="listWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>200</width>
-        <height>555</height>
-       </rect>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QTextEdit" name="priceText">
-    <property name="geometry">
-     <rect>
-      <x>790</x>
-      <y>540</y>
-      <width>200</width>
-      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>14</pointsize>
      </font>
     </property>
-    <property name="documentTitle">
-     <string/>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
     </property>
-    <property name="readOnly">
-     <bool>true</bool>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
-    <property name="placeholderText">
-     <string/>
+    <property name="iconSize">
+     <size>
+      <width>16</width>
+      <height>16</height>
+     </size>
     </property>
+    <property name="usesScrollButtons">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="gdax">
+     <attribute name="title">
+      <string>GDAX</string>
+     </attribute>
+     <widget class="QGroupBox" name="connections_gdax">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>270</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Exchange API Connections</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QLineEdit" name="key_gdax">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>70</y>
+         <width>180</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>API Key</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="secret_gdax">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>105</y>
+         <width>180</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>API Secret</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="password_gdax">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>140</y>
+         <width>180</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>API Password</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="add_update_gdax">
+       <property name="geometry">
+        <rect>
+         <x>145</x>
+         <y>170</y>
+         <width>110</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="remove_gdax">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>170</y>
+         <width>110</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Remove</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>60</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Key:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_10">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>105</y>
+         <width>60</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Secret:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_11">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>70</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="is_connected_gdax">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>35</y>
+         <width>210</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Not Connected</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="assets_gdax">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>210</y>
+        <width>270</width>
+        <height>345</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Assets on Exchange</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <widget class="QTableWidget" name="wallet_gdax">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>24</y>
+         <width>270</width>
+         <height>318</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="kucoin">
+     <attribute name="title">
+      <string>Kucoin</string>
+     </attribute>
+     <widget class="QGroupBox" name="connections_ku">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>270</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Exchange API Connections</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QLineEdit" name="key_ku">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>70</y>
+         <width>180</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>API Key</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="secret_ku">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>105</y>
+         <width>180</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>API Secret</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="add_update_ku">
+       <property name="geometry">
+        <rect>
+         <x>145</x>
+         <y>170</y>
+         <width>110</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="remove_ku">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>170</y>
+         <width>110</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Remove</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>60</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Key:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>105</y>
+         <width>60</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Secret:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="is_connected_ku">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>35</y>
+         <width>210</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Not Connected</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="assets_ku">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>210</y>
+        <width>270</width>
+        <height>345</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Assets on Exchange</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <widget class="QTableWidget" name="wallet_ku">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>24</y>
+         <width>270</width>
+         <height>318</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>

@@ -7,7 +7,7 @@
 // Default constructor
 //////////////////////
 Apollo::Exchanges::GdaxAccnt::GdaxAccnt() :
-    ExchangeAccnt(U("Gdax"), U("https://api-public.sandbox.gdax.com")) {
+    ExchangeAccnt(U("Gdax"), U("https://api.gdax.com")) {
 }
 
 ////////////////////////////////
