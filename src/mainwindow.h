@@ -10,6 +10,7 @@
 #include "gdax_accnt.h"
 #include "kucoin_accnt.h"
 #include "TestExchange.h"
+#include "TradingBot.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void startBots(std::string ticker, std::string subreddit);
+    void setupTimer();
 
 
 private slots:
@@ -34,15 +37,19 @@ private slots:
 
     void on_remove_ku_clicked();
 
+    void on_start_session_button_clicked();
 
 private:
     Ui::MainWindow *ui;
-    QVector<double> qy_pos, qy_neg, /*f_qy_pos, f_qy_neg, r_qy_pos, r_qy_neg,*/ qx;
+    QVector<double> qy_pos, qx_sent, qx_fin, qy_avg, qy_inst;
     QListWidgetItem* currentItem;
-    bool timerStarted;
     int counter;
     bool have_gdax_wallet;
     bool have_kucoin_wallet;
+    QTimer* bot_timer;
+    std::string current_ticker_;
+    double max_price_seen_;
+    double min_price_seen_;
 
     Apollo::Bot::Twitter* twitter_bot;
     Apollo::Bot::Reddit* reddit_bot;
@@ -51,9 +58,7 @@ private:
     Apollo::Exchanges::GdaxAccnt* gdax_accnt;
     Apollo::Exchanges::KucoinAccnt* kucoin_accnt;
     Apollo::Exchanges::TestExchange* test_exchange;
-
-
-
+    Apollo::TradingBot* trading_bot;
 
     void clearData();
     void plot();

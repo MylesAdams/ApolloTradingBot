@@ -18,7 +18,7 @@ Apollo::Bot::PriceData::PriceData()
     this->price_data_target_ = target;
 
     // Set request to default 12 hour average for BTC -> USD
-    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_, U("kucoin"));
+    setupRequest(DEFAULT_TICKER_FROM_, DEFAULT_TICKER_TO_, DEFAULT_TIME_IN_HOURS_, U("binance"));
 	updateFullRequestPathInterval();
 	updateInstantPriceRequestPath(utility::conversions::to_utf8string(DEFAULT_TICKER_FROM_));
 
@@ -218,7 +218,8 @@ double Apollo::Bot::PriceData::getIntervalAverage()
 
 void Apollo::Bot::PriceData::updateInstantPriceRequestPath(std::string ticker)
 {
-    this->full_request_path_instant_ = "/data/price?fsym=" + ticker + "&tsyms=BTC&e=cryptopia";
+    this->full_request_path_instant_ = "/data/price?fsym=" + ticker + "&tsyms=BTC&e=binance";
+    std::cout << full_request_path_instant_ << std::endl;
 }
 
 std::string Apollo::Bot::PriceData::requestLastPrice()
@@ -274,7 +275,6 @@ double Apollo::Bot::PriceData::getLastPrice()
         rapidjson::Document doc;
         doc.Parse(json_as_string);
 
-        // BREAKS RIGHT HERE!!!!!!!!!! //
         return doc["BTC"].GetDouble();
     }
     catch (const std::exception& e)

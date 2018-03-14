@@ -58,6 +58,7 @@ set(SOURCES
   src/kucoin_accnt.cpp
   src/ApolloSplashScreen.cpp
   src/exchange_accnt.cpp
+  src/TradeDialog.cpp
 )
 
 # Put any header files you create here:
@@ -93,7 +94,10 @@ set(HEADERS
         src/TestExchange.h
   src/kucoin_accnt.h
         src/TimeoutException.h
-        src/ApolloSplashScreen.h)
+        src/ApolloSplashScreen.h
+        src/TradeDialog.h
+        src/TradeDialog.ui
+        )
 
 set(INCLUDES
   ${INCLUDES}

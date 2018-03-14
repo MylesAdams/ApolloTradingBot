@@ -9,9 +9,10 @@ Apollo::TradingBot::TradingBot(std::string trading_currency)
 	last_trading_price_(-1),
 	highest_timestamp_seen_(0),
 	session_started_(false),
-	trading_currency_(trading_currency)
+    trading_currency_(trading_currency),
+    current_time_(0)
 {
-    price_bot_.setupRequest(utility::conversions::to_string_t(trading_currency), U("BTC"), 24, U("cryptopia"));
+    price_bot_.setupRequest(utility::conversions::to_string_t(trading_currency), U("BTC"), 1, U("binance"));
 	exchange_->setAmountBTC(10);
 	exchange_->setAmountCurrency(0);
 };
@@ -34,6 +35,7 @@ void Apollo::TradingBot::updateAveragePrice()
 bool Apollo::TradingBot::updateHighestTimestampSeen()
 {
     time_t temp = utility::datetime::utc_timestamp();
+    current_time_ = temp;
     if (temp - highest_timestamp_seen_ >= 60)
     {
         highest_timestamp_seen_ = temp - (temp % 60);
@@ -88,7 +90,6 @@ void Apollo::TradingBot::updateLastTradingPrice()
 {
     try
 	{
-		// 2
         last_trading_price_ = price_bot_.getLastPrice();
     }
     catch (const std::exception& e)
@@ -132,7 +133,6 @@ void Apollo::TradingBot::makeTrades()
 			std::cout << "CUR: " << exchange_->amount_cur_ << std::endl << std::endl;
 		}
 	}
-
 }
 
 void Apollo::TradingBot::updateAndTrade()

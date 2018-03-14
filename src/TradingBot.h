@@ -18,11 +18,6 @@ namespace Apollo
 		Apollo::Exchanges::TestExchange* exchange_;
         Apollo::TradingSession* current_trading_session_;
 
-        // 12 hour (default) Volume Weighted Average Price
-        double current_interval_average_;
-
-        double last_trading_price_;
-
         // Minute Resolution
         int highest_timestamp_seen_;
 
@@ -30,10 +25,13 @@ namespace Apollo
 
 		bool session_started_;
 
-
-
-
     public:
+        int current_time_;
+        // 12 hour (default) Volume Weighted Average Price
+        double current_interval_average_;
+
+        double last_trading_price_;
+
         TradingBot(std::string trading_currency);
         void updateAveragePrice();
         bool updateHighestTimestampSeen();

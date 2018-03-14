@@ -40,7 +40,7 @@
       <x>10</x>
       <y>10</y>
       <width>280</width>
-      <height>580</height>
+      <height>550</height>
      </rect>
     </property>
     <property name="font">
@@ -52,7 +52,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="iconSize">
      <size>
@@ -72,8 +72,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>270</width>
-        <height>211</height>
+        <width>274</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="font">
@@ -91,7 +91,7 @@
        <property name="geometry">
         <rect>
          <x>80</x>
-         <y>70</y>
+         <y>65</y>
          <width>180</width>
          <height>20</height>
         </rect>
@@ -107,7 +107,7 @@
        <property name="geometry">
         <rect>
          <x>80</x>
-         <y>105</y>
+         <y>95</y>
          <width>180</width>
          <height>20</height>
         </rect>
@@ -120,7 +120,7 @@
        <property name="geometry">
         <rect>
          <x>80</x>
-         <y>140</y>
+         <y>125</y>
          <width>180</width>
          <height>20</height>
         </rect>
@@ -133,7 +133,7 @@
        <property name="geometry">
         <rect>
          <x>145</x>
-         <y>170</y>
+         <y>150</y>
          <width>110</width>
          <height>32</height>
         </rect>
@@ -151,7 +151,7 @@
        <property name="geometry">
         <rect>
          <x>15</x>
-         <y>170</y>
+         <y>150</y>
          <width>110</width>
          <height>32</height>
         </rect>
@@ -169,7 +169,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>70</y>
+         <y>65</y>
          <width>60</width>
          <height>21</height>
         </rect>
@@ -187,7 +187,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>105</y>
+         <y>95</y>
          <width>60</width>
          <height>21</height>
         </rect>
@@ -205,7 +205,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>140</y>
+         <y>125</y>
          <width>70</width>
          <height>21</height>
         </rect>
@@ -244,10 +244,10 @@
      <widget class="QGroupBox" name="assets_gdax">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>210</y>
-        <width>270</width>
-        <height>345</height>
+        <x>2</x>
+        <y>190</y>
+        <width>268</width>
+        <height>330</height>
        </rect>
       </property>
       <property name="font">
@@ -267,9 +267,9 @@
       <widget class="QTableWidget" name="wallet_gdax">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>2</x>
          <y>24</y>
-         <width>270</width>
+         <width>268</width>
          <height>318</height>
         </rect>
        </property>
@@ -280,6 +280,9 @@
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
       </widget>
      </widget>
@@ -293,8 +296,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>270</width>
-        <height>211</height>
+        <width>274</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="font">
@@ -312,7 +315,7 @@
        <property name="geometry">
         <rect>
          <x>80</x>
-         <y>70</y>
+         <y>65</y>
          <width>180</width>
          <height>20</height>
         </rect>
@@ -328,7 +331,7 @@
        <property name="geometry">
         <rect>
          <x>80</x>
-         <y>105</y>
+         <y>95</y>
          <width>180</width>
          <height>20</height>
         </rect>
@@ -341,7 +344,7 @@
        <property name="geometry">
         <rect>
          <x>145</x>
-         <y>170</y>
+         <y>150</y>
          <width>110</width>
          <height>32</height>
         </rect>
@@ -359,7 +362,7 @@
        <property name="geometry">
         <rect>
          <x>15</x>
-         <y>170</y>
+         <y>150</y>
          <width>110</width>
          <height>32</height>
         </rect>
@@ -377,7 +380,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>70</y>
+         <y>65</y>
          <width>60</width>
          <height>21</height>
         </rect>
@@ -395,7 +398,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>105</y>
+         <y>95</y>
          <width>60</width>
          <height>21</height>
         </rect>
@@ -434,10 +437,10 @@
      <widget class="QGroupBox" name="assets_ku">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>210</y>
-        <width>270</width>
-        <height>345</height>
+        <x>2</x>
+        <y>190</y>
+        <width>268</width>
+        <height>330</height>
        </rect>
       </property>
       <property name="font">
@@ -457,9 +460,9 @@
       <widget class="QTableWidget" name="wallet_ku">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>2</x>
          <y>24</y>
-         <width>270</width>
+         <width>268</width>
          <height>318</height>
         </rect>
        </property>
@@ -471,9 +474,25 @@
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
       </widget>
      </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="start_session_button">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>560</y>
+      <width>291</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start Trading Session</string>
+    </property>
    </widget>
   </widget>
  </widget>
