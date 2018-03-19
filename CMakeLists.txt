@@ -20,6 +20,13 @@ if (APPLE)
 #  set(Qt5_DIR "/usr/local/Cellar/qt/5.10.1")
 endif()
 
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+
+    set(CPP_REST_FOUND False)
+    find_package(CppREST REQUIRED)
+endif()
+
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPLIER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPLIER_SUPPORTS_CXX0X)
@@ -33,8 +40,11 @@ endif()
 
 FIND_PACKAGE(Boost 1.66 COMPONENTS program_options REQUIRED)
 FIND_PACKAGE(OpenSSL REQUIRED)
-find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
-find_package(cpprestsdk REQUIRED)
+FIND_PACKAGE(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
+
+if (NOT LINUX)
+    FIND_PACKAGE(cpprestsdk REQUIRED)
+endif()
 
 # If you make a new *.cpp file, place it here:
 set(SOURCES
