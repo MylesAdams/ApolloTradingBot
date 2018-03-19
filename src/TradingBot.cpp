@@ -12,7 +12,7 @@ Apollo::TradingBot::TradingBot(std::string trading_currency)
     trading_currency_(trading_currency),
     current_time_(0)
 {
-    price_bot_.setupRequest(utility::conversions::to_string_t(trading_currency), U("BTC"), 1, U("binance"));
+    price_bot_.setupRequest(utility::conversions::to_string_t(trading_currency), U("BTC"), 12, U("binance"));
 	exchange_->setAmountBTC(10);
 	exchange_->setAmountCurrency(0);
 };

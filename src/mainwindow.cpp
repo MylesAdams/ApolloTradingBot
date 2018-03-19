@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     gdax_accnt = new Apollo::Exchanges::GdaxAccnt();
     kucoin_accnt = new Apollo::Exchanges::KucoinAccnt();
 
-    counter = 19;
+    counter = 199;
     have_gdax_wallet = false;
     have_kucoin_wallet = false;
     max_price_seen_ = 0;
@@ -128,7 +128,7 @@ void MainWindow::updateData()
 
     ui->trading_plot->yAxis->setRange(low * .995, high * 1.005);
 
-    if (this->counter == 19)
+    if (this->counter == 199)
     {
         std::string filename = "../resources/" + current_ticker_ + ".json";
         std::replace(filename.begin(), filename.end(), ' ', '_');
@@ -404,7 +404,7 @@ void MainWindow::on_start_session_button_clicked()
         trading_bot->endSession();
         delete trading_bot;
         delete bot_timer;
-        counter = 19;
+        counter = 199;
         this->ui->start_session_button->setText("Start Trading Session");
     }
 }
