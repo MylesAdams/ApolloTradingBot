@@ -1,26 +1,25 @@
 # INSTRUCTIONS TO BUILD PROJECT
 
-# UNIX Systems
+# MacOS
 
 1. Install [CMake](https://cmake.org/download/)
-    * macOS
-        * `brew install cmake`
-    * Ubuntu
-        * `sudo apt install cmake`
-2. Install curl
-    * macOS
-        * `brew install curl`
-    * Ubuntu
-        * `sudo apt install curl`
+   * `brew install cmake`
+   
+2. Install Qt
+   * `brew install qt`
         
 3. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
-   * `brew install cpprestsdk` on mac
-   * `sudo apt-get install libcpprest-dev` on ubuntu/debian
+   * `brew install cpprestsdk`
+   
+4. Install Boost
+   * `brew install boost`
    
 4. Run commands below within ApolloTradingBot directory
-    * `cd Build`
-    * `cmake ../`
-    * `make`
+   * `cd Build`
+   * `cmake ../ -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.10.1 -DCMAKE_BUILD_TYPE=release`
+   * `make`
+   
+   * Note: if homebrew installed Qt to a different directory, replace `/usr/local/Cellar/qt/5.10.1` with your path
     
 # Windows special instructions:
 **This guide can only guarantee that these instructions work for Visual Studio 2017 Community Edition.**
@@ -64,3 +63,6 @@
 8. Open `ApolloTradingBot.sln` inside the build folder. After opening the ApolloTradingBot.sln, open or locate the solution explorer window. Right-click on ApolloTradingBot -> "set as start-up project" since the default start-up project is ALL_BUILD.
 
 9. `ctrl-shift-b` to build.
+
+
+Note: This project is not currently compatible with Linux, because CMake would need to be changed a lot in order to find the CppRestSDK library.
