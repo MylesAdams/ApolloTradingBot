@@ -40,21 +40,19 @@ find_package(cpprestsdk REQUIRED)
 set(SOURCES
   ${SOURCES}
   src/qcustomplot.cpp
-  # src/main.cpp
   src/mainwindow.cpp
   src/Bot.cpp
   src/FourChan.cpp
   src/Twitter.cpp
   src/watson.cpp
   src/Reddit.cpp
-  src/GDAXPrice.cpp
   src/TradingBot.cpp
   src/PriceData.cpp
   src/TradingBot.cpp
   src/TradingSession.cpp
   src/binance_accnt.cpp
   src/gdax_accnt.cpp
-        src/TestExchange.cpp
+  src/TestExchange.cpp
   src/kucoin_accnt.cpp
   src/ApolloSplashScreen.cpp
   src/exchange_accnt.cpp
@@ -81,7 +79,6 @@ set(HEADERS
   src/BadStatusException.h
   src/BadResourceException.h
   src/Reddit.h
-  src/GDAXPrice.h
   src/TradingBot.h
   src/PriceData.h
   src/PriceDataTarget.h
@@ -91,13 +88,13 @@ set(HEADERS
   src/exchange_accnt.h
   src/exchange_manager.h
   src/gdax_accnt.h
-        src/TestExchange.h
+  src/TestExchange.h
   src/kucoin_accnt.h
-        src/TimeoutException.h
-        src/ApolloSplashScreen.h
-        src/TradeDialog.h
-        src/TradeDialog.ui
-        )
+  src/TimeoutException.h
+  src/ApolloSplashScreen.h
+  src/TradeDialog.h
+  src/TradeDialog.ui
+)
 
 set(INCLUDES
   ${INCLUDES}
@@ -141,50 +138,38 @@ add_executable(ApolloTradingBot src/main.cpp ${SOURCES} ${HEADERS})
 target_include_directories(ApolloTradingBot PRIVATE ${INCLUDES})
 target_link_libraries(ApolloTradingBot PRIVATE ${LIBRARIES})
 
-# add_executable(PriceDataTest src/pricedatamain.cpp ${SOURCES} ${HEADERS})
-# target_include_directories(PriceDataTest PRIVATE ${INCLUDES})
-# target_link_libraries(PriceDataTest PRIVATE ${LIBRARIES})
+# Unit tests
+enable_testing(true)
 
-# # Unit tests
-# enable_testing(true)
+# Twitter Tests
+add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
+target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
+target_include_directories(TwitterTester PRIVATE ${INCLUDES})
+add_test(TwitterSignatureGeneration TwitterTester)
 
-# # Twitter Tests
-# add_executable(TwitterTester tests/TwitterTest.cpp src/Bot.cpp src/Twitter.cpp)
-# target_link_libraries(TwitterTester ${CPPRESTSDK_LIBRARIES})
-# target_include_directories(TwitterTester PRIVATE ${INCLUDES})
-# add_test(TwitterSignatureGeneration TwitterTester)
+# FourChan Tests
+add_executable(FourChanTest tests/FourChanTest.cpp src/Bot.cpp src/FourChan.cpp)
+target_link_libraries(FourChanTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(FourChanTest PRIVATE ${INCLUDES})
+add_test(FourChan FourChanTest)
 
-# # FourChan Tests
-# add_executable(FourChanTest tests/FourChanTest.cpp src/Bot.cpp src/FourChan.cpp)
-# target_link_libraries(FourChanTest ${CPPRESTSDK_LIBRARIES} Catch)
-# target_include_directories(FourChanTest PRIVATE ${INCLUDES})
-# add_test(FourChan FourChanTest)
+# Bot Tests
+add_executable(BotTest tests/BotTest.cpp src/Bot.cpp src/FourChan.cpp)
+target_link_libraries(BotTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(BotTest PRIVATE ${INCLUDES})
+add_test(Bot BotTest)
 
-# # Bot Tests
-# add_executable(BotTest tests/BotTest.cpp src/Bot.cpp src/FourChan.cpp)
-# target_link_libraries(BotTest ${CPPRESTSDK_LIBRARIES} Catch)
-# target_include_directories(BotTest PRIVATE ${INCLUDES})
-# add_test(Bot BotTest)
-
-# # watson Tests
-# add_executable(watsonTest tests/watsonTest.cpp src/watson.cpp)
-# target_link_libraries(watsonTest ${CPPRESTSDK_LIBRARIES} Catch)
-# target_include_directories(watsonTest PRIVATE ${INCLUDES})
-# add_test(watson watsonTest)
-
-# # GDAXPrice Tests
-# add_executable(GDAXPriceTest tests/GDAXPriceTest.cpp src/GDAXPrice.cpp)
-# target_link_libraries(GDAXPriceTest ${CPPRESTSDK_LIBRARIES} Catch)
-# target_include_directories(GDAXPriceTest PRIVATE ${INCLUDES})
-# add_test(GDAXPrice GDAXPriceTest)
+# watson Tests
+add_executable(watsonTest tests/watsonTest.cpp src/watson.cpp)
+target_link_libraries(watsonTest ${CPPRESTSDK_LIBRARIES} Catch)
+target_include_directories(watsonTest PRIVATE ${INCLUDES})
+add_test(watson watsonTest)
 
 
-# # Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
-# set_tests_properties(
-#     # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
-#   FourChan
-# 	Bot
-# 	watson
-# 	GDAXPrice
-#         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
-
+# Properties for Tests - PUT YOUR TEST HERE IF YOU ADD A TEST
+set_tests_properties(
+    # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
+  FourChan
+	Bot
+	watson
+        PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")

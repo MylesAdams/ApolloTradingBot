@@ -100,7 +100,6 @@ void MainWindow::updatePlot()
             qx_sent.append(doc[ndx]["Time"].GetDouble());
 
             qy_pos.append(doc[ndx]["PosRating"].GetDouble());
-//            std::cout << std::to_string(doc[ndx]["Time"].GetDouble()) << " | " << std::to_string(doc[ndx]["PosRating"].GetDouble()) << " | " <<  std::to_string(doc[ndx]["NegRating"].GetDouble()) << std::endl;
         }
 
         json_file.close();
