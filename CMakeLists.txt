@@ -17,14 +17,6 @@ if (APPLE)
   set(OPT_LDFLAGS "-L/usr/local/opt/openssl/lib -lcpprest -lssl -lcrypto -lboost_system -lboost_thread-mt -lboost_chrono-mt")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPT_CPPFLAGS} -v -g -O3 -std=c++11 -fno-rtti")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OPT_LDFLAGS}")
-#  set(Qt5_DIR "/usr/local/Cellar/qt/5.10.1")
-endif()
-
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-
-    set(CPP_REST_FOUND False)
-    find_package(CppREST REQUIRED)
 endif()
 
 include(CheckCXXCompilerFlag)
@@ -41,10 +33,7 @@ endif()
 FIND_PACKAGE(Boost 1.66 COMPONENTS program_options REQUIRED)
 FIND_PACKAGE(OpenSSL REQUIRED)
 FIND_PACKAGE(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
-
-if (NOT LINUX)
-    FIND_PACKAGE(cpprestsdk REQUIRED)
-endif()
+FIND_PACKAGE(cpprestsdk REQUIRED)
 
 # If you make a new *.cpp file, place it here:
 set(SOURCES
@@ -96,7 +85,6 @@ set(HEADERS
   src/TradingSession.h
   src/binance_accnt.h
   src/exchange_accnt.h
-  src/exchange_manager.h
   src/gdax_accnt.h
   src/TestExchange.h
   src/kucoin_accnt.h
@@ -180,6 +168,6 @@ add_test(watson watsonTest)
 set_tests_properties(
     # TwitterSignatureGeneration ##convert this use Catch2 library instead of asserts
   FourChan
-	Bot
-	watson
+  Bot
+  watson
         PROPERTIES PASS_REGULAR_EXPRESSION "All tests passed")
