@@ -2,13 +2,13 @@
 
 # MacOS
 
-1. Install [CMake](https://cmake.org/download/)
+1. Install CMake
    * `brew install cmake`
    
 2. Install Qt
    * `brew install qt`
         
-3. Install [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
+3. Install CppRestSDK
    * `brew install cpprestsdk`
    
 4. Install Boost
